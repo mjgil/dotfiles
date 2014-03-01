@@ -36,6 +36,9 @@ alias tmxa='tmux attach-session -t'
 alias tmxk='tmux kill-session -t'
 alias tmxl='tmux ls'
 
+# node aliases
+alias nodeh='node --harmony-generators'
+
 
 # Easier navigation: .., ..., ...., ....., ~ and -
 alias ..="cd .."
