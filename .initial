@@ -16,6 +16,12 @@ then
     brew install wget
 fi
 
+# Install node
+if test ! $(which node)
+then
+    brew install node
+fi
+
 # Sublime Text Thing
 ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
 
