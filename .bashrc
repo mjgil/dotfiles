@@ -103,6 +103,8 @@ alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && kil
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+. /Users/malcomgilbert/git/z/z.sh
 # # Add `~/bin` to the `$PATH`
 # export PATH="$HOME/bin:$PATH"
 
