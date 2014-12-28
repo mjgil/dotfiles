@@ -14,6 +14,7 @@ alias gca="git commit -a -m"
 alias gmnf="git merge --no-ff"
 alias gpt="git push --tags"
 alias gp="git push"
+alias gpom="git push origin master"
 alias gpf="git push -f"
 alias grh="git reset --hard"
 alias gb="git branch"
@@ -26,7 +27,8 @@ alias gl="git log --pretty='format:%Cgreen%h%Creset %an - %s' --graph"
 alias glo="git log --color --oneline | head"
 alias gpom="git pull origin master"
 alias gcd='cd "`git rev-parse --show-toplevel`"'
-alias gc='git add --all && git commit -m'
+alias gc='git add --all :/ && git commit -m'
+alias gct='git add --all . && git commit -m'
 alias gr='git remote'
 alias grv='git remote -v'
 
@@ -38,6 +40,10 @@ alias tmxl='tmux ls'
 
 # node aliases
 alias nodeh='node --harmony-generators'
+
+# node aliases
+alias pdfJoin='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py'
+alias pdfJoinc='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py -o combined.pdf `ls|grep .pdf$`'
 
 
 # Easier navigation: .., ..., ...., ....., ~ and -
@@ -107,7 +113,7 @@ alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && kil
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/texbin
 . /Users/malcomgilbert/git/z/z.sh
 # # Add `~/bin` to the `$PATH`
 # export PATH="$HOME/bin:$PATH"
@@ -150,3 +156,7 @@ export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 # [ -f /etc/bash_completion ] && source /etc/bash_completion
 
 # source /usr/local/bin/virtualenvwrapper.sh
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
