@@ -21,3 +21,6 @@ fi
 if [ -f ~/.bashrc ]; then
    source ~/.bashrc
 fi
+# added by Anaconda 1.9.1 installer
+# export PATH="/usr/local/go/bin:/Users/malcomgilbert/Documents/anaconda/anaconda/bin:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
