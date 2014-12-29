@@ -40,6 +40,9 @@ alias tmxl='tmux ls'
 
 # node aliases
 alias nodeh='node --harmony-generators'
+alias npmi='npm install'
+alias npmis='npm install --save'
+alias npmisd='npm install --save-dev'
 
 # node aliases
 alias pdfJoin='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py'
@@ -113,11 +116,11 @@ alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && kil
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
-#export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-#. /Users/malcomgilbert/git/z/z.sh
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+. /Users/malcomgilbert/git/z/z.sh
 
-# # Add `~/bin` to the `$PATH`
-# export PATH="$HOME/bin:$PATH"
+# Add `~/bin` to the `$PATH`
+export PATH="$HOME/bin:$PATH"
 
 # # Load the shell dotfiles, and then some:
 # # * ~/.path can be used to extend `$PATH`.
@@ -130,8 +133,8 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 # # Case-insensitive globbing (used in pathname expansion)
 # shopt -s nocaseglob
 
-# # Append to the Bash history file, rather than overwriting it
-# shopt -s histappend
+# Append to the Bash history file, rather than overwriting it
+shopt -s histappend
 
 # # Autocorrect typos in path names when using `cd`
 # shopt -s cdspell
