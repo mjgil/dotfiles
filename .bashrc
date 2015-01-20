@@ -31,8 +31,8 @@ alias gc='git add --all :/ && git commit -m'
 alias gct='git add --all . && git commit -m'
 alias gr='git remote'
 alias grv='git remote -v'
-alias gfa='git fetch -all'
-alias gpa='git fetch -all && git reset --hard HEAD' #git pull all
+alias gfa='git fetch --all'
+alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 
 # tmux aliases
 alias tmxn='tmux new-session -s'
