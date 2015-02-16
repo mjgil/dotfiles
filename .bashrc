@@ -84,6 +84,9 @@ alias lns='ln -s'
 # gzipped responses
 alias gurl='curl --compressed'
 
+# usage PORT=3000 findPort
+alias findPort='lsof -n -i4TCP:$PORT | grep LISTEN'
+
 # pstree --- not on a mac
 # EDITOR=subl
 # export editor
@@ -166,3 +169,4 @@ shopt -s histappend
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+export GOPATH="/Users/malcomgilbert/go"
