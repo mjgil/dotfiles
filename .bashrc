@@ -25,7 +25,9 @@ alias gbv="git branch -v"
 alias gchp="git cherry-pick"
 alias gl="git log --pretty='format:%Cgreen%h%Creset %an - %s' --graph"
 alias glo="git log --color --oneline | head"
-alias gpom="git pull origin master"
+alias gpl="git pull"
+alias gplo="git pull origin"
+alias gplom="git pull origin master"
 alias gcd='cd "`git rev-parse --show-toplevel`"'
 alias gc='git add --all :/ && git commit -m'
 alias gct='git add --all . && git commit -m'
@@ -33,6 +35,7 @@ alias gr='git remote'
 alias grv='git remote -v'
 alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
+alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
 
 # tmux aliases
 alias tmxn='tmux new-session -s'
