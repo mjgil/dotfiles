@@ -90,6 +90,12 @@ alias gurl='curl --compressed'
 # usage PORT=3000 findPort
 alias findPort='lsof -n -i4TCP:$PORT | grep LISTEN'
 
+# find size of current subdirectories
+alias duc = 'du -sh */'
+
+# find directories larger than 100MB
+alias dul = 'du -sm * | awk "$1 > 1000"'
+
 # pstree --- not on a mac
 # EDITOR=subl
 # export editor
