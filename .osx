@@ -427,3 +427,32 @@ for app in "Address Book" "Calendar" "Contacts" "Dock" "Finder" "Mail" \
         killall "${app}" > /dev/null 2>&1
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
+
+brew update
+# Install Homebrew if it does not exist
+if test ! $(which brew)
+then
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+# Install Git
+if test ! $(which git)
+then
+    brew install git
+fi
+
+# Install wget
+if test ! $(which wget)
+then
+    brew install wget
+fi
+
+# Install node
+if test ! $(which node)
+then
+    brew install node
+fi
+
+brew install hardlink-osx
+
+
