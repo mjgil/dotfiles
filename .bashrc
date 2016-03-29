@@ -93,9 +93,13 @@ alias findPort='lsof -n -i4TCP:$PORT | grep LISTEN'
 # find size of current subdirectories
 alias duc='du -sh */'
 
-# find directories larger than 100MB
-function dul { du -sh * | grep '\d*\.\dG'; }
+# find directories larger than 1000MB
+function dul { du -sh * | grep '\d*\.*\dG'; }
 export -f dul
+
+# find directories larger than 100MB
+function dulm { du -sh * | grep '\d\d\dM'; }
+export -f dulm
 # pstree --- not on a mac
 # EDITOR=subl
 # export editor
