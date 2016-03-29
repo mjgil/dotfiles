@@ -94,8 +94,8 @@ alias findPort='lsof -n -i4TCP:$PORT | grep LISTEN'
 alias duc='du -sh */'
 
 # find directories larger than 100MB
-alias dul='du -sm * | awk "$1 > 1000"'
-
+function dul { du -sh * | grep '\d*\.\dG'; }
+export -f dul
 # pstree --- not on a mac
 # EDITOR=subl
 # export editor
