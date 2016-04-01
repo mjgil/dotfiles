@@ -49,6 +49,25 @@ alias npmi='npm install'
 alias npmis='npm install --save'
 alias npmisd='npm install --save-dev'
 
+# vagrant aliases
+alias vst='vagrant status'
+alias vup='vagrant up'
+alias vssh='vagrant ssh'
+# alias npmisd='npm install --save-dev'
+
+# ansible aliases
+# ansible-playbook
+# ansible all -m ping
+# ansible.cfg -> forks=100
+# setup module, gets gathered facts
+# ansible $hostname -m setup -a "filter=ansible_hostname"
+
+# [ab] -- apache benchmark
+# ab -n 10000 -c 25 http://localhost:8080
+
+# ssh-keyscan -- get ssh keys for remote servers
+# [usage] ssh-keyscan server1 server2 >> ~/.ssh/known_hosts
+
 # node aliases
 alias pdfJoin='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py'
 alias pdfJoinc='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py -o combined.pdf `ls|grep .pdf$`'
@@ -82,7 +101,10 @@ alias mkdirv='mkdir -v'
 alias rmrf='rm -rf'
 
 # soft symlinks
+# [usage] lns original linked
 alias lns='ln -s'
+alias sl='ln -s'
+alias hl='ln'
 
 # gzipped responses
 alias gurl='curl --compressed'
@@ -135,7 +157,7 @@ alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && 
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-. /Users/malcomgilbert/git/z/z.sh
+. ~/git/z/z.sh
 
 # Add `~/bin` to the `$PATH`
 export PATH="$HOME/bin:$PATH"
