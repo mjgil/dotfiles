@@ -74,6 +74,9 @@ alias ll='ls -lahF ${colorflag}'
 # kill pyc files
 alias klpyc='find . -name "*.pyc" -delete'
 
+# find all files of type in nested directories and move them to current directory
+# find . -name '*.ttf' -exec mv {} ./ \;
+
 # mkdir aliases
 alias mkdirp='mkdir -p'
 alias mkdirv='mkdir -v'
@@ -147,8 +150,14 @@ export PATH="$HOME/bin:$PATH"
 # # Case-insensitive globbing (used in pathname expansion)
 # shopt -s nocaseglob
 
-# Append to the Bash history file, rather than overwriting it
-shopt -s histappend
+# make bash history better
+export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
+export HISTSIZE=100000                   # big big history
+export HISTFILESIZE=100000               # big big history
+shopt -s histappend                      # append to history, don't overwrite it
+
+# Save and reload the history after each command finishes
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # # Autocorrect typos in path names when using `cd`
 # shopt -s cdspell
