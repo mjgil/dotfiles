@@ -14,6 +14,7 @@ alias gca="git commit -a -m"
 alias gmnf="git merge --no-ff"
 alias gpt="git push --tags"
 alias gp="git push"
+alias gpn='git push -u origin $(__git_ps1 "%s")'
 alias gpom="git push origin master"
 alias gpf="git push -f"
 alias grh="git reset --hard"
