@@ -453,6 +453,12 @@ then
     brew install node
 fi
 
+# Install hub foor git
+if test ! $(which hub)
+then
+    brew install hub
+fi
+
 brew install hardlink-osx
 
 

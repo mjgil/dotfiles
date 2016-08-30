@@ -4,6 +4,12 @@ export PS1='\[\033[1;34m\][\u@\h jobs:\j \d \A] \n \[\033[1;32m\]$PWD $(__git_ps
 # virtualenv ps1 --- export PS1='\[\033[1;34m\][\u@\h jobs:\j \d \A] \n \[\033[1;32m\](`basename $VIRTUAL_ENV`) $PWD $(__git_ps1 "(%s)")\n \[\033[1;31m\]ΝΔ\[\033[0m\]: '
 # export PATH="/usr/local/bin:/opt/chef/embedded/bin:$PATH"
 
+# alias hub to git
+alias git=hub
+
+# hub aliases
+alias gpr="git pull-request"
+
 # git aliases
 alias gd="git diff | subl"
 alias ga="git add"
@@ -37,6 +43,17 @@ alias grv='git remote -v'
 alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
+
+git_merge() {
+    # $1 -- branch to merge into
+    cur_branch=${2:-'$(__git_ps1 "%s")'}
+    gco $cur_branch
+    gco $1
+    git pull
+    gco $cur_branch
+    git merge $1
+}
+alias gm=git_merge
 
 # tmux aliases
 alias tmxn='tmux new-session -s'
