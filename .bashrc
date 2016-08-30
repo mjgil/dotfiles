@@ -46,7 +46,7 @@ alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull 
 
 git_merge() {
     # $1 -- branch to merge into
-    cur_branch=${2:-'$(__git_ps1 "%s")'}
+    cur_branch=${2:-$(__git_ps1 "%s")}
     gco $cur_branch
     gco $1
     git pull
