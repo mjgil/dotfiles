@@ -27,7 +27,7 @@ if [ -f ~/.git-prompt.sh ]; then
    source ~/.git-prompt.sh
 fi
 
-
+export GOPATH="/Users/malcomgilbert/go"
 # added by Anaconda 1.9.1 installer
 # export PATH="/usr/local/go/bin:/Users/malcomgilbert/Documents/anaconda/anaconda/bin:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
+# export PATH="/usr/local/go/bin:$PATH"

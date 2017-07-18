@@ -228,7 +228,8 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # source /usr/local/bin/virtualenvwrapper.sh
 
-### Added by the Heroku Toolbelt
+
 export PATH="/usr/local/heroku/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
-export GOPATH="/Users/malcomgilbert/go"
+export GOROOT=/usr/local/go
+export PATH="/usr/local/go/bin:$PATH"

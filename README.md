@@ -2,8 +2,11 @@ dotfiles
 ========
 
 ## Ubuntu Desktop Instructions
-`wget https://raw.githubusercontent.com/mjgil/dotfiles/master/installUbuntuDesktop.sh`
-run `./installUbuntuDesktop.sh`
+```
+wget https://raw.githubusercontent.com/mjgil/dotfiles/master/installUbuntuDesktop.sh
+chmod +x installUbuntuDesktop.sh
+./installUbuntuDesktop.sh
+```
 
 ## Ubuntu Server Instructions
 
