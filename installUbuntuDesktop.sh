@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# download this file wget 
-
 sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
 sudo apt-get update
 sudo apt-get upgrade -y

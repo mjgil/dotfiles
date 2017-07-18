@@ -1,9 +1,17 @@
 dotfiles
 ========
 
-run bash ./.osx if on a mac
+## Ubuntu Desktop Instructions
+`wget https://raw.githubusercontent.com/mjgil/dotfiles/master/installUbuntuDesktop.sh`
+run `./installUbuntuDesktop.sh`
 
-run bash ./.initial
+## Ubuntu Server Instructions
+
+
+## Mac Os Instructions
+
+run `bash ./.osx` if on a mac
+run `bash ./.initial`
 
 after installing dropbox run 
 
