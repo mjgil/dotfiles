@@ -68,7 +68,8 @@ cd ~/git
 # add ssh key to github
 # ssh-keygen -t rsa -b 4096 -C "malcomgilbert@gmail.com"
 # cat ~/.ssh/id_rsa.pub
-
+# eval "$(ssh-agent -s)"
+# ssh-add ~/.ssh/id_rsa
 
 # update keybindings for terminator copy -> ctrl + c
 # update keybindings for terminator paste -> ctrl + v
