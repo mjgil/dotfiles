@@ -40,6 +40,7 @@ alias gc='git add --all :/ && git commit -m'
 alias gct='git add --all . && git commit -m'
 alias gr='git remote'
 alias grv='git remote -v'
+alias grs='git remote set-url'
 alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
@@ -166,14 +167,6 @@ command -v md5sum > /dev/null || alias md5sum="md5"
 
 # OS X has no `sha1sum`, so use `shasum` as a fallback
 command -v sha1sum > /dev/null || alias sha1sum="shasum"
-
-# Show/hide hidden files in Finder
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
-# Hide/show all desktop icons (useful when presenting)
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 . ~/git/z/z.sh
