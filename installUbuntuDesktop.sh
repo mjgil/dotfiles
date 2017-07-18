@@ -65,5 +65,11 @@ script/build -o ~/bin/hub
 
 cd ~/git
 
+# add ssh key to github
+# ssh-keygen -t rsa -b 4096 -C "malcomgilbert@gmail.com"
+# cat ~/.ssh/id_rsa.pub
+
+
 # update keybindings for terminator copy -> ctrl + c
 # update keybindings for terminator paste -> ctrl + v
+

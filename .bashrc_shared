@@ -11,7 +11,7 @@ alias git=hub
 alias gpr="git pull-request"
 
 # git aliases
-alias gd="git diff | subl"
+alias gd="git diff"
 alias ga="git add"
 alias gaa="git add --all"
 alias gbd="git branch -D"
@@ -87,8 +87,6 @@ alias vssh='vagrant ssh'
 # [usage] ssh-keyscan server1 server2 >> ~/.ssh/known_hosts
 
 # node aliases
-alias pdfJoin='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py'
-alias pdfJoinc='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py -o combined.pdf `ls|grep .pdf$`'
 
 
 # Easier navigation: .., ..., ...., ....., ~ and -
