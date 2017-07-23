@@ -9,9 +9,18 @@ fi
 
 # add the google chrome package
 if [ ! -d "/usr/local/go" ]; then
-  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
   sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 fi
+
+if [ ! "$(which umake)" ]; then
+  sudo add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make
+fi
+
+if [ ! "$(which atom)" ]; then
+  sudo add-apt-repository -y ppa:webupd8team/atom
+fi
+
 
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -22,9 +31,18 @@ sudo apt-get install -y libssl-dev
 sudo apt-get install -y git-core
 sudo apt-get install -y curl
 sudo apt-get install -y terminator
-sudo apt-get install -y google-chrome-stable 
+sudo apt-get install -y google-chrome-stable
+sudo apt-get install -y ubuntu-make
+sudo apt-get install -y atom
+# install sublime text
+# install package control
+# install oceanic next as the theme
+sudo apt-get install -y sublime-text-installer
+
+umake web firefox-dev
 
 sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo npm install -g tmpin
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"
@@ -43,6 +61,7 @@ cd ~/git
 
 # pull down dotfiles
 git clone https://github.com/mjgil/dotfiles.git
+git clone https://github.com/mjgil/z.git
 
 # need go for hub on Ubuntu
 if [ ! -d "/usr/local/go" ]; then
@@ -70,7 +89,7 @@ cd ~/git
 # cat ~/.ssh/id_rsa.pub
 # eval "$(ssh-agent -s)"
 # ssh-add ~/.ssh/id_rsa
+# go to settings on github and add the key
 
 # update keybindings for terminator copy -> ctrl + c
 # update keybindings for terminator paste -> ctrl + v
-

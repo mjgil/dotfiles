@@ -11,7 +11,7 @@ alias git=hub
 alias gpr="git pull-request"
 
 # git aliases
-alias gd="git diff"
+alias gd="git diff | subl"
 alias ga="git add"
 alias gaa="git add --all"
 alias gbd="git branch -D"
