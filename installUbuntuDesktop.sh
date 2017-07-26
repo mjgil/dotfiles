@@ -38,6 +38,7 @@ sudo apt-get install -y atom
 # install package control
 # install oceanic next as the theme
 sudo apt-get install -y sublime-text-installer
+curl https://sh.rustup.rs -sSf | sh
 
 umake web firefox-dev
 
