@@ -47,6 +47,13 @@ alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
 
+git_remove_file() {
+  git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch $1" HEAD
+  rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune
+}
+alias grmf=git_remove_file
+
+
 git_merge() {
   # $1 -- branch to merge into
   cur_branch=${2:-$(__git_ps1 "%s")}
@@ -141,6 +148,9 @@ alias gurl='curl --compressed'
 
 # usage PORT=3000 findPort
 alias findPort='lsof -n -i4TCP:$PORT | grep LISTEN'
+
+alias connStates='netstat -tan | grep ":80 " | awk "{print $6}" | sort | uniq -c'
+alias connTimers='ss -rota | less'
 
 # find size of current subdirectories
 alias duc='du -sh */'
