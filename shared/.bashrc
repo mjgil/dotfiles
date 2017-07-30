@@ -241,6 +241,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 
 export PATH="/usr/local/heroku/bin:$PATH"
-export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
 export GOROOT=/usr/local/go
 export PATH="/home/$(whoami)/.cargo/bin:/usr/local/go/bin:$PATH"

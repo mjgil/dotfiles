@@ -34,6 +34,7 @@ sudo apt-get install -y terminator
 sudo apt-get install -y google-chrome-stable
 sudo apt-get install -y ubuntu-make
 sudo apt-get install -y atom
+sudo apt-get install -y python-pip
 # install sublime text
 # install package control
 # install oceanic next as the theme
@@ -41,6 +42,9 @@ sudo apt-get install -y sublime-text-installer
 curl https://sh.rustup.rs -sSf | sh
 
 umake web firefox-dev
+
+pip install --upgrade pip
+pip install grip
 
 sudo ln -s /usr/bin/nodejs /usr/bin/node
 sudo npm install -g tmpin
