@@ -41,20 +41,30 @@ alias gct='git add --all . && git commit -m'
 alias gr='git remote'
 alias grv='git remote -v'
 alias grs='git remote set-url'
+alias gra='git remote add'
+alias grr='git remote rename'
 alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
 
 git_merge() {
-    # $1 -- branch to merge into
-    cur_branch=${2:-$(__git_ps1 "%s")}
-    gco $cur_branch
-    gco $1
-    git pull
-    gco $cur_branch
-    git merge $1
+  # $1 -- branch to merge into
+  cur_branch=${2:-$(__git_ps1 "%s")}
+  gco $cur_branch
+  gco $1
+  git pull
+  gco $cur_branch
+  git merge $1
 }
 alias gm=git_merge
+
+bitbucket_to_github() {
+  # $1 -- github repo path
+  grr origin bitbucket
+  gra origin $1
+  gpom
+}
+alias btg=bitbucket_to_github
 
 # tmux aliases
 alias tmxn='tmux new-session -s'

@@ -74,9 +74,7 @@ if [ ! -d "/usr/local/go" ]; then
 fi
 
 # link bashrc
-rm ~/.bashrc
-ln -s /home/$(whoami)/git/dotfiles/.bashrc_ubuntu_desktop ~/.bashrc
-ln -s /home/$(whoami)/git/dotfiles/.bashrc_shared ~/.bashrc_shared
+/home/$(whoami)/git/dotfiles/ubuntu/update-bashrc.sh
 
 # install hub
 cd ~/git

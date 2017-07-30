@@ -1,5 +1,5 @@
-if [ -f ~/.bashrc_shared ]; then
-   source ~/.bashrc_shared
+if [ -f ~/.bashrc ]; then
+   source ~/.bashrc
 fi
 
 if [ -f ~/.git-prompt.sh ]; then
@@ -8,3 +8,4 @@ fi
 
 
 alias gd="git diff | tmpin subl"
+alias open="nautilus --browser"
