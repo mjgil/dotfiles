@@ -40,20 +40,38 @@ alias gc='git add --all :/ && git commit -m'
 alias gct='git add --all . && git commit -m'
 alias gr='git remote'
 alias grv='git remote -v'
+alias grs='git remote set-url'
+alias gra='git remote add'
+alias grr='git remote rename'
 alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
 
+git_remove_file() {
+  git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch $1" HEAD
+  rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune
+}
+alias grmf=git_remove_file
+
+
 git_merge() {
-    # $1 -- branch to merge into
-    cur_branch=${2:-$(__git_ps1 "%s")}
-    gco $cur_branch
-    gco $1
-    git pull
-    gco $cur_branch
-    git merge $1
+  # $1 -- branch to merge into
+  cur_branch=${2:-$(__git_ps1 "%s")}
+  gco $cur_branch
+  gco $1
+  git pull
+  gco $cur_branch
+  git merge $1
 }
 alias gm=git_merge
+
+bitbucket_to_github() {
+  # $1 -- github repo path
+  grr origin bitbucket
+  gra origin $1
+  gpom
+}
+alias btg=bitbucket_to_github
 
 # tmux aliases
 alias tmxn='tmux new-session -s'
@@ -87,8 +105,6 @@ alias vssh='vagrant ssh'
 # [usage] ssh-keyscan server1 server2 >> ~/.ssh/known_hosts
 
 # node aliases
-alias pdfJoin='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py'
-alias pdfJoinc='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py -o combined.pdf `ls|grep .pdf$`'
 
 
 # Easier navigation: .., ..., ...., ....., ~ and -
@@ -133,6 +149,9 @@ alias gurl='curl --compressed'
 # usage PORT=3000 findPort
 alias findPort='lsof -n -i4TCP:$PORT | grep LISTEN'
 
+alias connStates='netstat -tan | grep ":80 " | awk "{print $6}" | sort | uniq -c'
+alias connTimers='ss -rota | less'
+
 # find size of current subdirectories
 alias duc='du -sh */'
 
@@ -168,14 +187,6 @@ command -v md5sum > /dev/null || alias md5sum="md5"
 
 # OS X has no `sha1sum`, so use `shasum` as a fallback
 command -v sha1sum > /dev/null || alias sha1sum="shasum"
-
-# Show/hide hidden files in Finder
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
-# Hide/show all desktop icons (useful when presenting)
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 . ~/git/z/z.sh
@@ -228,9 +239,9 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # source /usr/local/bin/virtualenvwrapper.sh
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
-export GOPATH="/Users/malcomgilbert/go"
 
+export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
+export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
+export GOROOT=/usr/local/go
+export PATH="/home/$(whoami)/.cargo/bin:/usr/local/go/bin:$PATH"
