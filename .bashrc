@@ -232,3 +232,5 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export PATH="/usr/local/heroku/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 export GOPATH="/Users/malcomgilbert/go"
+
+export PATH="~/.yarn/bin:$PATH"

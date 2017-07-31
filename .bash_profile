@@ -31,3 +31,14 @@ fi
 # added by Anaconda 1.9.1 installer
 # export PATH="/usr/local/go/bin:/Users/malcomgilbert/Documents/anaconda/anaconda/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
+
+alias gam="/Users/malcomgilbert/bin/gam/gam"
+
+##
+# Your previous /Users/malcomgilbert/.bash_profile file was backed up as /Users/malcomgilbert/.bash_profile.macports-saved_2017-01-13_at_19:30:16
+##
+
+# MacPorts Installer addition on 2017-01-13_at_19:30:16: adding an appropriate PATH variable for use with MacPorts.
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+# Finished adapting your PATH environment variable for use with MacPorts.
+
