@@ -22,3 +22,5 @@ git clone https://github.com/mjgil/z.git
 #
 /Users/$(whoami)/git/dotfiles/mac/installSettingsAndApps.sh
 /Users/$(whoami)/git/dotfiles/mac/update-bashrc.sh
+
+git remote set-url origin git@github.com:mjgil/dotfiles.git
