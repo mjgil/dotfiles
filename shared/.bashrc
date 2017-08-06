@@ -47,6 +47,11 @@ alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
 
+git_clone_secure() {
+  git clone "ssh://git@ssh.github.com:443/mjgil/$1.git"
+}
+alias gcs=git_clone_secure
+
 git_remove_file() {
   git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch $1" HEAD
   rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune
