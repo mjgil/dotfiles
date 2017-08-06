@@ -461,4 +461,59 @@ then
     brew install hub
 fi
 
+# Install go
+if test ! $(which go)
+then
+    brew install go
+fi
+
+# Install rust
+if test ! $(which rust)
+then
+    brew install rust
+fi
+
+brew install haskell-stack
 brew install hardlink-osx
+
+# homebrew-cask
+brew tap caskroom/cask
+brew tap caskroom/versions
+
+# browsers
+brew cask install google-chrome
+brew cask install google-chrome-canary
+brew cask install firefox
+brew cask install firefox-beta
+brew cask install safari-technology-preview
+
+# coding
+brew cask install kaleidoscope
+brew cask install iterm2
+# brew cask install mou
+brew cask install parallels-desktop
+brew cask install paw
+brew cask install sourcetree
+brew cask install sublime-text
+brew cask install atom
+
+# essential
+brew cask install 1password
+# brew cask install adobe-photoshop-cs6
+brew cask install alfred
+brew cask install dropbox
+# brew cask install evernote
+# brew cask install licecap
+
+# for fun
+brew cask install spotify
+brew cask install vlc
+brew cask install webtorrent
+
+# other
+brew cask install bartender
+brew cask install istat-menus
+brew cask install screenflow
+brew cask install skype
+brew cask install slack
+brew cask install the-unarchiver
