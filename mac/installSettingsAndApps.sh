@@ -492,6 +492,7 @@ brew cask install kaleidoscope
 brew cask install iterm2
 # brew cask install mou
 brew cask install parallels-desktop
+brew cask install virtualbox
 brew cask install paw
 brew cask install sourcetree
 brew cask install sublime-text
@@ -501,6 +502,7 @@ brew cask install atom
 brew cask install 1password
 # brew cask install adobe-photoshop-cs6
 brew cask install alfred
+brew cask install caffeine
 brew cask install dropbox
 # brew cask install evernote
 # brew cask install licecap
