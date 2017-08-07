@@ -474,6 +474,7 @@ then
 fi
 
 brew install haskell-stack
+brew install elixir
 brew install hardlink-osx
 
 # homebrew-cask
