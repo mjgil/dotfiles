@@ -30,7 +30,7 @@ fi
 export GOPATH="/Users/malcomgilbert/go"
 # added by Anaconda 1.9.1 installer
 # export PATH="/usr/local/go/bin:/Users/malcomgilbert/Documents/anaconda/anaconda/bin:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
+export PATH="/Users/malcomgilbert/.cargo/bin:/usr/local/go/bin:$PATH"
 
 alias gam="/Users/malcomgilbert/bin/gam/gam"
 
