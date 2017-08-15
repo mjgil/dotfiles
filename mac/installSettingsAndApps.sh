@@ -501,9 +501,9 @@ brew cask install atom
 
 # essential
 brew cask install 1password
-# brew cask install adobe-photoshop-cs6
 brew cask install alfred
 brew cask install caffeine
+brew cask install flux
 brew cask install dropbox
 # brew cask install evernote
 # brew cask install licecap
