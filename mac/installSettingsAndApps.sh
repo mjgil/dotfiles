@@ -505,6 +505,8 @@ brew cask install alfred
 brew cask install caffeine
 brew cask install flux
 brew cask install dropbox
+brew cask install calibre
+brew cask install handbrake
 # brew cask install evernote
 # brew cask install licecap
 
