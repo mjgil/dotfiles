@@ -476,6 +476,7 @@ fi
 brew install haskell-stack
 brew install elixir
 brew install hardlink-osx
+brew install youtube-dl
 
 # homebrew-cask
 brew tap caskroom/cask
