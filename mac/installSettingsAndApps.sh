@@ -511,6 +511,7 @@ brew cask install calibre
 brew cask install handbrake
 brew cask install vagrant
 brew cask install virtualbox
+brew cask install spectacle
 # brew cask install evernote
 # brew cask install licecap
 

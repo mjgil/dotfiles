@@ -4,7 +4,7 @@ sudo xcodebuild -license
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"
-git config --global user.email malcomgilbert@gmail.com
+git config --global user.email malcom@mjgil.com
 git config --global core.editor "subl -n -w"
 git config --global push.default matching
 
@@ -18,9 +18,15 @@ cd ~/git
 
 # pull down dotfiles
 git clone https://github.com/mjgil/dotfiles.git
+
+# make sure dot files have correct remote origin
+cd dotfiles
+git remote set-url origin git@github.com:mjgil/dotfiles.git
+cd ~/git
+
 git clone https://github.com/mjgil/z.git
 #
 /Users/$(whoami)/git/dotfiles/mac/installSettingsAndApps.sh
 /Users/$(whoami)/git/dotfiles/mac/update-bashrc.sh
 
-git remote set-url origin git@github.com:mjgil/dotfiles.git
+ssh-keygen -t rsa -b 4096 -C "malcom@mjgil.com"
