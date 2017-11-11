@@ -91,9 +91,11 @@ alias npmis='npm install --save'
 alias npmisd='npm install --save-dev'
 
 # vagrant aliases
+alias vinit='vagrant init'
 alias vst='vagrant status'
 alias vup='vagrant up'
 alias vssh='vagrant ssh'
+# vagrant box add (boxname)
 # alias npmisd='npm install --save-dev'
 
 # ansible aliases
