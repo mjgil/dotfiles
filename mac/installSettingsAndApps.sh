@@ -500,6 +500,8 @@ brew cask install paw
 brew cask install sourcetree
 brew cask install sublime-text
 brew cask install atom
+brew cask install entr # watch file for changes and do stuff
+# ex: ls *.js | entr npm test
 
 # essential
 brew cask install 1password
