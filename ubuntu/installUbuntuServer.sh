@@ -19,7 +19,7 @@ sudo apt-get install -y python-pip
 # install sublime text
 # install package control
 # install oceanic next as the theme
-curl https://sh.rustup.rs -sSf | sh -s
+curl https://sh.rustup.rs -sSf | sh -y
 
 pip install --upgrade pip
 pip install grip
