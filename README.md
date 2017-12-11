@@ -13,7 +13,7 @@ chmod +x installUbuntuDesktop.sh
 ```
 wget https://raw.githubusercontent.com/mjgil/dotfiles/master/ubuntu/installUbuntuServer.sh
 chmod +x installUbuntuServer.sh
-./installUbuntuDesktop.sh
+./installUbuntuServer.sh
 ```
 
 ## Mac Os Instructions
