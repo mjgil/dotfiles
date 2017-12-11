@@ -3,13 +3,18 @@ dotfiles
 
 ## Ubuntu Desktop Instructions
 ```
-wget https://raw.githubusercontent.com/mjgil/dotfiles/master/installUbuntuDesktop.sh
+wget https://raw.githubusercontent.com/mjgil/dotfiles/master/ubuntu/installUbuntuDesktop.sh
 chmod +x installUbuntuDesktop.sh
 ./installUbuntuDesktop.sh
 ```
 
 ## Ubuntu Server Instructions
 
+```
+wget https://raw.githubusercontent.com/mjgil/dotfiles/master/ubuntu/installUbuntuServer.sh
+chmod +x installUbuntuServer.sh
+./installUbuntuDesktop.sh
+```
 
 ## Mac Os Instructions
 
