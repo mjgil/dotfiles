@@ -19,7 +19,7 @@ sudo apt-get install -y python-pip
 # install sublime text
 # install package control
 # install oceanic next as the theme
-curl https://sh.rustup.rs -sSf | sh
+curl https://sh.rustup.rs -sSf | sh -s
 
 pip install --upgrade pip
 pip install grip
@@ -57,6 +57,7 @@ fi
 
 # link bashrc
 ~/git/dotfiles/ubuntu/update-bashrc.sh
+source ~/.bashrc
 
 # install hub
 cd ~/git
