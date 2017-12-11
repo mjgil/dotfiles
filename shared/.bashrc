@@ -148,6 +148,9 @@ alias lns='ln -s'
 alias sl='ln -s'
 alias hl='ln'
 
+# get print sshkey to console
+alias sshkey='cat ~/.ssh/id_rsa.pub'
+
 # gzipped responses
 alias gurl='curl --compressed'
 
