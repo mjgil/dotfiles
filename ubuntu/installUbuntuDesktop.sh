@@ -39,7 +39,7 @@ sudo apt-get install -y python-pip
 # install package control
 # install oceanic next as the theme
 sudo apt-get install -y sublime-text-installer
-curl https://sh.rustup.rs -sSf | sh
+curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 umake web firefox-dev
 
