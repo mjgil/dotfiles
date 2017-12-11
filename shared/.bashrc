@@ -257,4 +257,4 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
 export GOROOT=/usr/local/go
-export PATH="/home/$(whoami)/.cargo/bin:/usr/local/go/bin:$PATH"
+export PATH="~/.cargo/bin:/usr/local/go/bin:$PATH"
