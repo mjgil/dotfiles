@@ -500,6 +500,8 @@ brew cask install paw
 brew cask install sourcetree
 brew cask install sublime-text
 brew cask install atom
+brew cask install entr # watch file for changes and do stuff
+# ex: ls *.js | entr npm test
 
 # essential
 brew cask install 1password
@@ -509,6 +511,8 @@ brew cask install flux
 brew cask install dropbox
 brew cask install calibre
 brew cask install handbrake
+brew cask install vagrant
+brew cask install virtualbox
 brew cask install spectacle
 # brew cask install evernote
 # brew cask install licecap
@@ -525,3 +529,9 @@ brew cask install screenflow
 brew cask install skype
 brew cask install slack
 brew cask install the-unarchiver
+
+
+curl -O https://bootstrap.pypa.io/get-pip.py
+sudo chown -R malcomgilbert /Library/Python/2.7
+python get-pip.py
+rm get-pip.py
