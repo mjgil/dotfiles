@@ -33,6 +33,8 @@ export GOPATH="/Users/malcomgilbert/go"
 export PATH="/Users/malcomgilbert/.cargo/bin:/usr/local/go/bin:$PATH"
 
 alias gam="/Users/malcomgilbert/bin/gam/gam"
+alias cpsshkey='pbcopy < ~/.ssh/id_rsa.pub'
+alias rebash='source ~/.bash_profile'
 
 ##
 # Your previous /Users/malcomgilbert/.bash_profile file was backed up as /Users/malcomgilbert/.bash_profile.macports-saved_2017-01-13_at_19:30:16
