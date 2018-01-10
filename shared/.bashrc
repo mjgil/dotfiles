@@ -52,6 +52,7 @@ alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull 
 gcp() {
   gc "$1" && gp
 }
+alias c=gcp
 git_clone_secure() {
   git clone "ssh://git@ssh.github.com:443/mjgil/$1.git"
 }
