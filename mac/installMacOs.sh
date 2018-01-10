@@ -7,6 +7,8 @@ git config --global user.name "Malcom Gilbert"
 git config --global user.email malcom@mjgil.com
 git config --global core.editor "subl -n -w"
 git config --global push.default matching
+git config --global core.excludesfile ~/.gitignore
+echo *.DS_Store >> ~/.gitignore
 
 if [ ! -f ~/.git-prompt.sh ]; then
   curl -o ~/.git-prompt.sh \
