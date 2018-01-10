@@ -47,6 +47,11 @@ alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
 
+
+
+gcp() {
+  gc "$1" && gp
+}
 git_clone_secure() {
   git clone "ssh://git@ssh.github.com:443/mjgil/$1.git"
 }
@@ -153,8 +158,9 @@ alias hl='ln'
 # get print sshkey to console
 alias sshkey='cat ~/.ssh/id_rsa.pub'
 
-# get print sshkey to console
+# reload bashrc
 alias rebash='source ~/.bashrc'
+alias r='rebash'
 
 # gzipped responses
 alias gurl='curl --compressed'
