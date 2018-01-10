@@ -134,7 +134,8 @@ else # OS X `ls`
   colorflag="-G"
 fi
 
-alias ls='ls -aF ${colorflag}'
+
+alias l='ls -aF ${colorflag}'
 alias ll='ls -lahF ${colorflag}'
 
 # kill pyc files
@@ -275,3 +276,4 @@ export PATH="~/.yarn/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
 export GOROOT=/usr/local/go
 export PATH="~/.cargo/bin:/usr/local/go/bin:$PATH"
+
