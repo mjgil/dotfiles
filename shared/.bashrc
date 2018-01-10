@@ -142,6 +142,7 @@ fi
 
 
 alias l='ls -aF ${colorflag}'
+alias ls='ls -aF ${colorflag}'
 alias ll='ls -lahF ${colorflag}'
 
 # kill pyc files
