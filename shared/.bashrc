@@ -195,6 +195,16 @@ alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
+# test editor stuff
+alias t="subl ."
+ct() {
+  cd "$1" && t
+}
+alias hosts="sudo t /etc/hosts"
+
+alias cdl="cd ~/Downloads"
+alias cdb="cd ~/Dropbox"
+
 # OS X has no `md5sum`, so use `md5` as a fallback
 command -v md5sum > /dev/null || alias md5sum="md5"
 
