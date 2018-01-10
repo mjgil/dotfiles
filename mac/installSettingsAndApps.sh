@@ -535,6 +535,3 @@ curl -O https://bootstrap.pypa.io/get-pip.py
 sudo chown -R malcomgilbert /Library/Python/2.7
 python get-pip.py
 rm get-pip.py
-
-# command line tools
-xcode-select --install
