@@ -215,7 +215,7 @@ alias t="subl ."
 ct() {
   cd "$1" && t
 }
-alias hosts="sudo t /etc/hosts"
+alias hosts="sudo subl /etc/hosts"
 alias o="open ."
 
 alias cdl="cd ~/Downloads"
