@@ -244,6 +244,12 @@ export PATH="$HOME/bin:$PATH"
 # # Case-insensitive globbing (used in pathname expansion)
 # shopt -s nocaseglob
 
+rust() {
+  name=$(basename $1 .rs)
+  rustc $@ && ./$name && rm $name
+}
+
+
 # make bash history better
 export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
 export HISTSIZE=100000                   # big big history
