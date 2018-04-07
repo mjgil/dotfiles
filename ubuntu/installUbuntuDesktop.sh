@@ -21,6 +21,7 @@ if [ ! "$(which atom)" ]; then
   sudo add-apt-repository -y ppa:webupd8team/atom
 fi
 
+sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable
 
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -35,13 +36,15 @@ sudo apt-get install -y google-chrome-stable
 sudo apt-get install -y ubuntu-make
 sudo apt-get install -y atom
 sudo apt-get install -y python-pip
+sudo apt-get install -y terminator
+sudo apt-get install -y qbittorrent 
 # install sublime text
 # install package control
 # install oceanic next as the theme
 sudo apt-get install -y sublime-text-installer
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
-umake web firefox-dev
+# umake web firefox-dev
 
 pip install --upgrade pip
 pip install grip
@@ -79,6 +82,7 @@ fi
 
 # link bashrc
 ~/git/dotfiles/ubuntu/update-bashrc.sh
+
 
 # install hub
 cd ~/git
