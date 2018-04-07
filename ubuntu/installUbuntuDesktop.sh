@@ -36,7 +36,6 @@ sudo apt-get install -y google-chrome-stable
 sudo apt-get install -y ubuntu-make
 sudo apt-get install -y atom
 sudo apt-get install -y python-pip
-sudo apt-get install -y terminator
 sudo apt-get install -y qbittorrent 
 # install sublime text
 # install package control
