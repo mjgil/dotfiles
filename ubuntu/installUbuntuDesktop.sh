@@ -36,7 +36,10 @@ sudo apt-get install -y google-chrome-stable
 sudo apt-get install -y ubuntu-make
 sudo apt-get install -y atom
 sudo apt-get install -y python-pip
-sudo apt-get install -y qbittorrent 
+sudo apt-get install -y qbittorrent
+sudo apt-get install -y ffmpeg
+sudo apt-get install -y exfat-utils
+sudo apt-get install -y exfat-fuse
 # install sublime text
 # install package control
 # install oceanic next as the theme
