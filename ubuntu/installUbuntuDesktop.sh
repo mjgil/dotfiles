@@ -92,6 +92,8 @@ script/build -o ~/bin/hub
 
 cd ~/git
 
+# default to list-view
+gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
 # add ssh key to github
 # ssh-keygen -t rsa -b 4096 -C "malcomgilbert@gmail.com"
 # cat ~/.ssh/id_rsa.pub
