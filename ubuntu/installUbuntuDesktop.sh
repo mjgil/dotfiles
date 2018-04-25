@@ -39,6 +39,7 @@ sudo apt-get install -y qbittorrent
 sudo apt-get install -y ffmpeg
 sudo apt-get install -y exfat-utils
 sudo apt-get install -y exfat-fuse
+sudo apt-get install -y vlc
 # install sublime text
 # install package control
 # install oceanic next as the theme
