@@ -90,6 +90,13 @@ bitbucket_to_github() {
 }
 alias btg=bitbucket_to_github
 
+zip_directory() {
+  # $1 -- github repo path
+  target=${1%/}
+  zip -r $target.zip $target
+}
+alias zipd=zip_directory
+
 # tmux aliases
 alias tmxn='tmux new-session -s'
 alias tmxa='tmux attach-session -t'
