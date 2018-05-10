@@ -71,11 +71,9 @@ git_remove_file() {
 alias grmf=git_remove_file
 
 git_create_repo() {
-  # TODO: verify name is github compatible
   echo "making ~/git/$1"
   if mkdir ~/git/$1; then
-    # Control will enter here if $DIRECTORY doesn't exist.
-    cd ~/git/$1..
+    cd ~/git/$1
     git init
     touch readme.md
     echo "# $1" >> readme.md
