@@ -55,10 +55,10 @@ alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull 
 
 
 
-gcp() {
+git_commit_push() {
   gc "$1" && gp
 }
-alias c=gcp
+alias c=git_commit_push
 git_clone_secure() {
   git clone "ssh://git@ssh.github.com:443/mjgil/$1.git"
 }
@@ -70,6 +70,22 @@ git_remove_file() {
 }
 alias grmf=git_remove_file
 
+git_create_repo() {
+  # TODO: verify name is github compatible
+  echo "making ~/git/$1"
+  if mkdir ~/git/$1; then
+    # Control will enter here if $DIRECTORY doesn't exist.
+    cd ~/git/$1..
+    git init
+    touch readme.md
+    echo "# $1" >> readme.md
+    git add readme.md
+    git commit -m 'initial commit'
+    hub create $1
+    git push -u origin master
+  fi
+}
+alias gcp=git_create_repo
 
 git_merge() {
   # $1 -- branch to merge into
