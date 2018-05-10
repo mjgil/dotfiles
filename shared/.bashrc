@@ -70,17 +70,33 @@ git_remove_file() {
 }
 alias grmf=git_remove_file
 
+repo_exists() {
+  git ls-remote git@github.com:$1/$2.git > /dev/null 2>&1
+  result=$?
+  if [ $result == 0 ]; then
+    echo "repo exists on github"
+    return 0
+  else
+    echo "repo not on github"
+    return 1
+  fi
+}
+alias re=repo_exists
+
 git_create_repo() {
-  echo "making ~/git/$1"
-  if mkdir ~/git/$1; then
-    cd ~/git/$1
-    git init
-    touch readme.md
-    echo "# $1" >> readme.md
-    git add readme.md
-    git commit -m 'initial commit'
-    hub create $1
-    git push -u origin master
+  # takes one argument: repo_name
+  if ! repo_exists mjgil $1; then
+    echo "making ~/git/$1"
+    if mkdir ~/git/$1; then
+      cd ~/git/$1
+      git init
+      touch readme.md
+      echo "# $1" >> readme.md
+      git add readme.md
+      git commit -m 'initial commit'
+      hub create $1
+      git push -u origin master
+    fi
   fi
 }
 alias gcp=git_create_repo
