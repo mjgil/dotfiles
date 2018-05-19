@@ -59,8 +59,14 @@ git_commit_push() {
   gc "$1" && gp
 }
 alias c=git_commit_push
+
+git_clone_org_secure() {
+  git clone "ssh://git@ssh.github.com:443/$1/$2.git"
+}
+alias gcos=git_clone_org_secure
+
 git_clone_secure() {
-  git clone "ssh://git@ssh.github.com:443/mjgil/$1.git"
+  gcos mjgil $1
 }
 alias gcs=git_clone_secure
 
