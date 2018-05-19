@@ -133,6 +133,10 @@ zip_directory() {
 }
 alias zipd=zip_directory
 
+youtube-dl3() {
+  youtube-dl $1 -x --audio-format mp3
+}
+
 # tmux aliases
 alias tmxn='tmux new-session -s'
 alias tmxa='tmux attach-session -t'
