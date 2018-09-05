@@ -73,7 +73,7 @@ cd ~/git
 git clone https://github.com/mjgil/dotfiles.git
 git clone https://github.com/mjgil/z.git
 
-# need go for hub on Ubuntu
+# install go
 if [ ! -d "/usr/local/go" ]; then
   # Control will enter here if $DIRECTORY doesn't exist.
   wget https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
@@ -87,9 +87,13 @@ fi
 
 
 # install hub
-cd ~/git
-git clone https://github.com/github/hub.git && cd hub
-script/build -o ~/bin/hub
+if [ ! -d "/usr/local/hub" ]; then
+  # Control will enter here if $DIRECTORY doesn't exist.
+  wget https://github.com/github/hub/releases/download/v2.5.1/hub-linux-amd64-2.5.1.tgz
+  sudo tar -xvf hub-linux-amd64-2.5.1.tgz
+  sudo mv hub-linux-amd64-2.5.1 /usr/local/hub
+  rm hub-linux-amd64-2.5.1.tgz
+fi
 
 cd ~/git
 
