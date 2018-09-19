@@ -142,6 +142,7 @@ alias tmxn='tmux new-session -s'
 alias tmxa='tmux attach-session -t'
 alias tmxk='tmux kill-session -t'
 alias tmxl='tmux ls'
+# detach -- ctrl+b, d
 
 # node aliases
 alias nodeh='node --harmony-generators'
