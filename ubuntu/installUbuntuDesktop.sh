@@ -41,6 +41,9 @@ sudo apt-get install -y exfat-utils
 sudo apt-get install -y exfat-fuse
 sudo apt-get install -y vlc
 sudo apt-get install -y tmux
+sudo apt-get install -y docker-io
+# add user to docker group
+sudo usermod -a -G docker $USER
 # install sublime text
 # install package control
 # install oceanic next as the theme
