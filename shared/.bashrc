@@ -126,6 +126,24 @@ bitbucket_to_github() {
 }
 alias btg=bitbucket_to_github
 
+make_sh() {
+  # $1 -- name of .sh file
+  if [ -e "$1.sh" ]; then
+    echo "File exists"
+  else 
+    touch $1.sh
+    echo "#!/usr/bin/env bash" >> $1.sh
+    echo "" >> $1.sh
+    chmod +x $1.sh
+    if [ -e "$1.sh" ]; then
+      echo "File created successfully"
+    else 
+      echo "An error occurred"
+    fi
+  fi
+}
+alias ms=make_sh
+
 zip_directory() {
   # $1 -- github repo path
   target=${1%/}
