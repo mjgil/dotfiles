@@ -155,6 +155,11 @@ youtube-dl3() {
   youtube-dl $1 -x --audio-format mp3
 }
 
+find_any() {
+  find . -iname "*$1*"
+}
+alias fa=find_any
+
 # tmux aliases
 alias tmxn='tmux new-session -s'
 alias tmxa='tmux attach-session -t'
