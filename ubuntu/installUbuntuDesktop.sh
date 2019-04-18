@@ -2,9 +2,9 @@
 
 
 # add sublime text package
-# if [ ! "$(which subl)" ]; then
-#   sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
-# fi
+if [ ! "$(which subl)" ]; then
+  sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
+fi
 
 
 # add the google chrome package
@@ -47,7 +47,7 @@ sudo usermod -a -G docker $USER
 # install sublime text
 # install package control
 # install oceanic next as the theme
-# sudo apt-get install -y sublime-text-installer
+sudo apt-get install -y sublime-text-installer
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # umake web firefox-dev
@@ -114,4 +114,4 @@ gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
 # update keybindings for terminator paste -> ctrl + v
 
 # sublime text from ubuntu installer
-# ln -s /snap/sublime-text/38/opt/sublime_text/sublime_text /usr/local/bin/subl
+ln -s /snap/sublime-text/current/opt/sublime_text/sublime_text /usr/local/bin/subl
