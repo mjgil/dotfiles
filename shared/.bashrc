@@ -160,6 +160,13 @@ find_any() {
 }
 alias fa=find_any
 
+find_any_open() {
+  output=$(fa "$1")
+  dname=$(dirname "$output")
+  open "$dname"
+}
+alias fao=find_any_open
+
 # tmux aliases
 alias tmxn='tmux new-session -s'
 alias tmxa='tmux attach-session -t'
