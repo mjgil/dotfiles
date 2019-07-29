@@ -8,4 +8,4 @@ fi
 
 
 alias gd="git diff | tmpin subl"
-alias open="xgd-open"
+alias open="xdg-open"
