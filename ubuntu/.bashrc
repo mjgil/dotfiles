@@ -8,4 +8,4 @@ fi
 
 
 alias gd="git diff | tmpin subl"
-alias open="nautilus --new-window"
+alias open="xgd-open"
