@@ -163,7 +163,7 @@ alias fa=find_any
 find_any_open() {
   output=$(fa "$1")
   dname=$(dirname "$output")
-  open "$dname"
+  o "$dname"
 }
 alias fao=find_any_open
 
