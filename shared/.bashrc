@@ -160,6 +160,7 @@ find_any() {
 }
 alias fa=find_any
 
+alias o="open ."
 find_any_open() {
   output=$(fa "$1")
   dname=$(dirname "$output")
@@ -294,7 +295,6 @@ ct() {
   cd "$1" && t
 }
 alias hosts="sudo subl /etc/hosts"
-alias o="open ."
 
 alias cdl="cd ~/Downloads"
 alias cdb="cd ~/Dropbox"
