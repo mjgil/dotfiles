@@ -16,6 +16,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/mjgil/dotfiles/master/ubuntu/
 
 ```
 bash <(wget -qO- https://raw.githubusercontent.com/mjgil/dotfiles/master/mac/installMacOs.sh)
+
 after installing dropbox run 
 
 cp ~/Dropbox/Fonts/*.ttf ~/Library/Fonts
