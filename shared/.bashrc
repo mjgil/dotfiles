@@ -369,6 +369,6 @@ export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2
 export GOROOT=/usr/local/go
 export PATH="/usr/local/lib/node_modules/youtube-dl/bin:$PATH" # youtube-dl
 export PATH="~/.cargo/bin:/usr/local/go/bin:$PATH" # rust
-export PATH="/usr/local/go/bin:$PATH" # go
+export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub
 
