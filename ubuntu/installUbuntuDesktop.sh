@@ -31,6 +31,7 @@ sudo apt-get install -y build-essential
 sudo apt-get install -y libssl-dev
 sudo apt-get install -y git-core
 sudo apt-get install -y curl
+sudo apt-get install -y jq
 sudo apt-get install -y google-chrome-stable
 sudo apt-get install -y ubuntu-make
 sudo apt-get install -y atom
