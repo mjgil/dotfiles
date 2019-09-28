@@ -81,10 +81,10 @@ git clone https://github.com/mjgil/z.git
 # install go
 if [ ! -d "/usr/local/go" ]; then
   # Control will enter here if $DIRECTORY doesn't exist.
-  wget https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
-  sudo tar -xvf go1.8.3.linux-amd64.tar.gz
+  wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz
+  sudo tar -xvf go1.13.1.linux-amd64.tar.gz
   sudo mv go /usr/local
-  rm go1.8.3.linux-amd64.tar.gz
+  rm go1.13.1.linux-amd64.tar.gz
 fi
 
 # link bashrc
