@@ -126,39 +126,9 @@ bitbucket_to_github() {
 }
 alias btg=bitbucket_to_github
 
-make_sh() {
-  # $1 -- name of .sh file
-  if [ -e "$1.sh" ]; then
-    echo "File exists"
-  else 
-    touch $1.sh
-    echo "#!/usr/bin/env bash" >> $1.sh
-    echo "" >> $1.sh
-    chmod +x $1.sh
-    if [ -e "$1.sh" ]; then
-      echo "File created successfully"
-    else 
-      echo "An error occurred"
-    fi
-  fi
-}
-alias ms=make_sh
-
-zip_directory() {
-  # $1 -- github repo path
-  target=${1%/}
-  zip -r $target.zip $target
-}
-alias zipd=zip_directory
-
 youtube-dl3() {
   youtube-dl $1 -x --audio-format mp3
 }
-
-find_any() {
-  find . -iname "*$1*"
-}
-alias fa=find_any
 
 alias o="open ."
 find_any_open() {

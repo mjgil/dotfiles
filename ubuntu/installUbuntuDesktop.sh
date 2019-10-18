@@ -77,6 +77,15 @@ cd ~/git
 # pull down dotfiles
 git clone https://github.com/mjgil/dotfiles.git
 git clone https://github.com/mjgil/z.git
+git clone https://github.com/mjgil/mini-bash.git
+
+# link bashrc
+~/git/dotfiles/ubuntu/update-bashrc.sh
+
+# install mini-bash
+cd ~/git/mini-bash
+./install-local.sh
+cd -
 
 # install go
 if [ ! -d "/usr/local/go" ]; then
@@ -87,8 +96,6 @@ if [ ! -d "/usr/local/go" ]; then
   rm go1.13.1.linux-amd64.tar.gz
 fi
 
-# link bashrc
-~/git/dotfiles/ubuntu/update-bashrc.sh
 
 
 # install hub
