@@ -130,6 +130,10 @@ youtube-dl3() {
   youtube-dl $1 -x --audio-format mp3
 }
 
+convert-audio-tempo() {
+  ffmpeg -i $2.mp3 -filter:a "atempo=$1" -vn $2-$1.mp3
+}
+
 alias o="open ."
 find_any_open() {
   output=$(fa "$1")
