@@ -131,7 +131,9 @@ youtube-dl3() {
 }
 
 convert-audio-tempo() {
-  ffmpeg -i $2.mp3 -filter:a "atempo=$1" -vn $2-$1.mp3
+  # $1 audio tempo
+  # $2 filename with extension
+  ffmpeg -i "$2" -filter:a "atempo=$1" -vn "${2%%.mp3}-$1".mp3
 }
 
 alias o="open ."
