@@ -37,7 +37,7 @@ sudo usermod -a -G docker $USER
 # install sublime text
 # install package control
 # install oceanic next as the theme
-sudo snap install sublime-text
+sudo snap install sublime-text --classic
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # umake web firefox-dev
