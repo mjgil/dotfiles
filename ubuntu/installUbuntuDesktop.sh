@@ -3,6 +3,13 @@
 # TODO: add verification text
 # check mark if the software is installed correctly
 
+
+# add the google chrome package
+if [ ! -d "/usr/bin/google-chrome" ]; then
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+fi
+
 sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable
 
 sudo apt-get update
