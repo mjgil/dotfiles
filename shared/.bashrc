@@ -239,11 +239,11 @@ alias connTimers='ss -rota | less'
 alias duc='du -sh */'
 
 # find directories larger than 1000MB
-function dul { du -sh * | awk '$1 ~ /G/ { print $0 }'; }
+function dul { du -sch * | awk '$1 ~ /G/ { print $0 }' | sort -rg; }
 export -f dul
 
 # find directories between 100-999 MB
-function dulm { du -sh * | awk '$1 ~ /[0-9][0-9][0-9]M/ { print $0 }'; }
+function dulm { du -sch * | awk '$1 ~ /[0-9][0-9][0-9]M/ { print $0 }' | sort -rg; }
 export -f dulm
 # pstree --- not on a mac
 # EDITOR=subl
