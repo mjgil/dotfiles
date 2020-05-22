@@ -235,16 +235,7 @@ alias findPort='lsof -n -i4TCP:$PORT | grep LISTEN'
 alias connStates='netstat -tan | grep ":80 " | awk "{print $6}" | sort | uniq -c'
 alias connTimers='ss -rota | less'
 
-# find size of current subdirectories
-alias duc='du -sh */'
 
-# find directories larger than 1000MB
-function dul { du -sch * | awk '$1 ~ /G/ { print $0 }' | sort -rg; }
-export -f dul
-
-# find directories between 100-999 MB
-function dulm { du -sch * | awk '$1 ~ /[0-9][0-9][0-9]M/ { print $0 }' | sort -rg; }
-export -f dulm
 # pstree --- not on a mac
 # EDITOR=subl
 # export editor
