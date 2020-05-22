@@ -22,7 +22,6 @@ sudo apt-get install -y git-core
 sudo apt-get install -y curl
 sudo apt-get install -y jq
 sudo apt-get install -y google-chrome-stable
-sudo apt-get install -y ubuntu-make
 sudo apt-get install -y python-pip
 sudo apt-get install -y qbittorrent
 sudo apt-get install -y ffmpeg
