@@ -17,10 +17,6 @@ if [ ! "$(which umake)" ]; then
   sudo add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make
 fi
 
-if [ ! "$(which atom)" ]; then
-  sudo add-apt-repository -y ppa:webupd8team/atom
-fi
-
 sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable
 
 sudo apt-get update
@@ -34,7 +30,6 @@ sudo apt-get install -y curl
 sudo apt-get install -y jq
 sudo apt-get install -y google-chrome-stable
 sudo apt-get install -y ubuntu-make
-sudo apt-get install -y atom
 sudo apt-get install -y python-pip
 sudo apt-get install -y qbittorrent
 sudo apt-get install -y ffmpeg
