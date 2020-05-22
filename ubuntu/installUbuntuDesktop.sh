@@ -83,12 +83,6 @@ cd -
 
 # default to list-view
 gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
-# add ssh key to github
-# ssh-keygen -t rsa -b 4096 -C "malcomgilbert@gmail.com"
-# cat ~/.ssh/id_rsa.pub
-# eval "$(ssh-agent -s)"
-# ssh-add ~/.ssh/id_rsa
-# go to settings on github and add the key
 
 # update keybindings for terminator copy -> ctrl + c
 # update keybindings for terminator paste -> ctrl + v
@@ -103,3 +97,4 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/'snap-store_ubuntu-software.desktop'//)"
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/'yelp.desktop'//)"
 
+echo "make sure to run make-ssh.sh in shared folder"
