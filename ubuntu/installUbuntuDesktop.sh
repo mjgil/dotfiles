@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: add verification text
+# check mark if the software is installed correctly
 
 # add the google chrome package
 if [ ! -d "/usr/local/go" ]; then
