@@ -32,12 +32,12 @@ sudo apt-get install -y tmux
 sudo apt-get install -y docker-io
 # add user to docker group
 sudo usermod -a -G docker $USER
-# install sublime text
 
 # install snap packages
 sudo snap install sublime-text --classic
 # install package control
 # install oceanic next as the theme
+
 sudo snap install ubuntu-make --classic
 sudo snap install --classic --channel=1.14/stable go
 
