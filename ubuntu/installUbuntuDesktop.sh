@@ -40,6 +40,7 @@ sudo snap install sublime-text --classic
 
 sudo snap install ubuntu-make --classic
 sudo snap install --classic --channel=1.14/stable go
+sudo snap install hub --classic
 
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
@@ -79,18 +80,6 @@ cd ~/git/mini-bash
 ./install-local.sh
 cd -
 
-
-
-# install hub
-if [ ! -d "/usr/local/hub" ]; then
-  # Control will enter here if $DIRECTORY doesn't exist.
-  wget https://github.com/github/hub/releases/download/v2.5.1/hub-linux-amd64-2.5.1.tgz
-  sudo tar -xvf hub-linux-amd64-2.5.1.tgz
-  sudo mv hub-linux-amd64-2.5.1 /usr/local/hub
-  rm hub-linux-amd64-2.5.1.tgz
-fi
-
-cd ~/git
 
 # default to list-view
 gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
