@@ -3,16 +3,6 @@
 # TODO: add verification text
 # check mark if the software is installed correctly
 
-# add the google chrome package
-if [ ! -d "/usr/local/go" ]; then
-  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-fi
-
-if [ ! "$(which umake)" ]; then
-  sudo add-apt-repository -y ppa:ubuntu-desktop/ubuntu-make
-fi
-
 sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable
 
 sudo apt-get update
@@ -37,9 +27,14 @@ sudo apt-get install -y docker-io
 # add user to docker group
 sudo usermod -a -G docker $USER
 # install sublime text
+
+# install snap packages
+sudo snap install sublime-text --classic
 # install package control
 # install oceanic next as the theme
-sudo snap install sublime-text --classic
+sudo snap install ubuntu-make --classic
+sudo snap install --classic --channel=1.14/stable go
+
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # umake web firefox-dev
@@ -78,15 +73,6 @@ cd ~/git/mini-bash
 ./install-local.sh
 cd -
 
-# install go
-if [ ! -d "/usr/local/go" ]; then
-  # Control will enter here if $DIRECTORY doesn't exist.
-  wget https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz
-  sudo tar -xvf go1.13.1.linux-amd64.tar.gz
-  sudo mv go /usr/local
-  rm go1.13.1.linux-amd64.tar.gz
-fi
-
 
 
 # install hub
@@ -111,6 +97,3 @@ gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
 
 # update keybindings for terminator copy -> ctrl + c
 # update keybindings for terminator paste -> ctrl + v
-
-# sublime text from ubuntu installer
-ln -s /snap/sublime-text/current/opt/sublime_text/sublime_text /usr/local/bin/subl
