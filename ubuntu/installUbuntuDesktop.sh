@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
 
-# add sublime text package
-if [ ! "$(which subl)" ]; then
-  sudo add-apt-repository -y ppa:webupd8team/sublime-text-3
-fi
-
-
 # add the google chrome package
 if [ ! -d "/usr/local/go" ]; then
   wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -43,7 +37,7 @@ sudo usermod -a -G docker $USER
 # install sublime text
 # install package control
 # install oceanic next as the theme
-sudo apt-get install -y sublime-text-installer
+sudo snap install sublime-text
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # umake web firefox-dev
