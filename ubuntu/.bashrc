@@ -13,3 +13,5 @@ fi
 if [ -f ~/.git-prompt.sh ]; then
    source ~/.git-prompt.sh
 fi
+
+export PATH="/snap/bin:$PATH" # snap
