@@ -10,8 +10,6 @@ if [ ! -d "/usr/bin/google-chrome" ]; then
   sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 fi
 
-sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable
-
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y nodejs
