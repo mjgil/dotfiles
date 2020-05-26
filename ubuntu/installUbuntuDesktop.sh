@@ -37,6 +37,9 @@ sudo snap install --classic --channel=1.14/stable go
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
 sudo snap install docker
+# sudo groupadd docker
+# sudo usermod -aG docker $USER
+sudo chmod 666 /var/run/docker.sock
 
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
