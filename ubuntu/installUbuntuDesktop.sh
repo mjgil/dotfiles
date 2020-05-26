@@ -36,10 +36,7 @@ sudo snap install ubuntu-make --classic
 sudo snap install --classic --channel=1.14/stable go
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
-
 sudo snap install docker
-# add user to docker group
-sudo usermod -a -G docker $USER
 
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
