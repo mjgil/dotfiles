@@ -23,7 +23,6 @@ sudo apt-get install -y curl
 sudo apt-get install -y jq
 sudo apt-get install -y google-chrome-stable
 sudo apt-get install -y python-pip
-sudo apt-get install -y qbittorrent
 sudo apt-get install -y ffmpeg
 sudo apt-get install -y exfat-utils
 sudo apt-get install -y exfat-fuse
@@ -41,6 +40,7 @@ sudo snap install sublime-text --classic
 sudo snap install ubuntu-make --classic
 sudo snap install --classic --channel=1.14/stable go
 sudo snap install hub --classic
+sudo snap install qbittorrent-arnatious
 
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
