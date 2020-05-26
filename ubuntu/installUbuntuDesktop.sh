@@ -97,4 +97,6 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 
 # set time format to AM/PM
 gsettings set org.gnome.desktop.interface clock-format 12h
-echo "make sure to run make-ssh.sh in shared folder"
+
+# generate new ssh key for github
+~/git/dotfiles/shared/make-ssh.sh
