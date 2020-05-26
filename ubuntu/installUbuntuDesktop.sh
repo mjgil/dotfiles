@@ -26,9 +26,6 @@ sudo apt-get install -y exfat-utils
 sudo apt-get install -y exfat-fuse
 sudo apt-get install -y vlc
 sudo apt-get install -y tmux
-sudo apt-get install -y docker-io
-# add user to docker group
-sudo usermod -a -G docker $USER
 
 # install snap packages
 sudo snap install sublime-text --classic
@@ -39,6 +36,10 @@ sudo snap install ubuntu-make --classic
 sudo snap install --classic --channel=1.14/stable go
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
+
+sudo snap install docker
+# add user to docker group
+sudo usermod -a -G docker $USER
 
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
