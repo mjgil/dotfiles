@@ -95,4 +95,6 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/'snap-store_ubuntu-software.desktop'//)"
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/'yelp.desktop'//)"
 
+# set time format to AM/PM
+gsettings set org.gnome.desktop.interface clock-format 12h
 echo "make sure to run make-ssh.sh in shared folder"
