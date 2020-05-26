@@ -20,7 +20,7 @@ sudo apt-get install -y git-core
 sudo apt-get install -y curl
 sudo apt-get install -y jq
 sudo apt-get install -y google-chrome-stable
-sudo apt-get install -y python-pip
+sudo apt-get install -y python3-pip
 sudo apt-get install -y ffmpeg
 sudo apt-get install -y exfat-utils
 sudo apt-get install -y exfat-fuse
@@ -45,8 +45,7 @@ curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # umake web firefox-dev
 
-pip install --upgrade pip
-pip install grip
+pip3 install grip
 
 sudo ln -s /usr/bin/nodejs /usr/bin/node
 sudo npm install -g tmpin
