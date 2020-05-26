@@ -68,11 +68,15 @@ git clone https://github.com/mjgil/z.git
 git clone https://github.com/mjgil/mini-bash.git
 
 # link bashrc
-~/git/dotfiles/ubuntu/update-bashrc.sh
+cd ~/git/dotfiles
+./ubuntu/update-bashrc.sh
+git remote set-url origin ssh://git@ssh.github.com:443/mjgil/dotfiles.git
+cd -
 
 # install mini-bash
 cd ~/git/mini-bash
 ./install-local.sh
+git remote set-url origin ssh://git@ssh.github.com:443/mjgil/mini-bash.git
 cd -
 
 
