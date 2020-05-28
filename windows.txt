@@ -3,3 +3,5 @@ bcuninstaller
 7zip
 vlc
 chrome
+
+windows time? (windows-key + r -> services.msc -> automatic)
