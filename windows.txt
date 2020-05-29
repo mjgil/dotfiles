@@ -4,4 +4,12 @@ bcuninstaller
 vlc
 chrome
 
-windows time? (windows-key + r -> services.msc -> automatic)
+windows time sync
+  open task scheduler
+  Task Scheduler Library -> Microsoft -> Windows -> Time Synchronization
+  Create Task
+    Name: Sync Time
+    Triggers: Login, Startup
+    Action:
+      program / script %windir%\system32\sc.exe 
+      args start w32time task_started
