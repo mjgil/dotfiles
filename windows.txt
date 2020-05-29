@@ -11,5 +11,5 @@ windows time sync
     Name: Sync Time
     Triggers: Login, Startup
     Action:
-      program / script %windir%\system32\sc.exe 
-      args start w32time task_started
+      program/script: %windir%\system32\sc.exe 
+      args: start w32time task_started
