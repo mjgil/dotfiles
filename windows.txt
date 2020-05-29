@@ -9,7 +9,6 @@ windows time sync
   Task Scheduler Library -> Microsoft -> Windows -> Time Synchronization
   Create Task
     Name: Sync Time
-    Triggers: Login, Startup
+    Triggers: Login
     Action:
-      program/script: %windir%\system32\sc.exe 
-      args: start w32time task_started
+      program/script: time.cmd
