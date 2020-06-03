@@ -10,6 +10,12 @@ if [ ! -d "/usr/bin/google-chrome" ]; then
   sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 fi
 
+# add terminator
+if [ ! -d "/usr/bin/terminator" ]; then
+  sudo add-apt-repository ppa:gnome-terminator
+fi
+
+
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y nodejs
@@ -26,6 +32,7 @@ sudo apt-get install -y exfat-utils
 sudo apt-get install -y exfat-fuse
 sudo apt-get install -y vlc
 sudo apt-get install -y tmux
+sudo apt-get install -y terminator
 
 # install snap packages
 sudo snap install sublime-text --classic
