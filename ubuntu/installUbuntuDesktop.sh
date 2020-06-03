@@ -48,6 +48,10 @@ curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 pip3 install grip
 
+# update node version
+npm install n
+sudo node_modules/n/bin/n 12.7
+
 sudo npm install -g tmpin
 
 # Setup Git
