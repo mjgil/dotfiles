@@ -61,6 +61,10 @@ sudo node_modules/n/bin/n 12.7
 
 sudo npm install -g tmpin
 
+sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+sudo chmod a+rx /usr/local/bin/youtube-dl
+sudo ln -s /usr/bin/python3 /usr/bin/python
+
 # Setup Git
 git config --global user.name "Malcom Gilbert"
 git config --global user.email malcomgilbert@gmail.com
