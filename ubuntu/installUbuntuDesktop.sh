@@ -43,6 +43,8 @@ sudo snap install ubuntu-make --classic
 sudo snap install --classic --channel=1.14/stable go
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
+sudo snap install gravit-designer
+sudo snap install vectr
 
 sudo groupadd docker
 sudo usermod -aG docker $USER
