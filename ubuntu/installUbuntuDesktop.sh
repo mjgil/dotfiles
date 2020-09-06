@@ -46,10 +46,8 @@ sudo snap install gravit-designer
 sudo snap install vectr
 
 # install go
-sudo snap install --classic --channel=1.14/stable go
-# add default GOROOT & GOPATH directories
-sudo mkdir /usr/local/go
-mkdir $HOME/go
+wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+# to check `go env` `go version` `go run $filename`
 
 sudo groupadd docker
 sudo usermod -aG docker $USER
