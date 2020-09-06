@@ -40,11 +40,16 @@ sudo snap install sublime-text --classic
 # install oceanic next as the theme
 
 sudo snap install ubuntu-make --classic
-sudo snap install --classic --channel=1.14/stable go
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
 sudo snap install gravit-designer
 sudo snap install vectr
+
+# install go
+sudo snap install --classic --channel=1.14/stable go
+# add default GOROOT & GOPATH directories
+sudo mkdir /usr/local/go
+mkdir $HOME/go
 
 sudo groupadd docker
 sudo usermod -aG docker $USER
