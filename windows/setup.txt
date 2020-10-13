@@ -12,3 +12,7 @@ windows time sync
     Triggers: Login
     Action:
       program/script: time.cmd
+
+
+github bash for windows
+cp .bashrc over (first 200 lines, remove part about hub)
