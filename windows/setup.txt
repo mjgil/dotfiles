@@ -1,0 +1,18 @@
+sharex -- screen recorder
+bcuninstaller
+7zip
+vlc
+chrome
+
+windows time sync
+  open task scheduler
+  Task Scheduler Library -> Microsoft -> Windows -> Time Synchronization
+  Create Task
+    Name: Sync Time
+    Triggers: Login
+    Action:
+      program/script: time.cmd
+
+
+github bash for windows
+cp .bashrc over (first 200 lines, remove part about hub)

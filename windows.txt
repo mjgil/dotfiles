@@ -1,5 +1,0 @@
-sharex -- screen recorder
-bcuninstaller
-7zip
-vlc
-chrome

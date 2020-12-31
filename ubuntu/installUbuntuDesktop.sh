@@ -10,6 +10,12 @@ if [ ! -d "/usr/bin/google-chrome" ]; then
   sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 fi
 
+# add terminator
+if [ ! -d "/usr/bin/terminator" ]; then
+  sudo add-apt-repository ppa:gnome-terminator
+fi
+
+
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y nodejs
@@ -26,6 +32,7 @@ sudo apt-get install -y exfat-utils
 sudo apt-get install -y exfat-fuse
 sudo apt-get install -y vlc
 sudo apt-get install -y tmux
+sudo apt-get install -y terminator
 
 # install snap packages
 sudo snap install sublime-text --classic
@@ -33,11 +40,19 @@ sudo snap install sublime-text --classic
 # install oceanic next as the theme
 
 sudo snap install ubuntu-make --classic
-sudo snap install --classic --channel=1.14/stable go
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
+sudo snap install gravit-designer
+sudo snap install vectr
+
+# install go
+wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+# to check `go env` `go version` `go run $filename`
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
 sudo snap install docker
-sudo chmod 666 /var/run/docker.sock
+# sudo chmod 666 /var/run/docker.sock
 
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 
@@ -45,8 +60,15 @@ curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 pip3 install grip
 
-sudo ln -s /usr/bin/nodejs /usr/bin/node
+# update node version
+npm install n
+sudo node_modules/n/bin/n 12.7
+
 sudo npm install -g tmpin
+
+sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+sudo chmod a+rx /usr/local/bin/youtube-dl
+sudo ln -s /usr/bin/python3 /usr/bin/python
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"
@@ -92,6 +114,7 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'google-chrome.desktop']"
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'vlc.desktop']"
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'sublime-text_subl.desktop']"
+gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'terminator.desktop']"
 
 # rm 'snap-store_ubuntu-software.desktop', 'yelp.desktop' from favorites
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/'snap-store_ubuntu-software.desktop'//)"
