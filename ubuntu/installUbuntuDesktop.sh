@@ -33,6 +33,7 @@ sudo apt-get install -y exfat-fuse
 sudo apt-get install -y vlc
 sudo apt-get install -y tmux
 sudo apt-get install -y terminator
+sudo apt-get install -y tree
 
 # install snap packages
 sudo snap install sublime-text --classic
