@@ -136,6 +136,11 @@ convert-audio-tempo() {
   ffmpeg -i "$2" -filter:a "atempo=$1" -vn "${2%%.mp3}-$1".mp3
 }
 
+num-files-count() {
+  du -a | cut -d/ -f2 | sort | uniq -c | sort -nr
+}
+alias nfc=num-files-count
+
 alias o="open ."
 find_any_open() {
   output=$(fa "$1")
