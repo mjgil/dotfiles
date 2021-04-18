@@ -130,6 +130,10 @@ youtube-dl3() {
   youtube-dl $1 -x --audio-format mp3
 }
 
+youtube-dlp() {
+  youtube-dl -o "%(playlist_index)004d - %(title)s.%(ext)s" $1
+}
+
 convert-audio-tempo() {
   # $1 audio tempo
   # $2 filename with extension
