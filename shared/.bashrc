@@ -131,7 +131,7 @@ youtube-dl3() {
 }
 
 youtube-dlp() {
-  youtube-dl -o "%(playlist_index)004d - %(title)s.%(ext)s" $1
+  youtube-dl "$@" -o "%(playlist_index)004d - %(title)s.%(ext)s" 
 }
 
 convert-audio-tempo() {
