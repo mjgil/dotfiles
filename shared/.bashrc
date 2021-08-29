@@ -127,7 +127,7 @@ bitbucket_to_github() {
 alias btg=bitbucket_to_github
 
 youtube-dl3() {
-  youtube-dl $1 -x --audio-format mp3
+  youtube-dl $1 -x --audio-format mp3 --audio-quality 320k
 }
 
 youtube-dlp() {
