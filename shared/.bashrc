@@ -134,6 +134,10 @@ youtube-dlp() {
   youtube-dl "$@" -o "%(playlist_index)004d - %(title)s.%(ext)s" 
 }
 
+youtube-dlpl() {
+  youtube-dl -j --flat-playlist "$@" | jq -r '.id' | sed 's_^_https://youtu.be/_'
+}
+
 convert-audio-tempo() {
   # $1 audio tempo
   # $2 filename with extension
