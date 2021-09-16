@@ -153,7 +153,7 @@ youtube-dlad() {
   for line in $(cat $FILE_NAME); do
     if [ $count -ge $AUTONUMBER_START ]; then
       printf "   %s %s\n" $count $line
-      youtube-dl $line --output "%(autonumber)004d - %(title)s.%(ext)s" --autonumber-start $AUTONUMBER_START
+      youtube-dl $line --output "%(autonumber)004d - %(title)s.%(ext)s" --autonumber-start $count
     fi
     let count++
   done
