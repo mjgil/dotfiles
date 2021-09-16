@@ -130,12 +130,33 @@ youtube-dl3() {
   youtube-dl $1 -x --audio-format mp3 --audio-quality 320k
 }
 
-youtube-dla() {
-  youtube-dl "$@" -o "%(autonumber)004d - %(title)s.%(ext)s" 
-}
-
 youtube-dlpl() {
   youtube-dl -j --flat-playlist "$@" | jq -r '.id' | sed 's_^_https://youtu.be/_'
+}
+
+youtube-dlad() {
+  # $1: starting index
+  # $2: name of file
+
+  die () {
+      echo >&2 "$@"
+      exit 1
+  }
+
+  [ "$#" -eq 2 ] || die "2 arguments required, $# provided"
+
+  AUTONUMBER_START=$1
+  FILE_NAME=$2
+
+
+  let count=1
+  for line in $(cat $FILE_NAME); do
+    if [ $count -ge $AUTONUMBER_START ]; then
+      printf "   %s %s\n" $count $line
+      youtube-dl $line --output "%(autonumber)004d - %(title)s.%(ext)s" --autonumber-start $AUTONUMBER_START
+    fi
+    let count++
+  done
 }
 
 convert-audio-tempo() {
