@@ -130,8 +130,8 @@ youtube-dl3() {
   youtube-dl $1 -x --audio-format mp3 --audio-quality 320k
 }
 
-youtube-dlp() {
-  youtube-dl "$@" -o "%(playlist_index)004d - %(title)s.%(ext)s" 
+youtube-dla() {
+  youtube-dl "$@" -o "%(autonumber)004d - %(title)s.%(ext)s" 
 }
 
 youtube-dlpl() {
