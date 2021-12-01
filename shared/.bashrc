@@ -134,6 +134,21 @@ youtube-dlp() {
   youtube-dl "$@" -o "%(playlist_index)004d - %(title)s.%(ext)s" 
 }
 
+youtube-dlgif() {
+  # $1 -- url of video
+  # $2 -- start time of video (00:00:15:00 -> start 15 secs in)
+  # $3 -- how much time to capture (00:00:10:00 -> 10 secs)
+  # $4 -- output name
+  URL=$(youtube-dl -g "$1")
+  ffmpeg $(youtube-dl -f "bestvideo" -g "$1" | sed "s/^/-ss $2 -i /") -t "$3" -c copy "$4.mp4"
+  ffmpeg -i "$4.mp4" -f gif "$4.gif"
+}
+
+
+youtube-dlp3() {
+  youtube-dlp "$@" -x --audio-format mp3 --audio-quality 320k
+}
+
 youtube-dlpl() {
   youtube-dl -j --flat-playlist "$@" | jq -r '.id' | sed 's_^_https://youtu.be/_'
 }
