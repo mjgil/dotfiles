@@ -143,6 +143,7 @@ youtube-dlgif() {
   ffmpeg $(youtube-dl -f "bestvideo" -g "$1" | sed "s/^/-ss $2 -i /") -t "$3" -c copy "$4.mp4"
   ffmpeg -i "$4.mp4" -f gif "$4.gif"
   ffmpeg -i "$4.mp4" -f gif -vf scale=320x180 "$4-small.gif"
+  ffmpeg -i "$4.mp4" -f gif -vf scale=640x360 "$4-medium.gif"
 }
 
 
