@@ -126,36 +126,41 @@ bitbucket_to_github() {
 }
 alias btg=bitbucket_to_github
 
-youtube-dl3() {
-  youtube-dl $1 -x --audio-format mp3 --audio-quality 320k
+yt-dlp3() {
+  yt-dlp $1 -x --audio-format mp3 --audio-quality 320k
 }
 
-youtube-dlp() {
-  youtube-dl "$@" -o "%(playlist_index)004d - %(title)s.%(ext)s" 
+yt-dlpp() {
+  yt-dlp "$@" -o "%(playlist_index)004d - %(title)s.%(ext)s" 
 }
 
-youtube-dlgif() {
+yt-dlp1080() {
+  yt-dlp -f "bv[height<=1080]+ba / b[height<=1080] / b" "$@" 
+}
+
+
+yt-dlpgif() {
   # $1 -- url of video
   # $2 -- start time of video (00:00:15:00 -> start 15 secs in)
   # $3 -- how much time to capture (00:00:10:00 -> 10 secs)
   # $4 -- output name
-  URL=$(youtube-dl -g "$1")
-  ffmpeg $(youtube-dl -f "bestvideo" -g "$1" | sed "s/^/-ss $2 -i /") -t "$3" -c copy "$4.mp4"
+  URL=$(yt-dlp -g "$1")
+  ffmpeg $(yt-dlp -f "bestvideo" -g "$1" | sed "s/^/-ss $2 -i /") -t "$3" -c copy "$4.mp4"
   ffmpeg -i "$4.mp4" -f gif "$4.gif"
   ffmpeg -i "$4.mp4" -f gif -vf scale=320x180 "$4-small.gif"
   ffmpeg -i "$4.mp4" -f gif -vf scale=640x360 "$4-medium.gif"
 }
 
 
-youtube-dlp3() {
-  youtube-dlp "$@" -x --audio-format mp3 --audio-quality 320k
+yt-dlpp3() {
+  yt-dlpp "$@" -x --audio-format mp3 --audio-quality 320k
 }
 
-youtube-dlpl() {
-  youtube-dl -j --flat-playlist "$@" | jq -r '.id' | sed 's_^_https://youtu.be/_'
+yt-dlppl() {
+  yt-dlp -j --flat-playlist "$@" | jq -r '.id' | sed 's_^_https://youtu.be/_'
 }
 
-youtube-dlad() {
+yt-dlpad() {
   # $1: starting index
   # $2: name of file
 
@@ -174,7 +179,7 @@ youtube-dlad() {
   for line in $(cat $FILE_NAME); do
     if [ $count -ge $AUTONUMBER_START ]; then
       printf "   %s %s\n" $count $line
-      youtube-dl $line --output "%(autonumber)004d - %(title)s.%(ext)s" --autonumber-start $count
+      yt-dlp $line --output "%(autonumber)004d - %(title)s.%(ext)s" --autonumber-start $count
     fi
     let count++
   done
@@ -389,7 +394,6 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
 export GOROOT=/usr/local/go
-export PATH="/usr/local/lib/node_modules/youtube-dl/bin:$PATH" # youtube-dl
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub
 source $HOME/.cargo/env # rust
