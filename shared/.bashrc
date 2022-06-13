@@ -139,6 +139,14 @@ yt-dlp1080() {
 }
 
 
+yt-dlpfraction() {
+  # $1 -- url of video
+  # $2 -- start time of video (00:00:15:00 -> start 15 secs in)
+  # $3 -- how much time to capture (00:00:10:00 -> 10 secs)
+  # $4 -- output name
+  ffmpeg $(yt-dlp -f "bestvideo+bestaudio" -g "$1" | sed "s/^/-ss $2 -i /") -t "$3" -c copy "$4.mkv"
+}
+
 yt-dlpgif() {
   # $1 -- url of video
   # $2 -- start time of video (00:00:15:00 -> start 15 secs in)
