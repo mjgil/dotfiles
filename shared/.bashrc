@@ -105,7 +105,7 @@ git_create_repo() {
     fi
   fi
 }
-alias gcp=git_create_repo
+alias gcr=git_create_repo
 
 git_merge() {
   # $1 -- branch to merge into
