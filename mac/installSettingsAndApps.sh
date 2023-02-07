@@ -428,7 +428,7 @@ for app in "Address Book" "Calendar" "Contacts" "Dock" "Finder" "Mail" \
         "Twitter" "iCal"; do
         killall "${app}" > /dev/null 2>&1
 done
-echo "Done. Note that some of these changes require a logout/restart to take effect."
+echo "Killed Apps, Beginning Install..."
 
 # Install Homebrew if it does not exist
 if test ! $(which brew)
@@ -535,3 +535,5 @@ curl -O https://bootstrap.pypa.io/get-pip.py
 sudo chown -R malcomgilbert /Library/Python/2.7
 python get-pip.py
 rm get-pip.py
+
+echo "Done. Note that some of these changes require a logout/restart to take effect."
