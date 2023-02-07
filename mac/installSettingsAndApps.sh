@@ -437,56 +437,30 @@ then
 fi
 brew update
 
-# Install Git
-if test ! $(which git)
-then
-    brew install git
-fi
-
-# Install wget
-if test ! $(which wget)
-then
-    brew install wget
-fi
-
-# Install node
-if test ! $(which node)
-then
-    brew install node
-fi
-
-# Install hub foor git
-if test ! $(which hub)
-then
-    brew install hub
-fi
-
-# Install go
-if test ! $(which go)
-then
-    brew install go
-fi
-
-# Install rust
-if test ! $(which rust)
-then
-    brew install rust
-fi
-
+ifnot_brew_install() {
+  if test ! $(which $1)
+  then
+    brew install $1
+  fi  
+}
 
 brew_cask_install() {
   brew install $1 --cask
 }
 
-brew install haskell-stack
-brew install elixir
-brew install hardlink-osx
-brew install youtube-dl
-brew install tree
-
-# homebrew-cask
-brew tap caskroom/cask
-brew tap caskroom/versions
+# Install Essential Programs/Languages
+ifnot_brew_install git
+ifnot_brew_install wget
+ifnot_brew_install node
+ifnot_brew_install hub
+ifnot_brew_install go
+ifnot_brew_install rust
+ifnot_brew_install python
+ifnot_brew_install haskell-stack
+ifnot_brew_install elixir
+ifnot_brew_install hardlink-osx
+ifnot_brew_install youtube-dl
+ifnot_brew_install tree
 
 # browsers
 brew_cask_install google-chrome
