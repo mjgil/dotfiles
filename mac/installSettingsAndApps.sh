@@ -473,6 +473,11 @@ then
     brew install rust
 fi
 
+
+brew_cask_install() {
+  brew install $1 --cask
+}
+
 brew install haskell-stack
 brew install elixir
 brew install hardlink-osx
@@ -484,51 +489,51 @@ brew tap caskroom/cask
 brew tap caskroom/versions
 
 # browsers
-brew cask install google-chrome
-brew cask install google-chrome-canary
-brew cask install firefox
-brew cask install firefox-beta
-brew cask install safari-technology-preview
+brew_cask_install google-chrome
+brew_cask_install google-chrome-canary
+brew_cask_install firefox
+brew_cask_install firefox-beta
+brew_cask_install safari-technology-preview
 
 # coding
-brew cask install kaleidoscope
-brew cask install iterm2
-# brew cask install mou
-brew cask install parallels-desktop
-brew cask install virtualbox
-brew cask install paw
-brew cask install sourcetree
-brew cask install sublime-text
-brew cask install atom
-brew cask install entr # watch file for changes and do stuff
+brew_cask_install kaleidoscope
+brew_cask_install iterm2
+# brew_cask_install mou
+brew_cask_install parallels-desktop
+brew_cask_install virtualbox
+brew_cask_install paw
+brew_cask_install sourcetree
+brew_cask_install sublime-text
+brew_cask_install atom
+brew_cask_install entr # watch file for changes and do stuff
 # ex: ls *.js | entr npm test
 
 # essential
-brew cask install 1password
-brew cask install alfred
-brew cask install caffeine
-brew cask install flux
-brew cask install dropbox
-brew cask install calibre
-brew cask install handbrake
-brew cask install vagrant
-brew cask install virtualbox
-brew cask install spectacle
-# brew cask install evernote
-# brew cask install licecap
+brew_cask_install 1password
+brew_cask_install alfred
+brew_cask_install caffeine
+brew_cask_install flux
+brew_cask_install dropbox
+brew_cask_install calibre
+brew_cask_install handbrake
+brew_cask_install vagrant
+brew_cask_install virtualbox
+brew_cask_install spectacle
+# brew_cask_install evernote
+# brew_cask_install licecap
 
 # for fun
-brew cask install spotify
-brew cask install vlc
-brew cask install webtorrent
+brew_cask_install spotify
+brew_cask_install vlc
+brew_cask_install webtorrent
 
 # other
-brew cask install bartender
-brew cask install istat-menus
-brew cask install screenflow
-brew cask install skype
-brew cask install slack
-brew cask install the-unarchiver
+brew_cask_install bartender
+brew_cask_install istat-menus
+brew_cask_install screenflow
+brew_cask_install skype
+brew_cask_install slack
+brew_cask_install the-unarchiver
 
 
 curl -O https://bootstrap.pypa.io/get-pip.py
