@@ -459,7 +459,7 @@ ifnot_brew_install python
 ifnot_brew_install haskell-stack
 ifnot_brew_install elixir
 ifnot_brew_install hardlink-osx
-ifnot_brew_install youtube-dl
+ifnot_brew_install yt-dlp
 ifnot_brew_install tree
 
 # browsers
