@@ -509,6 +509,7 @@ brew_cask_install screenflow
 brew_cask_install skype
 brew_cask_install slack
 brew_cask_install the-unarchiver
+brew_cask_install gimp
 
 
 curl -O https://bootstrap.pypa.io/get-pip.py
