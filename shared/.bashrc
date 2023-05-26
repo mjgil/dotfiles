@@ -204,6 +204,11 @@ num-files-count() {
 }
 alias nfc=num-files-count
 
+video_resolution() {
+  ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$1"
+}
+alias vr=video_resolution
+
 alias o="open ."
 find_any_open() {
   output=$(fa "$1")
