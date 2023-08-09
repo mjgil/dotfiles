@@ -462,6 +462,7 @@ ifnot_brew_install hardlink-osx
 ifnot_brew_install yt-dlp
 ifnot_brew_install ffmpeg
 ifnot_brew_install tree
+ifnot_brew_install jq
 
 # browsers
 brew_cask_install google-chrome
