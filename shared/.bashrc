@@ -410,7 +410,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
-export GOROOT=/usr/local/go
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub
 source $HOME/.cargo/env # rust
