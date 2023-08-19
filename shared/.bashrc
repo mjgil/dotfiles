@@ -17,7 +17,7 @@ alias git=hub
 alias gpr="git pull-request"
 
 # git aliases
-alias gd="git diff | subl"
+alias gd="git diff | subl -"
 alias ga="git add"
 alias gaa="git add --all"
 alias gbd="git branch -D"
@@ -213,6 +213,23 @@ video_resolution() {
 }
 alias vr=video_resolution
 
+venv() {
+case $1 in
+  "make")
+    python3 -m venv venv ;;
+  "start")
+    source venv/bin/activate ;;
+  "stop")
+    deactivate ;;
+  "check")
+   # It should be in the venv directory:
+   # .../venv/bin/python
+    which python ;;
+  *)
+    echo "Error: Invalid Option for venv (start, stop, make, check)" ;;
+esac
+}
+
 alias o="open ."
 find_any_open() {
   output=$(fa "$1")
@@ -342,6 +359,8 @@ alias hosts="sudo subl /etc/hosts"
 
 alias cdl="cd ~/Downloads"
 alias cdb="cd ~/Dropbox"
+
+
 
 # OS X has no `md5sum`, so use `md5` as a fallback
 command -v md5sum > /dev/null || alias md5sum="md5"

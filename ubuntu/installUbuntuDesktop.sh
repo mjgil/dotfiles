@@ -16,24 +16,25 @@ if [ ! -d "/usr/bin/terminator" ]; then
 fi
 
 
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get install -y nodejs
-sudo apt-get install -y npm
-sudo apt-get install -y build-essential
-sudo apt-get install -y libssl-dev
-sudo apt-get install -y git-core
-sudo apt-get install -y curl
-sudo apt-get install -y jq
-sudo apt-get install -y google-chrome-stable
-sudo apt-get install -y python3-pip
-sudo apt-get install -y ffmpeg
-sudo apt-get install -y exfat-utils
-sudo apt-get install -y exfat-fuse
-sudo apt-get install -y vlc
-sudo apt-get install -y tmux
-sudo apt-get install -y terminator
-sudo apt-get install -y tree
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y nodejs
+sudo apt install -y npm
+sudo apt install -y build-essential
+sudo apt install -y libssl-dev
+sudo apt install -y git-core
+sudo apt install -y curl
+sudo apt install -y jq
+sudo apt install -y google-chrome-stable
+sudo apt install -y python3-pip
+sudo apt install -y python3-venv
+sudo apt install -y ffmpeg
+sudo apt install -y exfat-utils
+sudo apt install -y exfat-fuse
+sudo apt install -y vlc
+sudo apt install -y tmux
+sudo apt install -y terminator
+sudo apt install -y tree
 
 # install snap packages
 sudo snap install sublime-text --classic

@@ -478,6 +478,7 @@ brew_cask_install iterm2
 # brew_cask_install mou
 brew_cask_install parallels-desktop
 brew_cask_install virtualbox
+brew_cask_install docker
 brew_cask_install paw
 brew_cask_install sourcetree
 brew_cask_install sublime-text
@@ -513,10 +514,5 @@ brew_cask_install slack
 brew_cask_install the-unarchiver
 brew_cask_install gimp
 
-
-curl -O https://bootstrap.pypa.io/get-pip.py
-sudo chown -R malcomgilbert /Library/Python/2.7
-python get-pip.py
-rm get-pip.py
 
 echo "Done. Note that some of these changes require a logout/restart to take effect."
