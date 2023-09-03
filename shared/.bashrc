@@ -158,9 +158,9 @@ yt-dlpgif() {
 }
 
 vid-gif() {
-  ffmpeg -i "$1" -f gif "$1.gif"
-  ffmpeg -i "$1" -f gif -vf scale=320x180 "$1-small.gif"
-  ffmpeg -i "$1" -f gif -vf scale=640x360 "$1-medium.gif"
+  gifgen "$1"
+  gifgen  -w 320 -o "$1-small.gif" "$1"
+  gifgen  -w 640 -o "$1-medium.gif" "$1"
 }
 
 

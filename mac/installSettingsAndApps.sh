@@ -465,6 +465,9 @@ ifnot_brew_install tree
 ifnot_brew_install jq
 ifnot_brew_install gnupg
 
+# install gifgen
+brew install lukechilds/tap/gifgen
+
 # browsers
 brew_cask_install google-chrome
 brew_cask_install google-chrome-canary
