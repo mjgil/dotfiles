@@ -140,6 +140,9 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 # set time format to AM/PM
 gsettings set org.gnome.desktop.interface clock-format 12h
 
+cp /var/lib/snapd/desktop/applications/*.desktop ~/.local/share/applications/
+update-desktop-database ~/.local/share/applications/
+
 # github commands
 echo "make github key"
 echo "update git config file"
