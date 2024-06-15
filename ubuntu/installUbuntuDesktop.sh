@@ -153,6 +153,7 @@ cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 # github commands
 echo "make github key"
 echo "update git config file"
+echo "keyboard shortcut gnome-screenshot -a"
 
 
 # install dropbox
