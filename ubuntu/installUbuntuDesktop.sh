@@ -15,6 +15,7 @@ if [ ! -d "/usr/bin/terminator" ]; then
   sudo add-apt-repository ppa:gnome-terminator
 fi
 
+# linux mint
 if [ -f "/etc/apt/preferences.d/nosnap.pref" ]; then
    sudo rm /etc/apt/preferences.d/nosnap.pref
 fi
@@ -140,8 +141,10 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 # set time format to AM/PM
 gsettings set org.gnome.desktop.interface clock-format 12h
 
+# linux mint
 cp /var/lib/snapd/desktop/applications/*.desktop ~/.local/share/applications/
 update-desktop-database ~/.local/share/applications/
+gsettings set org.cinnamon.desktop.interface clock-use-24h false
 
 # github commands
 echo "make github key"
