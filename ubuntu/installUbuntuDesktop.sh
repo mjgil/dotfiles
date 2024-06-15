@@ -33,6 +33,7 @@ sudo apt install -y jq
 sudo apt install -y google-chrome-stable
 sudo apt install -y python3-pip
 sudo apt install -y python3-venv
+
 sudo apt install -y ffmpeg
 sudo apt install -y exfat-utils
 sudo apt install -y exfat-fuse
@@ -40,6 +41,17 @@ sudo apt install -y vlc
 sudo apt install -y tmux
 sudo apt install -y terminator
 sudo apt install -y tree
+
+
+sudo apt install -y software-properties-common
+sudo apt install -y python3.9
+sudo apt install -y python3.9-distutils
+sudo ln -s /usr/bin/python3.9 /usr/bin/python
+curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python
+pip install yt-dlp
+pip install -U yt-dlp
+
+
 
 # install snap packages
 sudo snap install sublime-text --classic
@@ -51,9 +63,10 @@ sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
 sudo snap install gravit-designer
 sudo snap install vectr
+sudo snap install gimp
 
 # install go
-wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+wget -c https://go.dev/dl/go1.21.1.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
 # to check `go env` `go version` `go run $filename`
 
 sudo groupadd docker
@@ -69,13 +82,10 @@ pip3 install grip
 
 # update node version
 npm install n
-sudo node_modules/n/bin/n 12.7
+sudo node_modules/n/bin/n 20.14
 
 sudo npm install -g tmpin
 
-sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
-sudo chmod a+rx /usr/local/bin/youtube-dl
-sudo ln -s /usr/bin/python3 /usr/bin/python
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"
@@ -130,8 +140,9 @@ gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell fav
 # set time format to AM/PM
 gsettings set org.gnome.desktop.interface clock-format 12h
 
-# generate new ssh key for github
-~/git/dotfiles/shared/make-ssh.sh
+# github commands
+echo "make github key"
+echo "update git config file"
 
 
 # install dropbox
