@@ -146,6 +146,8 @@ gsettings set org.gnome.desktop.interface clock-format 12h
 cp /var/lib/snapd/desktop/applications/*.desktop ~/.local/share/applications/
 update-desktop-database ~/.local/share/applications/
 gsettings set org.cinnamon.desktop.interface clock-use-24h false
+gsettings set org.cinnamon.desktop.interface clock-show-date true
+
 
 # app-settings
 cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
