@@ -56,6 +56,7 @@ pip install -U yt-dlp
 
 # install snap packages
 sudo snap install sublime-text --classic
+subl --command "install_package_control"
 # install package control
 # install oceanic next as the theme
 
@@ -145,6 +146,9 @@ gsettings set org.gnome.desktop.interface clock-format 12h
 cp /var/lib/snapd/desktop/applications/*.desktop ~/.local/share/applications/
 update-desktop-database ~/.local/share/applications/
 gsettings set org.cinnamon.desktop.interface clock-use-24h false
+
+# app-settings
+cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
 # github commands
 echo "make github key"
