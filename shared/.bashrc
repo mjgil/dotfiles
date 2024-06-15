@@ -217,7 +217,7 @@ alias vr=video_resolution
 venv() {
 case $1 in
   "make")
-    python3 -m venv venv ;;
+    python3.9 -m venv venv ;;
   "start")
     source venv/bin/activate ;;
   "stop")
@@ -435,6 +435,8 @@ export PATH="~/.yarn/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
 export PYTHONPATH="/usr/local/lib/python3.9/dist-packages:$PYTHONPATH"
 export PATH="~/.local/bin:$PATH"
+export JAVA_HOME=/usr/local/jdk-21.0.3
+export PATH=$JAVA_HOME/bin:$PATH
 
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub
