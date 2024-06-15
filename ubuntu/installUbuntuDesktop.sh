@@ -15,6 +15,10 @@ if [ ! -d "/usr/bin/terminator" ]; then
   sudo add-apt-repository ppa:gnome-terminator
 fi
 
+if [ -f "/etc/apt/preferences.d/nosnap.pref" ]; then
+   sudo rm /etc/apt/preferences.d/nosnap.pref
+fi
+
 
 sudo apt update
 sudo apt upgrade -y
