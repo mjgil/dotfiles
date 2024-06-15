@@ -24,6 +24,8 @@ fi
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y snapd
+sudo apt install -y nautilus
+sudo apt install -y imagemagick
 sudo apt install -y nodejs
 sudo apt install -y npm
 sudo apt install -y build-essential
@@ -32,8 +34,6 @@ sudo apt install -y git-core
 sudo apt install -y curl
 sudo apt install -y jq
 sudo apt install -y google-chrome-stable
-sudo apt install -y python3-pip
-sudo apt install -y python3-venv
 
 sudo apt install -y ffmpeg
 sudo apt install -y exfat-utils
@@ -46,6 +46,8 @@ sudo apt install -y tree
 
 sudo apt install -y software-properties-common
 sudo apt install -y python3.9
+sudo apt install -y python3.9-pip
+sudo apt install -y python3.9-venv
 sudo apt install -y python3.9-distutils
 sudo ln -s /usr/bin/python3.9 /usr/bin/python
 curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python
@@ -69,6 +71,10 @@ sudo snap install gimp
 
 # install go
 wget -c https://go.dev/dl/go1.21.1.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+
+# install java
+wget -c https://download.oracle.com/java/21.0.3/latest/jdk-21.0.3_linux-x64_bin.tar.gz -O - | sudo tar -xz -C /usr/local/
+
 # to check `go env` `go version` `go run $filename`
 
 sudo groupadd docker
