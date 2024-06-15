@@ -13,3 +13,4 @@ if [ -f ~/.git-prompt.sh ]; then
 fi
 
 export PATH="/snap/bin:$PATH" # snap
+. "$HOME/.cargo/env"

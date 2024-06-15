@@ -6,7 +6,7 @@
 # o - open finder
 # r - resource bashrc
 
-export PS1='\[\033[1;34m\][\u@\h jobs:\j \d \A] \n \[\033[1;32m\]$PWD $(__git_ps1 "(%s)")\n \[\033[1;31m\]mac\[\033[0m\]: '
+export PS1='\[\033[1;34m\][\u@\h jobs:\j \d \A] \n \[\033[1;32m\]$PWD $(__git_ps1 "(%s)")\n \[\033[1;31m\]m\[\033[0m\]: '
 # virtualenv ps1 --- export PS1='\[\033[1;34m\][\u@\h jobs:\j \d \A] \n \[\033[1;32m\](`basename $VIRTUAL_ENV`) $PWD $(__git_ps1 "(%s)")\n \[\033[1;31m\]ΝΔ\[\033[0m\]: '
 # export PATH="/usr/local/bin:/opt/chef/embedded/bin:$PATH"
 
@@ -222,6 +222,8 @@ case $1 in
     source venv/bin/activate ;;
   "stop")
     deactivate ;;
+  "rm")
+    rm -rf venv ;;
   "check")
    # It should be in the venv directory:
    # .../venv/bin/python
@@ -247,7 +249,6 @@ alias tmxl='tmux ls'
 # detach -- ctrl+b, d
 
 # node aliases
-alias nodeh='node --harmony-generators'
 alias npmi='npm install'
 alias npmis='npm install --save'
 alias npmisd='npm install --save-dev'
@@ -359,6 +360,8 @@ ct() {
 alias hosts="sudo subl /etc/hosts"
 
 alias cdl="cd ~/Downloads"
+alias cdv="cd ~/Videos"
+alias cdm="cd ~/Music"
 alias cdb="cd ~/Dropbox"
 
 
@@ -430,6 +433,9 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
+export PYTHONPATH="/usr/local/lib/python3.9/dist-packages:$PYTHONPATH"
+export PATH="~/.local/bin:$PATH"
+
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub
 source $HOME/.cargo/env # rust
