@@ -18,6 +18,7 @@ fi
 
 sudo apt update
 sudo apt upgrade -y
+sudo apt install -y snapd
 sudo apt install -y nodejs
 sudo apt install -y npm
 sudo apt install -y build-essential
