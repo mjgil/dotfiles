@@ -156,6 +156,7 @@ gsettings set org.cinnamon.desktop.interface clock-show-date true
 
 
 # app-settings
+mkdirp ~/.config/terminator
 cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
 # github commands
