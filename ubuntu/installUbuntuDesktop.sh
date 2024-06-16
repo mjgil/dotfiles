@@ -163,6 +163,12 @@ current_list=$(gsettings get org.cinnamon.desktop.keybindings custom-list)
 new_list=$(echo "$current_list" | sed "s/]/, 'custom0']/g")
 gsettings set org.cinnamon.desktop.keybindings custom-list "$new_list"
 
+# don't group applications by window
+for file in ~/.cinnamon/configs/grouped-window-list@cinnamon.org/*.json; do
+  cp "$file" "$file.bak"
+  jq '.["group-apps"].value = false' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+done
+
 sudo apt install --reinstall -o Dpkg::Options::="--force-confmiss" grub2-theme-mint
 
 
@@ -172,15 +178,6 @@ cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
 # github commands
 echo "run post-dotfiles-script"
-echo "TODO: don't group applications by window"
-echo "./.cinnamon/configs/grouped-window-list@cinnamon.org/39.json"
-
-# "group-apps": {
-# "type": "checkbox",
-# "default": true,
-# "description": "Group windows by application",
-# "value": false
-# },
 
 
 # install dropbox
