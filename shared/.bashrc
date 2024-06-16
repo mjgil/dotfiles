@@ -216,18 +216,16 @@ alias vr=video_resolution
 
 venv() {
 case $1 in
-  "make")
-    python3.9 -m venv venv ;;
   "start")
-    source venv/bin/activate ;;
+    PIPENV_IGNORE_VIRTUALENVS=1 pipenv shell ;;
   "stop")
-    deactivate ;;
+    exit ;;
   "rm")
-    rm -rf venv ;;
+    pipenv --rm && exit ;;
   "check")
-   # It should be in the venv directory:
-   # .../venv/bin/python
-    which python ;;
+   # It should be in the virtualenvs directory:
+   # .../virtualenvs/...
+    which python && which pip ;;
   *)
     echo "Error: Invalid Option for venv (start, stop, make, check)" ;;
 esac
@@ -441,3 +439,4 @@ export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub
 source $HOME/.cargo/env # rust
+export PATH="$PATH:/opt/mssql-tools/bin"
