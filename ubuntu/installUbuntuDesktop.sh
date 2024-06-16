@@ -154,6 +154,7 @@ update-desktop-database ~/.local/share/applications/
 gsettings set org.cinnamon.desktop.interface clock-use-24h false
 gsettings set org.cinnamon.desktop.interface clock-show-date true
 gsettings set org.nemo.preferences default-folder-viewer 'list-view'
+sudo apt install --reinstall -o Dpkg::Options::="--force-confmiss" grub2-theme-mint
 
 
 # app-settings
