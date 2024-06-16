@@ -154,6 +154,15 @@ update-desktop-database ~/.local/share/applications/
 gsettings set org.cinnamon.desktop.interface clock-use-24h false
 gsettings set org.cinnamon.desktop.interface clock-show-date true
 gsettings set org.nemo.preferences default-folder-viewer 'list-view'
+
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/desktop/keybindings/custom-keybindings/custom0/ name 'Area Screenshot'
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/desktop/keybindings/custom-keybindings/custom0/ binding "['<Primary>Print']"
+gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/desktop/keybindings/custom-keybindings/custom0/ command "gnome-screenshot -a"
+
+current_list=$(gsettings get org.cinnamon.desktop.keybindings custom-list)
+new_list=$(echo "$current_list" | sed "s/]/, 'custom0']/g")
+gsettings set org.cinnamon.desktop.keybindings custom-list "$new_list"
+
 sudo apt install --reinstall -o Dpkg::Options::="--force-confmiss" grub2-theme-mint
 
 
@@ -162,9 +171,16 @@ mkdirp ~/.config/terminator
 cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
 # github commands
-echo "make github key"
-echo "update git config file"
-echo "keyboard shortcut gnome-screenshot -a"
+echo "run post-dotfiles-script"
+echo "TODO: don't group applications by window"
+echo "./.cinnamon/configs/grouped-window-list@cinnamon.org/39.json"
+
+# "group-apps": {
+# "type": "checkbox",
+# "default": true,
+# "description": "Group windows by application",
+# "value": false
+# },
 
 
 # install dropbox
