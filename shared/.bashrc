@@ -250,6 +250,7 @@ alias tmxl='tmux ls'
 alias npmi='npm install'
 alias npmis='npm install --save'
 alias npmisd='npm install --save-dev'
+alias niy='npm init -y'
 
 # vagrant aliases
 alias vinit='vagrant init'
