@@ -73,7 +73,7 @@ sudo snap install gimp
 wget -c https://go.dev/dl/go1.21.1.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
 
 # install java
-wget -c https://download.oracle.com/java/21.0.3/latest/jdk-21.0.3_linux-x64_bin.tar.gz -O - | sudo tar -xz -C /usr/local/
+wget -c https://download.oracle.com/java/21/archive/jdk-21.0.2_linux-x64_bin.tar.gz  -O - | sudo tar -xz -C /usr/local/
 
 # to check `go env` `go version` `go run $filename`
 
