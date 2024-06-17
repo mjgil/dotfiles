@@ -441,3 +441,8 @@ export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub
 source $HOME/.cargo/env # rust
 export PATH="$PATH:/opt/mssql-tools/bin"
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT/bin
