@@ -57,7 +57,12 @@ pip install pipenv
 
 # install snap packages
 sudo snap install sublime-text --classic
+pkill sublime-text
+sleep 1
+pkill sublime-text
 subl --command "install_package_control"
+sleep 1
+pkill sublime-text
 # install package control
 # install oceanic next as the theme
 
