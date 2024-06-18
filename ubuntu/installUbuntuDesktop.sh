@@ -164,7 +164,14 @@ gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/d
 gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/desktop/keybindings/custom-keybindings/custom0/ command "gnome-screenshot -a"
 
 current_list=$(gsettings get org.cinnamon.desktop.keybindings custom-list)
-new_list=$(echo "$current_list" | sed "s/]/, 'custom0']/g")
+# Check if the list is empty or already contains 'custom0'
+if [[ "$current_list" == "@as []" ]]; then
+  # If the list is empty, create a new list with 'custom0'
+  new_list="@as ['custom0']"
+else
+  # If the list is not empty, append 'custom0' to the list
+  new_list=$(echo "$current_list" | sed "s/]/, 'custom0']/g")
+fi
 gsettings set org.cinnamon.desktop.keybindings custom-list "$new_list"
 
 # don't group applications by window
