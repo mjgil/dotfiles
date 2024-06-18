@@ -184,7 +184,7 @@ sudo apt install --reinstall -o Dpkg::Options::="--force-confmiss" grub2-theme-m
 
 
 # app-settings
-mkdirp ~/.config/terminator
+mkdir -p ~/.config/terminator
 cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
 # github commands
