@@ -46,7 +46,7 @@ sudo apt install -y tree
 
 sudo apt install -y software-properties-common
 sudo apt install -y python3.9
-# sudo apt install -y python3.9-distutils
+sudo apt install -y python3.9-distutils
 sudo ln -s /usr/bin/python3.9 /usr/bin/python
 curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python
 pip install yt-dlp
