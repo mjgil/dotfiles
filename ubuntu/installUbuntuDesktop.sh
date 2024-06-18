@@ -15,6 +15,12 @@ if [ ! -d "/usr/bin/terminator" ]; then
   sudo add-apt-repository -y ppa:gnome-terminator
 fi
 
+
+if [ ! -d "/usr/bin/python3.9" ]; then
+  sudo add-apt-repository -y ppa:deadsnakes/ppa
+fi
+
+
 # linux mint
 if [ -f "/etc/apt/preferences.d/nosnap.pref" ]; then
    sudo rm /etc/apt/preferences.d/nosnap.pref
