@@ -12,7 +12,7 @@ fi
 
 # add terminator
 if [ ! -d "/usr/bin/terminator" ]; then
-  sudo add-apt-repository ppa:gnome-terminator
+  sudo add-apt-repository -y ppa:gnome-terminator
 fi
 
 # linux mint
