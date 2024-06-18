@@ -58,6 +58,7 @@ curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python
 pip install yt-dlp
 pip install -U yt-dlp
 pip install pipenv
+pip install grip
 
 
 
@@ -96,7 +97,7 @@ curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # umake web firefox-dev
 
-pip3 install grip
+
 
 # update node version
 npm install n
