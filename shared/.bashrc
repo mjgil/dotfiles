@@ -251,6 +251,7 @@ alias npmi='npm install'
 alias npmis='npm install --save'
 alias npmisd='npm install --save-dev'
 alias niy='npm init -y'
+alias goy='go mod init m'
 
 # vagrant aliases
 alias vinit='vagrant init'
