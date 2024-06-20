@@ -74,6 +74,7 @@ pkill sublime_text
 # install oceanic next as the theme
 
 sudo snap install ubuntu-make --classic
+sudo snap install cmake --classic
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
 sudo snap install gravit-designer
@@ -85,6 +86,7 @@ wget -c https://go.dev/dl/go1.21.1.linux-amd64.tar.gz -O - | sudo tar -xz -C /us
 
 # install java
 wget -c https://download.oracle.com/java/21/archive/jdk-21.0.2_linux-x64_bin.tar.gz  -O - | sudo tar -xz -C /usr/local/
+sudo apt install -y maven
 
 # to check `go env` `go version` `go run $filename`
 
