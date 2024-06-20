@@ -252,6 +252,8 @@ alias npmis='npm install --save'
 alias npmisd='npm install --save-dev'
 alias niy='npm init -y'
 alias goy='go mod init m'
+alias javalt="sudo update-alternatives --config java"
+
 
 # vagrant aliases
 alias vinit='vagrant init'
