@@ -435,7 +435,7 @@ export PATH="~/.yarn/bin:$PATH"
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
 export PYTHONPATH="/usr/local/lib/python3.9/dist-packages:$PYTHONPATH"
 export PATH="~/.local/bin:$PATH"
-export JAVA_HOME=/usr/local/jdk-21.0.2
+export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 export PATH=$JAVA_HOME/bin:$PATH
 
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
