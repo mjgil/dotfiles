@@ -77,6 +77,7 @@ sudo snap install ubuntu-make --classic
 sudo snap install cmake --classic
 sudo snap install hub --classic
 sudo snap install qbittorrent-arnatious
+sudo snap install brave
 sudo snap install gravit-designer
 sudo snap install vectr
 sudo snap install gimp
