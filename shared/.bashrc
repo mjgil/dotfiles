@@ -365,6 +365,7 @@ alias cdl="cd ~/Downloads"
 alias cdv="cd ~/Videos"
 alias cdm="cd ~/Music"
 alias cdb="cd ~/Dropbox"
+alias cdd="cd ~/git/dotfiles"
 
 
 
@@ -394,6 +395,11 @@ export PATH="$HOME/bin:$PATH"
 rust() {
   name=$(basename $1 .rs)
   rustc $@ && ./$name && rm $name
+}
+
+initpy() {
+  ./init.sh "$1"
+  cd "$1"
 }
 
 
