@@ -211,6 +211,7 @@ cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
 # github commands
 echo "run post-dotfiles-script"
+echo "run ../check-installed.sh"
 
 
 # install dropbox
