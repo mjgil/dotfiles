@@ -22,7 +22,25 @@ NC='\033[0m' # No color
 
 # Function to check if a program is installed
 check_program() {
-    if which $1 &> /dev/null; then
+    if [[ "$1" == "java" ]]; then
+        if java -version &> /dev/null; then
+            echo -e "${GREEN}java: Installed${NC}"
+            ((passed++))
+        else
+            echo -e "${RED}java: Not installed${NC}"
+            ((failed++))
+            failed_programs+=("java")
+        fi
+    elif [[ "$1" == "javac" ]]; then
+        if javac -version &> /dev/null; then
+            echo -e "${GREEN}javac: Installed${NC}"
+            ((passed++))
+        else
+            echo -e "${RED}javac: Not installed${NC}"
+            ((failed++))
+            failed_programs+=("javac")
+        fi
+    elif which $1 &> /dev/null; then
         echo -e "${GREEN}$1: Installed${NC}"
         ((passed++))
     else

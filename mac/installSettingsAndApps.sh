@@ -455,7 +455,10 @@ ifnot_brew_install node
 ifnot_brew_install hub
 ifnot_brew_install go
 ifnot_brew_install rust
-ifnot_brew_install python
+ifnot_brew_install python@3.9
+sudo ln -s /opt/homebrew/bin/python3.9 /opt/homebrew/bin/python
+sudo ln -s /opt/homebrew/bin/pip3.9 /opt/homebrew/bin/pip
+ifnot_brew_install pipenv
 ifnot_brew_install haskell-stack
 ifnot_brew_install elixir
 ifnot_brew_install hardlink-osx
@@ -464,6 +467,13 @@ ifnot_brew_install ffmpeg
 ifnot_brew_install tree
 ifnot_brew_install jq
 ifnot_brew_install gnupg
+ifnot_brew_install cmake
+ifnot_brew_install tmux
+brew install java
+sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+ifnot_brew_install mvn
+ifnot_brew_install snap
+
 
 # install gifgen
 brew install lukechilds/tap/gifgen
@@ -471,9 +481,11 @@ brew install lukechilds/tap/gifgen
 # browsers
 brew_cask_install google-chrome
 brew_cask_install google-chrome-canary
+brew_cask_install google-cloud-sdk
 brew_cask_install firefox
 brew_cask_install firefox-beta
 brew_cask_install safari-technology-preview
+brew_cask_install brave-browser
 
 # coding
 brew_cask_install kaleidoscope
