@@ -20,6 +20,9 @@ if [ ! -d "/usr/bin/python3.9" ]; then
   sudo add-apt-repository -y ppa:deadsnakes/ppa
 fi
 
+if [ ! -d "/usr/bin/fastfetch" ]; then
+  sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+fi
 
 # linux mint
 if [ -f "/etc/apt/preferences.d/nosnap.pref" ]; then
@@ -48,6 +51,7 @@ sudo apt install -y vlc
 sudo apt install -y tmux
 sudo apt install -y terminator
 sudo apt install -y tree
+sudo apt install -y fastfetch
 
 
 sudo apt install -y software-properties-common
