@@ -469,6 +469,11 @@ ifnot_brew_install jq
 ifnot_brew_install gnupg
 ifnot_brew_install cmake
 ifnot_brew_install tmux
+brew install java
+sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+ifnot_brew_install mvn
+ifnot_brew_install snap
+
 
 # install gifgen
 brew install lukechilds/tap/gifgen
