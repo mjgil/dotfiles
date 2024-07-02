@@ -473,6 +473,7 @@ brew install java
 sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
 ifnot_brew_install mvn
 ifnot_brew_install snap
+ifnot_brew_install gcc@10
 
 
 # install gifgen
