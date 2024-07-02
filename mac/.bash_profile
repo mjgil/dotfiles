@@ -46,6 +46,7 @@ export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 alias gd="git diff | subl"
 alias pdfJoin='python /Users/malcomgilbert/Dropbox/Classes/21m.269/pdfJoin.py'

@@ -437,6 +437,7 @@ then
 fi
 brew update
 
+# TODO: fix for different names, imagemagick (magick,convert), ripgrep (rg), gcc@10, etc...
 ifnot_brew_install() {
   if test ! $(which $1)
   then
@@ -455,9 +456,7 @@ ifnot_brew_install node
 ifnot_brew_install hub
 ifnot_brew_install go
 ifnot_brew_install rust
-ifnot_brew_install python@3.9
-sudo ln -s /opt/homebrew/bin/python3.9 /opt/homebrew/bin/python
-sudo ln -s /opt/homebrew/bin/pip3.9 /opt/homebrew/bin/pip
+ifnot_brew_install asdf
 ifnot_brew_install pipenv
 ifnot_brew_install haskell-stack
 ifnot_brew_install elixir
@@ -474,6 +473,8 @@ sudo ln -sfn /opt/homebrew/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVir
 ifnot_brew_install mvn
 ifnot_brew_install snap
 ifnot_brew_install gcc@10
+ifnot_brew_install ripgrep
+ifnot_brew_install ncdu
 
 
 # install gifgen
