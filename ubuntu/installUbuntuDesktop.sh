@@ -55,10 +55,22 @@ sudo apt install -y fastfetch
 
 
 sudo apt install -y software-properties-common
-sudo apt install -y python3.9
-sudo apt install -y python3.9-distutils
-sudo ln -s /usr/bin/python3.9 /usr/bin/python
-curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python
+
+### install python with sqlite3 and tkinter working
+# need to install sqlite3 before installing python
+export LDFLAGS="-L/usr/local/opt/sqlite/lib"
+export CPPFLAGS="-I/usr/local/opt/sqlite/include"
+export PKG_CONFIG_PATH="/usr/local/opt/sqlite/lib/pkgconfig"
+sudo apt install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+liblzma-dev python3-openssl git
+sudo apt install -y libsqlite3-dev
+sudo apt install -y asdf
+asdf plugin-add python
+asdf install python 3.9.19
+
+
 pip install yt-dlp
 pip install -U yt-dlp
 pip install pipenv
