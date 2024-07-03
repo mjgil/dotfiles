@@ -398,6 +398,18 @@ rust() {
 }
 
 initpy() {
+  # Check if a directory name is provided
+  if [ -z "$1" ]; then
+    echo "Usage: initpy <directory_name>"
+    return 1
+  fi
+
+  # Check if the directory already exists
+  if [ -d "$1" ]; then
+    echo "Directory '$1' already exists. Exiting."
+    return 1
+  fi
+  
   ./init.sh "$1"
   cd "$1"
 }
@@ -440,8 +452,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
-export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/local/lib/python2.7/dist-packages:/usr/lib/python2.7/dist-packages:$PYTHONPATH"
-export PYTHONPATH="/usr/local/lib/python3.9/dist-packages:$PYTHONPATH"
 export PATH="~/.local/bin:$PATH"
 export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 export PATH=$JAVA_HOME/bin:$PATH
@@ -455,3 +465,6 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export GOROOT=/usr/local/go
 export PATH=$PATH:$GOROOT/bin
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
