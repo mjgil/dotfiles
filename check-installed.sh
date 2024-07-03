@@ -6,7 +6,7 @@ programs=("git" "hub" "curl" "jq" "google-chrome" "vlc" "tree" "ffmpeg"
           "python" "pip" "python3" "python3.9" "pip3" "pipenv" "yt-dlp"
           "brave" "gimp" "go" "cargo" "n" "dfg" "dua" "dug" "dum" "fa"
           "ms" "zipr" "subl" "make" "cmake" "gcloud" "snap" "g++" 
-          "g++-10" "mvn" "fastfetch")
+          "g++-10" "mvn" "fastfetch" "asdf" "rg" "ncdu")
 
 # Counters for passed and failed checks
 passed=0
