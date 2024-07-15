@@ -216,6 +216,8 @@ alias vr=video_resolution
 
 venv() {
 case $1 in
+  "init")
+    pipenv --python $2 ;;
   "start")
     PIPENV_IGNORE_VIRTUALENVS=1 pipenv shell ;;
   "stop")
