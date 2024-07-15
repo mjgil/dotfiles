@@ -128,6 +128,7 @@ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
 . "$HOME/.asdf/asdf.sh"
 asdf plugin-add python
 asdf install python 3.9.19
+asdf global python 3.9.19
 
 pip install pipenv
 pip install grip
