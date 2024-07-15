@@ -15,11 +15,6 @@ if [ ! -d "/usr/bin/terminator" ]; then
   sudo add-apt-repository -y ppa:gnome-terminator
 fi
 
-
-if [ ! -d "/usr/bin/python3.9" ]; then
-  sudo add-apt-repository -y ppa:deadsnakes/ppa
-fi
-
 if [ ! -d "/usr/bin/fastfetch" ]; then
   sudo add-apt-repository -y ppa:zhangsongcui3371/fastfetch
 fi
@@ -52,30 +47,6 @@ sudo apt install -y tmux
 sudo apt install -y terminator
 sudo apt install -y tree
 sudo apt install -y fastfetch
-
-
-sudo apt install -y software-properties-common
-
-### install python with sqlite3 and tkinter working
-# need to install sqlite3 before installing python
-export LDFLAGS="-L/usr/local/opt/sqlite/lib"
-export CPPFLAGS="-I/usr/local/opt/sqlite/include"
-export PKG_CONFIG_PATH="/usr/local/opt/sqlite/lib/pkgconfig"
-sudo apt install -y make build-essential libssl-dev zlib1g-dev \
-libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
-liblzma-dev python3-openssl git
-sudo apt install -y libsqlite3-dev
-sudo apt install -y asdf
-asdf plugin-add python
-asdf install python 3.9.19
-
-
-pip install yt-dlp
-pip install -U yt-dlp
-pip install pipenv
-pip install grip
-
 
 
 # install snap packages
@@ -139,6 +110,29 @@ fi
 # make git directory
 mkdir ~/git
 cd ~/git
+
+
+
+### install python with sqlite3 and tkinter working
+# need to install sqlite3 before installing python
+sudo apt install -y software-properties-common
+export LDFLAGS="-L/usr/local/opt/sqlite/lib"
+export CPPFLAGS="-I/usr/local/opt/sqlite/include"
+export PKG_CONFIG_PATH="/usr/local/opt/sqlite/lib/pkgconfig"
+sudo apt install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+liblzma-dev python3-openssl git
+sudo apt install -y libsqlite3-dev
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+. "$HOME/.asdf/asdf.sh"
+asdf plugin-add python
+asdf install python 3.9.19
+
+pip install pipenv
+pip install grip
+# 
+### end install python
 
 # pull down dotfiles
 git clone https://github.com/mjgil/dotfiles.git
