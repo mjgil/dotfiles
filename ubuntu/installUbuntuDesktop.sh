@@ -132,6 +132,7 @@ asdf global python 3.9.19
 
 pip install pipenv
 pip install grip
+pip install tabulate
 # 
 ### end install python
 
