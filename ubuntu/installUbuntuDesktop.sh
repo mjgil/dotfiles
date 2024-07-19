@@ -47,6 +47,7 @@ sudo apt install -y tmux
 sudo apt install -y terminator
 sudo apt install -y tree
 sudo apt install -y fastfetch
+sudo apt install -y ripgrep
 
 
 # install snap packages
