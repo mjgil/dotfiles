@@ -450,8 +450,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
 export PATH="~/.local/bin:$PATH"
-export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
-export PATH=$JAVA_HOME/bin:$PATH
 
 export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH" # go
 export PATH="/usr/local/hub/bin:$PATH" # hub

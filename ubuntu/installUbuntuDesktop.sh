@@ -73,9 +73,7 @@ sudo snap install gimp
 # install go
 wget -c https://go.dev/dl/go1.21.1.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
 
-# install java
-wget -c https://download.oracle.com/java/21/archive/jdk-21.0.2_linux-x64_bin.tar.gz  -O - | sudo tar -xz -C /usr/local/
-sudo apt install -y maven
+
 
 # to check `go env` `go version` `go run $filename`
 
@@ -125,6 +123,8 @@ libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
 libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
 liblzma-dev python3-openssl git
 sudo apt install -y libsqlite3-dev
+
+# install asdf
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
 . "$HOME/.asdf/asdf.sh"
 asdf plugin-add python
@@ -136,6 +136,13 @@ pip install grip
 pip install tabulate
 # 
 ### end install python
+
+# install java
+asdf plugin-add java
+asdf install java openjdk-21.0.2
+asdf global java openjdk-21.0.2
+
+sudo apt install -y maven
 
 # pull down dotfiles
 git clone https://github.com/mjgil/dotfiles.git
