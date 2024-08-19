@@ -27,6 +27,7 @@ fi
 
 sudo apt update
 sudo apt upgrade -y
+sudo apt install -y ncal
 sudo apt install -y snapd
 sudo apt install -y nautilus
 sudo apt install -y imagemagick
