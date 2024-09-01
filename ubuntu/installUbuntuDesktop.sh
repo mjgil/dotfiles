@@ -39,6 +39,7 @@ sudo apt install -y git-core
 sudo apt install -y curl
 sudo apt install -y jq
 sudo apt install -y google-chrome-stable
+sudo apt install -y sqlite3
 
 sudo apt install -y ffmpeg
 sudo apt install -y exfat-utils
