@@ -67,6 +67,7 @@ pkill sublime_text
 sudo snap install ubuntu-make --classic
 sudo snap install cmake --classic
 sudo snap install hub --classic
+sudo snap install google-cloud-cli --classic
 sudo snap install qbittorrent-arnatious
 sudo snap install brave
 sudo snap install gravit-designer
