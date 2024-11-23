@@ -31,8 +31,6 @@ sudo apt install -y ncal
 sudo apt install -y snapd
 sudo apt install -y nautilus
 sudo apt install -y imagemagick
-sudo apt install -y nodejs
-sudo apt install -y npm
 sudo apt install -y build-essential
 sudo apt install -y libssl-dev
 sudo apt install -y git-core
@@ -90,15 +88,6 @@ curl https://sh.rustup.rs -sSf | bash -s -- -y
 
 # umake web firefox-dev
 
-
-
-# update node version
-npm install n
-sudo node_modules/n/bin/n 20.14
-
-sudo npm install -g tmpin
-
-
 # Setup Git
 git config --global user.name "Malcom Gilbert"
 git config --global user.email malcomgilbert@gmail.com
@@ -131,6 +120,11 @@ sudo apt install -y libsqlite3-dev
 # install asdf
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
 . "$HOME/.asdf/asdf.sh"
+
+asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+asdf install nodejs 22.11.0
+asdf global nodejs 22.11.0
+
 asdf plugin-add python
 asdf install python 3.9.19
 asdf global python 3.9.19
