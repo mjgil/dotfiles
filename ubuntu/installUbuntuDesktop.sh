@@ -72,9 +72,6 @@ sudo snap install gravit-designer
 sudo snap install vectr
 sudo snap install gimp
 
-# install go
-wget -c https://go.dev/dl/go1.21.1.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
-
 
 
 # to check `go env` `go version` `go run $filename`
@@ -128,6 +125,11 @@ asdf global nodejs 22.11.0
 asdf plugin-add python
 asdf install python 3.9.19
 asdf global python 3.9.19
+
+asdf plugin-add golang
+asdf install golang 1.23.3
+asdf global golang 1.23.3
+
 
 pip install pipenv
 pip install grip
