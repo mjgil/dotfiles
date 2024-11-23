@@ -3,8 +3,8 @@
 # List of programs to check
 programs=("git" "hub" "curl" "jq" "google-chrome" "vlc" "tree" "ffmpeg" 
           "tmux" "curl" "wget" "python3" "node" "npm" "java" "javac"
-          "python" "pip" "python3" "python3.9" "pip3" "pipenv" "yt-dlp"
-          "brave" "gimp" "go" "cargo" "n" "dfg" "dua" "dug" "dum" "fa"
+          "python" "pip" "python3" "python3.9" "pip3" "pipenv"
+          "brave" "gimp" "go" "cargo" "dfg" "dua" "dug" "dum" "fa"
           "ms" "zipr" "subl" "make" "cmake" "gcloud" "snap" "g++" 
           "g++-10" "mvn" "fastfetch" "asdf" "rg" "ncdu" "dotnet" "cal"
           "sqlite3" "htop")
