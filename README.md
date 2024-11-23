@@ -1,9 +1,9 @@
 dotfiles
 ========
 
-## Ubuntu Desktop Instructions
+## Linux Instructions
 ```
-bash <(wget -qO- https://raw.githubusercontent.com/mjgil/dotfiles/master/ubuntu/installUbuntuDesktop.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/mjgil/dotfiles/master/linux/install.sh)
 ```
 
 ## Mac Os Instructions
