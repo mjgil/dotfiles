@@ -47,6 +47,7 @@ sudo apt install -y tree
 sudo apt install -y fastfetch
 sudo apt install -y ripgrep
 sudo apt install -y ncdu
+sudo apt install -y htop
 
 
 # install snap packages
