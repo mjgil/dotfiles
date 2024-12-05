@@ -122,8 +122,8 @@ asdf install nodejs 22.11.0
 asdf global nodejs 22.11.0
 
 asdf plugin-add python
-asdf install python 3.9.19
-asdf global python 3.9.19
+asdf install python 3.12.8
+asdf global python 3.12.8
 
 asdf plugin-add golang
 asdf install golang 1.23.3
