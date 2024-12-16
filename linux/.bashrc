@@ -33,3 +33,7 @@ export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
 export HISTSIZE=100000                   # big big history
 export HISTFILESIZE=100000               # big big history
 shopt -s histappend                      # append to history, don't overwrite it
+
+run_swift() {
+   docker run --rm -v "$(pwd)":/swift-project -w /swift-project swift:5.9 swift $1
+}
