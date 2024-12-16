@@ -217,21 +217,33 @@ alias vr=video_resolution
 venv() {
 case $1 in
   "init")
-    pipenv install --python $2 && pipenv shell ;;
+    # Create a new pipenv environment with the specified Python version
+    pipenv install --python "$2"
+    # Activate it in the current shell
+    source "$(pipenv --venv)/bin/activate"
+    ;;
   "start")
-    PIPENV_IGNORE_VIRTUALENVS=1 pipenv shell ;;
+    # Just ensure we activate the existing environment
+    source "$(pipenv --venv)/bin/activate"
+    ;;
   "stop")
-    exit ;;
+    # Deactivate the virtual environment without exiting the shell
+    deactivate
+    ;;
   "rm")
-    pipenv --rm && exit ;;
+    # If the environment is active, deactivate it first
+    # deactivate 2>/dev/null
+    pipenv --rm
+    ;;
   "check")
-   # It should be in the virtualenvs directory:
-   # .../virtualenvs/...
-    which python && which pip ;;
+    which python && which pip
+    ;;
   *)
-    echo "Error: Invalid Option for venv (start, stop, make, check)" ;;
+    echo "Error: Invalid Option for venv (init, start, stop, rm, check)"
+    ;;
 esac
 }
+
 
 alias o="open ."
 find_any_open() {
@@ -254,6 +266,7 @@ alias npmis='npm install --save'
 alias npmisd='npm install --save-dev'
 alias niy='npm init -y'
 alias goy='go mod init m'
+alias gody='go mod tidy'
 alias javalt="sudo update-alternatives --config java"
 
 
