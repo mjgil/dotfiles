@@ -217,23 +217,24 @@ alias vr=video_resolution
 venv() {
 case $1 in
   "init")
-    # Create a new pipenv environment with the specified Python version
-    pipenv install --python "$2"
-    # Activate it in the current shell
+    pipenv --python "$2"
     source "$(pipenv --venv)/bin/activate"
+    export PIPENV_HOME="$(pwd)"
     ;;
   "start")
-    # Just ensure we activate the existing environment
+    pipenv install
     source "$(pipenv --venv)/bin/activate"
+    export PIPENV_HOME="$(pwd)"
     ;;
   "stop")
-    # Deactivate the virtual environment without exiting the shell
     deactivate
     ;;
   "rm")
-    # If the environment is active, deactivate it first
-    # deactivate 2>/dev/null
+    deactivate
+    cd "$PIPENV_HOME"
     pipenv --rm
+    cd -
+    export PIPENV_HOME=""
     ;;
   "check")
     which python && which pip
