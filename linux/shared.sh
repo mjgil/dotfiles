@@ -121,6 +121,7 @@ asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf install nodejs 22.11.0
 asdf global nodejs 22.11.0
 sudo npm install -g typescript
+sudo npm install -g ts-node
 
 asdf plugin-add python
 asdf install python 3.12.8
