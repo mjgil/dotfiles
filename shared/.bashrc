@@ -469,6 +469,11 @@ export PATH="/usr/local/hub/bin:$PATH" # hub
 source $HOME/.cargo/env # rust
 export PATH="$PATH:/opt/mssql-tools/bin"
 
-export GOROOT=$(asdf where golang)/go
-export PATH="$GOROOT/bin:$PATH"
+if command -v asdf >/dev/null 2>&1; then
+  export GOROOT=$(asdf where golang)/go
+  export PATH="$GOROOT/bin:$PATH"
+else
+  echo "asdf is not installed or not in PATH"
+fi
+
 
