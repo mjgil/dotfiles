@@ -30,6 +30,7 @@ else
         exit 1
     fi
 fi
+softwareupdate --install-rosetta --agree-to-license
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"
