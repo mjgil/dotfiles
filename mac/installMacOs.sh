@@ -1,6 +1,14 @@
 # need developer tools for git
-xcode-select --install
-sudo xcodebuild -license
+if ! xcode-select -p &>/dev/null; then
+    echo "Xcode Command Line Tools not installed. Installing..."
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    softwareupdate --install -a
+    rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+else
+    echo "Xcode Command Line Tools are already installed."
+fi
+
+sudo xcodebuild -license accept
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"
