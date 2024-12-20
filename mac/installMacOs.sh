@@ -1,12 +1,28 @@
 # need developer tools for git
-if ! xcode-select -p &>/dev/null; then
-    echo "Xcode Command Line Tools not installed. Installing..."
-    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-    softwareupdate --install -a
-    rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-else
+# Check if Command Line Tools are already installed
+if xcode-select -p &>/dev/null; then
     echo "Xcode Command Line Tools are already installed."
+else
+    echo "Xcode Command Line Tools are not installed. Proceeding with installation..."
+    # Create the marker file to enable installation via softwareupdate
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+
+    # Install the Command Line Tools
+    echo "Installing Xcode Command Line Tools..."
+    softwareupdate --install "Command Line Tools for Xcode" --verbose
+
+    # Remove the marker file
+    rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+
+    # Verify installation
+    if xcode-select -p &>/dev/null; then
+        echo "Xcode Command Line Tools successfully installed."
+    else
+        echo "Failed to install Xcode Command Line Tools."
+        exit 1
+    fi
 fi
+
 
 sudo xcodebuild -license accept
 
