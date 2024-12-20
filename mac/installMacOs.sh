@@ -16,7 +16,7 @@ else
                     xargs)
     echo "Name Found: $UPDATE_LABEL"
     echo "Installing Xcode Command Line Tools..."
-    echo "Running: `softwareupdate --install $UPDATE_LABEL --verbose`"
+    echo "Running: softwareupdate --install $UPDATE_LABEL --verbose"
     softwareupdate --install "$UPDATE_LABEL" --verbose
 
     # Remove the marker file
