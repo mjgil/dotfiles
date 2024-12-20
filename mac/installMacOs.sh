@@ -8,8 +8,16 @@ else
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
 
     # Install the Command Line Tools
+    echo "Finding Xcode Software Name..."
+    UPDATE_LABEL=$(softwareupdate --list | \
+                    awk -F: '/^ *\* Label: / {print $2}' | \
+                    grep -i "Command Line Tools for Xcode" | \
+                    head -n 1 | \
+                    xargs)
+    echo "Name Found: $UPDATE_LABEL"
     echo "Installing Xcode Command Line Tools..."
-    softwareupdate --install "Command Line Tools for Xcode" --verbose
+    echo "Running: `softwareupdate --install $UPDATE_LABEL --verbose`"
+    softwareupdate --install "$UPDATE_LABEL" --verbose
 
     # Remove the marker file
     rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
@@ -22,9 +30,6 @@ else
         exit 1
     fi
 fi
-
-
-sudo xcodebuild -license accept
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"
