@@ -9,8 +9,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/mjgil/dotfiles/master/linux/i
 ## Mac Os Instructions
 
 ```
-bash <(curl -fsSL 
-https://raw.githubusercontent.com/mjgil/dotfiles/master/mac/installMacOs.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/mjgil/dotfiles/master/mac/installMacOs.sh)
 
 after installing dropbox run 
 

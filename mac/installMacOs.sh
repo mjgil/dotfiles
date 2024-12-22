@@ -1,6 +1,36 @@
 # need developer tools for git
-xcode-select --install
-sudo xcodebuild -license
+# Check if Command Line Tools are already installed
+if xcode-select -p &>/dev/null; then
+    echo "Xcode Command Line Tools are already installed."
+else
+    echo "Xcode Command Line Tools are not installed. Proceeding with installation..."
+    # Create the marker file to enable installation via softwareupdate
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+
+    # Install the Command Line Tools
+    echo "Finding Xcode Software Name..."
+    UPDATE_LABEL=$(softwareupdate --list | \
+                    awk -F: '/^ *\* Label: / {print $2}' | \
+                    grep -i "Command Line Tools for Xcode" | \
+                    head -n 1 | \
+                    xargs)
+    echo "Name Found: $UPDATE_LABEL"
+    echo "Installing Xcode Command Line Tools..."
+    echo "Running: softwareupdate --install $UPDATE_LABEL --verbose"
+    softwareupdate --install "$UPDATE_LABEL" --verbose
+
+    # Remove the marker file
+    rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+
+    # Verify installation
+    if xcode-select -p &>/dev/null; then
+        echo "Xcode Command Line Tools successfully installed."
+    else
+        echo "Failed to install Xcode Command Line Tools."
+        exit 1
+    fi
+fi
+softwareupdate --install-rosetta --agree-to-license
 
 # Setup Git
 git config --global user.name "Malcom Gilbert"

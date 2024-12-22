@@ -476,6 +476,7 @@ ifnot_brew_install gcc@10
 ifnot_brew_install ripgrep
 ifnot_brew_install ncdu
 ifnot_brew_install handbrake
+ifnot_brew_install mas
 
 
 # install gifgen
@@ -483,10 +484,10 @@ brew install lukechilds/tap/gifgen
 
 # browsers
 brew_cask_install google-chrome
-brew_cask_install google-chrome-canary
+brew_cask_install google-chrome@canary
 brew_cask_install google-cloud-sdk
 brew_cask_install firefox
-brew_cask_install firefox-beta
+brew_cask_install firefox@beta
 brew_cask_install safari-technology-preview
 brew_cask_install brave-browser
 
@@ -494,14 +495,14 @@ brew_cask_install brave-browser
 brew_cask_install kaleidoscope
 brew_cask_install iterm2
 # brew_cask_install mou
-brew_cask_install parallels-desktop
+# brew_cask_install parallels-desktop
 brew_cask_install virtualbox
 brew_cask_install docker
 brew_cask_install paw
 brew_cask_install sourcetree
 brew_cask_install sublime-text
 brew_cask_install atom
-brew_cask_install entr # watch file for changes and do stuff
+# brew_cask_install entr # watch file for changes and do stuff
 # ex: ls *.js | entr npm test
 
 # essential
@@ -514,12 +515,12 @@ brew_cask_install calibre
 brew_cask_install handbrake
 brew_cask_install vagrant
 brew_cask_install virtualbox
-brew_cask_install spectacle
+brew_cask_install rectangle
 # brew_cask_install evernote
 # brew_cask_install licecap
 
 # for fun
-brew_cask_install spotify
+# brew_cask_install spotify
 brew_cask_install vlc
 brew_cask_install webtorrent
 
