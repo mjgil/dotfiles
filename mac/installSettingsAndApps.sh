@@ -475,6 +475,7 @@ ifnot_brew_install snap
 ifnot_brew_install gcc@10
 ifnot_brew_install ripgrep
 ifnot_brew_install ncdu
+ifnot_brew_install handbrake
 
 
 # install gifgen
