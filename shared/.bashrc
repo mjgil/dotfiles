@@ -473,8 +473,6 @@ export PATH="$PATH:/opt/mssql-tools/bin"
 if command -v asdf >/dev/null 2>&1; then
   export GOROOT=$(asdf where golang)/go
   export PATH="$GOROOT/bin:$PATH"
-else
-  echo "asdf is not installed or not in PATH"
 fi
 
 
