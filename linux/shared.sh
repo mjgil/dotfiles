@@ -143,15 +143,15 @@ asdf plugin-add java
 asdf install java openjdk-21.0.2
 asdf global java openjdk-21.0.2
 
+asdf plugin-add maven
+asdf install maven 3.9.4
+asdf global maven 3.9.4
+
 # install dotnet
 asdf plugin-add dotnet
 asdf install dotnet 7.0.100
 asdf global dotnet 7.0.100
 
-
-
-
-sudo apt install -y maven
 
 # pull down dotfiles
 git clone https://github.com/mjgil/dotfiles.git
