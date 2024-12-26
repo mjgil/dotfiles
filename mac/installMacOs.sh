@@ -60,5 +60,3 @@ git clone https://github.com/mjgil/z.git
 #
 /Users/$(whoami)/git/dotfiles/mac/installSettingsAndApps.sh
 /Users/$(whoami)/git/dotfiles/mac/update-bashrc.sh
-
-ssh-keygen -t rsa -b 4096 -C "malcomgilbert@gmail.com"
