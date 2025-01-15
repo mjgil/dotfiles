@@ -219,22 +219,22 @@ case $1 in
   "init")
     pipenv --python "$2"
     source "$(pipenv --venv)/bin/activate"
-    export PIPENV_HOME="$(pwd)"
+    export GIL_PIPENV_HOME="$(pwd)"
     ;;
   "start")
     pipenv install
     source "$(pipenv --venv)/bin/activate"
-    export PIPENV_HOME="$(pwd)"
+    export GIL_PIPENV_HOME="$(pwd)"
     ;;
   "stop")
     deactivate
     ;;
   "rm")
     deactivate
-    cd "$PIPENV_HOME"
+    cd "$GIL_PIPENV_HOME"
     pipenv --rm
     cd -
-    export PIPENV_HOME=""
+    export GIL_PIPENV_HOME=""
     ;;
   "check")
     which python && which pip
