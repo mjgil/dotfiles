@@ -31,6 +31,7 @@ alias gpn='git push -u origin $(__git_ps1 "%s")'
 alias gpom="git push origin master"
 alias gpf="git push -f"
 alias grh="git reset --hard"
+alias grm1="git reset --mixed HEAD~1"
 alias gb="git branch"
 alias gcob="git checkout -b"
 alias gco="git checkout"
