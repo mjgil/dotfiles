@@ -31,6 +31,7 @@ alias gpn='git push -u origin $(__git_ps1 "%s")'
 alias gpom="git push origin master"
 alias gpf="git push -f"
 alias grh="git reset --hard"
+alias grm1="git reset --mixed HEAD~1"
 alias gb="git branch"
 alias gcob="git checkout -b"
 alias gco="git checkout"
@@ -219,22 +220,22 @@ case $1 in
   "init")
     pipenv --python "$2"
     source "$(pipenv --venv)/bin/activate"
-    export PIPENV_HOME="$(pwd)"
+    export GIL_PIPENV_HOME="$(pwd)"
     ;;
   "start")
     pipenv install
     source "$(pipenv --venv)/bin/activate"
-    export PIPENV_HOME="$(pwd)"
+    export GIL_PIPENV_HOME="$(pwd)"
     ;;
   "stop")
     deactivate
     ;;
   "rm")
     deactivate
-    cd "$PIPENV_HOME"
+    cd "$GIL_PIPENV_HOME"
     pipenv --rm
     cd -
-    export PIPENV_HOME=""
+    export GIL_PIPENV_HOME=""
     ;;
   "check")
     which python && which pip
