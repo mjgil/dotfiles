@@ -62,7 +62,7 @@ git_commit_push() {
 alias c=git_commit_push
 
 git_clone_org_secure() {
-  git clone "ssh://$1.github.com:443/$1/$2.git"
+  git clone "git@github.com:$1/$2.git"
 }
 alias gcos=git_clone_org_secure
 
