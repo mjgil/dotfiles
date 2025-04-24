@@ -58,5 +58,6 @@ cd ~/git
 
 git clone https://github.com/mjgil/z.git
 #
-/Users/$(whoami)/git/dotfiles/mac/installSettingsAndApps.sh
+/Users/$(whoami)/git/dotfiles/mac/install-defaults.sh
+/Users/$(whoami)/git/dotfiles/mac/install-programs-and-apps.sh
 /Users/$(whoami)/git/dotfiles/mac/update-bashrc.sh
