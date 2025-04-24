@@ -109,9 +109,29 @@ git_create_repo() {
 }
 alias gcr=git_create_repo
 
+gh_new() {
+  ocal privacy=${2:-"--private"}
+  
+  # only for creating completely new repos
+  if [ -d "$1" ]; then
+    echo "Error: Directory '$1' already exists. Aborting."
+    return 1
+  fi
+
+  local privacy=${2:-"--private"}
+  gh repo create $1 --private
+  gcs $1
+  cd $1
+  touch readme.md
+  git add readme.md
+  git commit -m 'add readme'
+  git push --set-upstream origin main
+}
+alias ghn=gh_new
+
 git_merge() {
   # $1 -- branch to merge into
-  cur_branch=${2:-$(__git_ps1 "%s")}
+  local cur_branch=${2:-$(__git_ps1 "%s")}
   gco $cur_branch
   gco $1
   git pull
