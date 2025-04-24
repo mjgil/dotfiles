@@ -7,7 +7,7 @@ programs=("git" "hub" "curl" "jq" "google-chrome" "vlc" "tree" "ffmpeg"
           "brave" "gimp" "go" "cargo" "dfg" "dua" "dug" "dum" "fa"
           "ms" "zipr" "subl" "make" "cmake" "gcloud" "snap" "g++" 
           "g++-10" "mvn" "fastfetch" "asdf" "rg" "ncdu" "dotnet" "cal"
-          "sqlite3" "htop" "tsc")
+          "sqlite3" "htop" "tsc" "gh")
 
 # Counters for passed and failed checks
 passed=0

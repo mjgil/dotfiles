@@ -477,6 +477,7 @@ ifnot_brew_install ripgrep
 ifnot_brew_install ncdu
 ifnot_brew_install handbrake
 ifnot_brew_install mas
+ifnot_brew_install gh
 
 
 # install gifgen

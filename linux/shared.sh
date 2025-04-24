@@ -48,6 +48,7 @@ sudo apt install -y fastfetch
 sudo apt install -y ripgrep
 sudo apt install -y ncdu
 sudo apt install -y htop
+sudo apt install -y gh
 
 
 # install snap packages
