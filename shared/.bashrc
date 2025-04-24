@@ -110,8 +110,6 @@ git_create_repo() {
 alias gcr=git_create_repo
 
 gh_new() {
-  ocal privacy=${2:-"--private"}
-  
   # only for creating completely new repos
   if [ -d "$1" ]; then
     echo "Error: Directory '$1' already exists. Aborting."
@@ -119,7 +117,7 @@ gh_new() {
   fi
 
   local privacy=${2:-"--private"}
-  gh repo create $1 --private
+  gh repo create $1 $privacy
   gcs $1
   cd $1
   touch readme.md
