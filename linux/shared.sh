@@ -49,6 +49,7 @@ sudo apt install -y ripgrep
 sudo apt install -y ncdu
 sudo apt install -y htop
 sudo apt install -y gh
+sudo apt install -y wmcrtl
 
 
 # install snap packages
