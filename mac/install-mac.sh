@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Import logging utilities
-source "$(dirname "${BASH_SOURCE[0]}")/shared/log_utils.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../shared/log_utils.sh"
 
 # Exit on error
 set -e
