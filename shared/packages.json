@@ -68,7 +68,8 @@
       "name": "fd",
       "description": "Simple, fast alternative to find",
       "apt": "fd-find",
-      "brew": "fd"
+      "brew": "fd",
+      "symlink_target": "fd"
     },
     {
       "name": "jq",
@@ -118,7 +119,9 @@
       "description": "Modern replacement for ls",
       "apt": ["exa", "eza"],
       "apt_command": "if ! dpkg -l | grep -q 'exa|eza'; then if apt-cache show eza >/dev/null 2>&1; then sudo apt install -y eza; elif apt-cache show exa >/dev/null 2>&1; then sudo apt install -y exa; else (command -v cargo >/dev/null 2>&1 && cargo install eza) || echo 'Unable to install exa or eza'; fi; fi",
-      "brew": "exa"
+      "brew": "exa",
+      "symlink_target": "exa",
+      "cargo_fallback": "eza"
     },
     {
       "name": "fzf",
@@ -131,7 +134,9 @@
       "description": "Cat clone with syntax highlighting",
       "apt": ["batcat", "bat"],
       "apt_command": "if ! dpkg -l | grep -q 'bat|batcat'; then if apt-cache show bat >/dev/null 2>&1; then sudo apt install -y bat; elif apt-cache show batcat >/dev/null 2>&1; then sudo apt install -y batcat; else (command -v cargo >/dev/null 2>&1 && cargo install bat) || echo 'Unable to install bat or batcat'; fi; fi",
-      "brew": "bat"
+      "brew": "bat",
+      "symlink_target": "bat",
+      "cargo_fallback": "bat"
     },
     {
       "name": "delta",
@@ -143,7 +148,8 @@
       "name": "atuin",
       "description": "Magical shell history",
       "apt_command": "bash <(curl https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh)",
-      "brew": "atuin"
+      "brew": "atuin",
+      "symlink_target": "atuin"
     },
     {
       "name": "lux",

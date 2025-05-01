@@ -18,8 +18,11 @@ if [ ! -d .git ]; then
     exit 1
 fi
 
+# Combine all arguments into a single variable
+#files=$@
+files=("$@")
+
 # remove all paths passed as arguments from the history of the repo
-files=$@
 git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch $files" HEAD
 
 # remove the temporary history git-filter-branch otherwise leaves behind for a long time

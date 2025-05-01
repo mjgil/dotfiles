@@ -217,32 +217,44 @@ EOF
   log_info "dpkg blocker script installed/updated successfully"
 }
 
-# --- Main Execution ---
+# Main function to install hooks
+install_hooks() {
+  log_info "Setting up APT hook for ASDF package blocking..."
+  
+  local blocker_script_path="/usr/local/bin/dpkg-asdf-block.sh"
+  local apt_hook_conf="/etc/apt/apt.conf.d/00-asdf-block"
 
-log_info "Setting up APT hook for ASDF package blocking..."
+  # Ensure script directory exists
+  sudo mkdir -p "$(dirname "$blocker_script_path")"
 
-# Create directory for APT hooks if it doesn't exist
-sudo mkdir -p /etc/apt/apt.conf.d
+  # Get blocked packages
+  local blocked_packages
+  blocked_packages=$(get_blocked_packages) # Call once
+  log_info "Blocked packages for APT hook: $blocked_packages"
 
-# Create/Update the blocker script itself
-create_dpkg_blocker_script
+  # Create or update the blocker script
+  create_dpkg_blocker_script
 
-# Check if the blocker script was actually created (it might be skipped if no blocked packages)
-if [[ -f "/usr/local/bin/dpkg-asdf-block.sh" ]]; then
-    # Create the APT hook configuration file using sudo tee
-    HOOK_FILE="/etc/apt/apt.conf.d/00-asdf-block"
-    log_info "Creating/Updating APT hook configuration at $HOOK_FILE"
+  # Check if the blocker script was actually created (it might be skipped if no blocked packages)
+  if [[ -f "$blocker_script_path" ]]; then
+      # Create the APT hook configuration file using sudo tee
+      log_info "Creating/Updating APT hook configuration at $apt_hook_conf"
 
-    # Note: Using // comments might not be universally supported, sticking to simple format
-    cat << EOF | sudo tee "$HOOK_FILE" > /dev/null
-DPkg::Pre-Install-Pkgs { "/usr/local/bin/dpkg-asdf-block.sh"; };
+      # Note: Using // comments might not be universally supported, sticking to simple format
+      cat << EOF | sudo tee "$apt_hook_conf" > /dev/null
+DPkg::Pre-Install-Pkgs { "$blocker_script_path"; };
 EOF
 
-    log_info "APT hook configured successfully"
-    log_info "This hook will prevent direct installation of packages that should be managed through ASDF"
-    log_info "(unless BYPASS_ASDF_CHECK=1 is set)."
-else
-    log_info "Skipped creating APT hook configuration as blocker script was not needed."
-fi
+      log_info "APT hook configured successfully"
+      log_info "This hook will prevent direct installation of packages that should be managed through ASDF"
+      log_info "(unless BYPASS_ASDF_CHECK=1 is set)."
+  else
+      log_info "Skipped creating APT hook configuration as blocker script was not needed."
+  fi
 
-log_success "APT hook setup process completed."
+  log_success "APT hook setup process completed."
+}
+
+# --- Main Execution ---
+
+install_hooks

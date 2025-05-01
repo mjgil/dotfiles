@@ -47,3 +47,5 @@ export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-
 eval "$(atuin init bash)"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="/home/m/.local/bin:$PATH"
+export PATH="/home/m/.cargo/bin:$PATH"

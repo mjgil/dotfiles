@@ -66,8 +66,13 @@ check_program() {
             fi
             ;;
         "atuin")
-            if which "atuin" &> /dev/null || [ -f "$HOME/.atuin/bin/atuin" ]; then
-                local atuin_path=$(which atuin 2>/dev/null || echo "$HOME/.atuin/bin/atuin")
+            local atuin_path
+            atuin_path=$(which atuin 2>/dev/null)
+            if [[ -z "$atuin_path" && -f "$HOME/.atuin/bin/atuin" ]]; then
+                atuin_path="$HOME/.atuin/bin/atuin"
+            fi
+
+            if [[ -n "$atuin_path" ]]; then
                 echo -e "${GREEN}atuin: Installed ($atuin_path)${NC}"
                 ((passed++))
             else

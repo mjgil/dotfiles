@@ -1,53 +1,54 @@
-#!/bin/bash
-# log_utils.sh - Centralized logging utilities
+#!/usr/bin/env bash
+# log_utils.sh - Common logging functions
 
-# Define colors
+# Define color codes
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
-# Log function that shows file and function information
-log() {
+# Get the base name of the script that sourced this file
+CALLING_SCRIPT_BASENAME=$(basename "${BASH_SOURCE[1]:-$0}")
+
+# Function to log informational messages
+function log_info() {
   local message="$1"
-  local log_level="${2:-INFO}"
-  local color="${3:-$NC}"
-  
-  # Get calling information
-  local calling_file="${BASH_SOURCE[1]##*/}"
-  local calling_func="${FUNCNAME[1]:-main}"
-  
-  # Format timestamp
-  local timestamp=$(date +"%Y-%m-%d %H:%M:%S")
-  
-  # Print formatted log message
-  printf "${color}[%s] [%s] [%s:%s] %s${NC}\n" "$timestamp" "$log_level" "$calling_file" "$calling_func" "$message"
+  local timestamp
+  timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+  echo -e "[$timestamp] ${BLUE}[INFO]${NC} [${CALLING_SCRIPT_BASENAME}:${BASH_LINENO[0]}] $message"
+}
+
+# Function to log success messages
+function log_success() {
+  local message="$1"
+  local timestamp
+  timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+  echo -e "[$timestamp] ${GREEN}[SUCCESS]${NC} [${CALLING_SCRIPT_BASENAME}:${BASH_LINENO[0]}] $message"
+}
+
+# Function to log warning messages
+function log_warning() {
+  local message="$1"
+  local timestamp
+  timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+  echo -e "[$timestamp] ${YELLOW}[WARNING]${NC} [${CALLING_SCRIPT_BASENAME}:${BASH_LINENO[0]}] $message" >&2
+}
+
+# Function to log error messages
+function log_error() {
+  local message="$1"
+  local timestamp
+  timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+  echo -e "[$timestamp] ${RED}[ERROR]${NC} [${CALLING_SCRIPT_BASENAME}:${BASH_LINENO[0]}] $message" >&2
 }
 
 # Convenience logging functions with different levels
-log_info() {
-  log "$1" "INFO" "$BLUE"
-}
-
-log_success() {
-  log "$1" "SUCCESS" "$GREEN"
-}
-
-log_warning() {
-  log "$1" "WARNING" "$YELLOW"
-}
-
-log_error() {
-  log "$1" "ERROR" "$RED"
-}
-
 log_debug() {
   # Only show debug logs if DEBUG is enabled
   if [[ "${DEBUG:-0}" == "1" ]]; then
-    log "$1" "DEBUG" "$PURPLE"
+    log "$1" "DEBUG" "$MAGENTA"
   fi
 }
 
@@ -67,7 +68,6 @@ log_echo() {
 }
 
 # Export functions
-export -f log
 export -f log_info
 export -f log_success
 export -f log_warning
