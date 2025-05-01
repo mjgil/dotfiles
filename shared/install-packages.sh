@@ -603,8 +603,11 @@ install_all() {
     "system_tools"
     "cloud_tools"
     "dev_environments"
-    "asdf_languages" 
-    # Add other critical categories here if needed
+    "asdf_languages"
+    "browsers"
+    "design_tools"
+    "editors"
+    "file_utils"
   )
 
   # Keep track of processed categories to avoid duplicates

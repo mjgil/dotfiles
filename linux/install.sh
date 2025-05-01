@@ -66,22 +66,22 @@ download_script "linux/linuxmint.sh" "linuxmint.sh"
 # Execute scripts in the correct order
 log_info "Installing packages..."
 # Pass TEMP_DIR so install-packages knows where packages.json is
-bash "$TEMP_DIR/install-packages.sh" "$TEMP_DIR"
+bash "$TEMP_DIR/install-packages.sh"
 
 log_info "Executing Linux shared script..."
 bash "$TEMP_DIR/linux_shared.sh"
 
 log_info "Executing distribution-specific setup..."
 # Pass TEMP_DIR so distro-setup knows where other scripts are
-bash "$TEMP_DIR/distro-setup.sh" "$TEMP_DIR"
+bash "$TEMP_DIR/distro-setup.sh"
 
 log_info "Executing shared setup across platforms..."
 # Pass TEMP_DIR so shared.sh knows where other scripts are
-bash "$TEMP_DIR/shared.sh" "$TEMP_DIR"
+bash "$TEMP_DIR/shared.sh"
 
 log_info "Setting up package blocking for ASDF..."
 # Pass TEMP_DIR so these scripts know where packages.json is
-bash "$TEMP_DIR/create-package-blockers.sh" "$TEMP_DIR"
-bash "$TEMP_DIR/install-apt-hooks.sh" "$TEMP_DIR"
+bash "$TEMP_DIR/create-package-blockers.sh"
+bash "$TEMP_DIR/install-apt-hooks.sh"
 
 log_success "Setup completed successfully."
