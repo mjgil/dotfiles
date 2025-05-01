@@ -4,7 +4,7 @@
 set -e
 
 # Define the base URL where the scripts are hosted
-BASE_URL="https://raw.githubusercontent.com/mjgil/dotfiles/master/linux"
+BASE_URL="https://raw.githubusercontent.com/mjgil/dotfiles/master"
 
 # Temporary directory to store downloaded scripts
 TEMP_DIR=$(mktemp -d)
@@ -15,12 +15,30 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# Function to download a script with progress indicator
+download_script() {
+    local source_path=$1
+    local target_name=$2
+    local target_path="$TEMP_DIR/$target_name"
+    
+    echo "Downloading $target_name..."
+    wget -q "$BASE_URL/$source_path" -O "$target_path"
+    chmod +x "$target_path"
+}
+
 echo "Starting setup..."
 
-# Download shared.sh
-echo "Downloading shared.sh..."
-wget -q "$BASE_URL/shared.sh" -O "$TEMP_DIR/shared.sh"
-chmod +x "$TEMP_DIR/shared.sh"
+# Download shared scripts
+download_script "shared/bootstrap.sh" "bootstrap.sh"
+download_script "shared/shared.sh" "shared.sh"
+download_script "shared/packages.yml" "packages.yml"
+download_script "shared/install-packages.sh" "install-packages.sh"
+download_script "shared/create-package-blockers.sh" "create-package-blockers.sh"
+download_script "shared/install-apt-hooks.sh" "install-apt-hooks.sh"
+
+# Execute bootstrap.sh to install yq
+echo "Executing bootstrap.sh..."
+bash "$TEMP_DIR/bootstrap.sh"
 
 # Detect the Linux distribution
 echo "Detecting Linux distribution..."
@@ -33,31 +51,27 @@ else
 fi
 echo "Detected distribution: $DISTRO_ID"
 
-# Download distribution-specific script
-if [ "$DISTRO_ID" = "ubuntu" ]; then
-    echo "Downloading ubuntu.sh..."
-    wget -q "$BASE_URL/ubuntu.sh" -O "$TEMP_DIR/ubuntu.sh"
-    chmod +x "$TEMP_DIR/ubuntu.sh"
-elif [ "$DISTRO_ID" = "linuxmint" ]; then
-    echo "Downloading linuxmint.sh..."
-    wget -q "$BASE_URL/linuxmint.sh" -O "$TEMP_DIR/linuxmint.sh"
-    chmod +x "$TEMP_DIR/linuxmint.sh"
-else
-    echo "Unsupported distribution: $DISTRO_ID. Exiting."
-    exit 1
-fi
+# Download Linux-specific scripts
+download_script "linux/shared.sh" "linux_shared.sh"
+download_script "linux/distro-setup.sh" "distro-setup.sh"
+download_script "linux/ubuntu.sh" "ubuntu.sh"
+download_script "linux/linuxmint.sh" "linuxmint.sh"
 
-# Execute shared.sh
-echo "Executing shared.sh..."
+# Execute scripts in the correct order
+echo "Installing packages..."
+bash "$TEMP_DIR/install-packages.sh"
+
+echo "Executing Linux shared script..."
+bash "$TEMP_DIR/linux_shared.sh"
+
+echo "Executing distribution-specific setup..."
+bash "$TEMP_DIR/distro-setup.sh"
+
+echo "Executing shared setup across platforms..."
 bash "$TEMP_DIR/shared.sh"
 
-# Execute distribution-specific script
-if [ "$DISTRO_ID" = "ubuntu" ]; then
-    echo "Executing ubuntu.sh..."
-    bash "$TEMP_DIR/ubuntu.sh"
-elif [ "$DISTRO_ID" = "linuxmint" ]; then
-    echo "Executing linuxmint.sh..."
-    bash "$TEMP_DIR/linuxmint.sh"
-fi
+echo "Setting up package blocking for ASDF..."
+bash "$TEMP_DIR/create-package-blockers.sh"
+bash "$TEMP_DIR/install-apt-hooks.sh"
 
 echo "Setup completed successfully."

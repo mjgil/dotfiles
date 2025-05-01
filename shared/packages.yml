@@ -1,0 +1,268 @@
+# Core development tools
+development:
+  - name: git
+    description: "Version control system"
+    apt: git-core
+    brew: git
+
+  - name: curl
+    description: "Command line tool for transferring data"
+    apt: curl
+    brew: curl
+    
+  - name: wget
+    description: "Internet file retriever"
+    apt: wget
+    brew: wget
+
+  - name: rust
+    description: "Rust programming language"
+    apt_command: "curl https://sh.rustup.rs -sSf | bash -s -- -y"
+    brew: rust
+
+# ASDF-managed languages (to be installed ONLY through ASDF)
+asdf_languages:
+  - name: nodejs
+    description: "JavaScript runtime via ASDF"
+    plugin: "nodejs https://github.com/asdf-vm/asdf-nodejs.git"
+    versions: ["22.11.0"]
+    global: "22.11.0"
+    post_install: "npm install -g typescript ts-node"
+    
+  - name: python
+    description: "Python via ASDF"
+    plugin: "python"
+    versions: ["3.12.8"]
+    global: "3.12.8"
+    post_install: "pip install pipenv grip tabulate"
+    
+  - name: golang
+    description: "Go via ASDF"
+    plugin: "golang"
+    versions: ["1.23.3"]
+    global: "1.23.3"
+    
+  - name: java
+    description: "Java via ASDF"
+    plugin: "java"
+    versions: ["openjdk-21.0.2"]
+    global: "openjdk-21.0.2"
+    
+  - name: maven
+    description: "Maven via ASDF"
+    plugin: "maven"
+    versions: ["3.9.4"]
+    global: "3.9.4"
+    
+  - name: dotnet
+    description: ".NET via ASDF"
+    plugin: "dotnet"
+    versions: ["7.0.100"]
+    global: "7.0.100"
+
+# Terminal utilities
+terminal_utils:
+  - name: tree
+    description: "Directory listing tool"
+    apt: tree
+    brew: tree
+    
+  - name: ripgrep
+    description: "Fast search tool"
+    apt: ripgrep
+    brew: ripgrep
+    
+  - name: fd-find
+    description: "Simple, fast alternative to find"
+    apt: fd-find
+    brew: fd
+    
+  - name: jq
+    description: "JSON processor"
+    apt: jq
+    brew: jq
+    
+  - name: htop
+    description: "Interactive process viewer"
+    apt: htop
+    brew: htop
+    
+  - name: tmux
+    description: "Terminal multiplexer"
+    apt: tmux
+    brew: tmux
+    
+  - name: ncdu
+    description: "Disk usage analyzer"
+    apt: ncdu
+    brew: ncdu
+
+  - name: fastfetch
+    description: "System information tool"
+    apt_ppa: "ppa:zhangsongcui3371/fastfetch"
+    apt: fastfetch
+    brew: fastfetch
+
+  - name: cmake
+    description: "Cross-platform build system"
+    apt_snap: "cmake --classic"
+    brew: cmake
+    
+  - name: wmcrtl
+    description: "Window manager control utility"
+    apt: wmcrtl
+    
+  - name: qbittorrent
+    description: "BitTorrent client"
+    apt_snap: "qbittorrent-arnatious"
+    brew_cask: qbittorrent
+
+# Development environments
+dev_environments:
+  - name: asdf
+    description: "Multiple runtime version manager"
+    apt_command: "git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0"
+    brew: asdf
+
+  - name: python-build-deps
+    description: "Build dependencies for Python"
+    apt: "software-properties-common make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl libsqlite3-dev"
+    brew_bundle: ["openssl", "readline", "sqlite3", "xz", "zlib", "tcl-tk"]
+
+# Browsers
+browsers:
+  - name: chrome
+    description: "Google Chrome browser"
+    apt_repo: "deb http://dl.google.com/linux/chrome/deb/ stable main"
+    apt_key: "https://dl-ssl.google.com/linux/linux_signing_key.pub"
+    apt: google-chrome-stable
+    brew_cask: google-chrome
+    
+  - name: firefox
+    description: "Firefox browser"
+    apt: firefox
+    brew_cask: firefox
+    
+  - name: brave
+    description: "Brave browser"
+    apt_snap: brave
+    brew_cask: brave-browser
+
+# File utilities
+file_utils:
+  - name: imagemagick
+    description: "Image manipulation"
+    apt: imagemagick
+    brew: imagemagick
+    
+  - name: ffmpeg
+    description: "Audio/video manipulation"
+    apt: ffmpeg
+    brew: ffmpeg
+    
+  - name: exfat-utils
+    description: "ExFAT filesystem support"
+    apt: "exfat-utils exfat-fuse"
+    brew: exfat
+    
+  - name: vlc
+    description: "Media player"
+    apt: vlc
+    brew_cask: vlc
+    
+  - name: nautilus
+    description: "File manager (Linux)"
+    apt: nautilus
+    
+  - name: yt-dlp
+    description: "Media downloader"
+    apt_command: "pip install yt-dlp"
+    brew: yt-dlp
+
+# Text editors
+editors:
+  - name: sublime
+    description: "Sublime Text editor"
+    apt_snap: "sublime-text --classic"
+    brew_cask: sublime-text
+
+# Development tools
+dev_tools:
+  - name: docker
+    description: "Container platform"
+    apt_snap: docker
+    brew_cask: docker
+    
+  - name: github-cli
+    description: "GitHub CLI"
+    apt: gh
+    brew: gh
+    
+  - name: build-essential
+    description: "Build tools"
+    apt: build-essential
+    brew_bundle: ["gcc", "make"]
+    
+  - name: ubuntu-make
+    description: "Ubuntu developer tools installer"
+    apt_snap: "ubuntu-make --classic"
+    
+  - name: libssl-dev
+    description: "SSL development libraries"
+    apt: libssl-dev
+    brew: openssl
+
+# System tools
+system_tools:
+  - name: sqlite3
+    description: "SQLite database"
+    apt: sqlite3
+    brew: sqlite
+    
+  - name: snapd
+    description: "Snap package manager"
+    apt: snapd
+    
+  - name: gnupg
+    description: "GNU Privacy Guard"
+    apt: gnupg
+    brew: gnupg
+    
+  - name: ncal
+    description: "Calendar utility"
+    apt: ncal
+    brew: ncal
+
+  - name: terminator
+    description: "Terminal emulator"
+    apt_ppa: "ppa:gnome-terminator"
+    apt: terminator
+    brew_cask: terminator
+
+# Cloud tools
+cloud_tools:
+  - name: gcloud
+    description: "Google Cloud CLI"
+    apt_snap: "google-cloud-cli --classic"
+    brew_cask: google-cloud-sdk
+    
+  - name: hub
+    description: "GitHub CLI (hub)"
+    apt_snap: "hub --classic"
+    brew: hub
+
+# Design tools
+design_tools:
+  - name: gimp
+    description: "Image editor"
+    apt_snap: gimp
+    brew_cask: gimp
+    
+  - name: gravit-designer
+    description: "Vector graphics editor"
+    apt_snap: gravit-designer
+    brew_cask: gravit-designer
+    
+  - name: vectr
+    description: "Vector graphics editor"
+    apt_snap: vectr
