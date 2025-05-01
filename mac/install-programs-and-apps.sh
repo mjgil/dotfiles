@@ -101,6 +101,7 @@ brew_cask_install skype
 brew_cask_install slack
 brew_cask_install the-unarchiver
 brew_cask_install gimp
+brew_cask_install mounty
 
 
 echo "Done. Note that some of these changes require a logout/restart to take effect."
