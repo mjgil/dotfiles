@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
+# Import logging utilities
+source "$(dirname "${BASH_SOURCE[0]}")/shared/log_utils.sh"
 
 # This script supplements the YAML-based package management system
 # with Mac-specific applications and utilities
 
-echo "Installing Mac-specific applications..."
+log_info "Installing Mac-specific applications..."
 
 # Install Homebrew if it does not exist (this is now in bootstrap.sh but kept for direct script use)
 if ! command -v brew >/dev/null 2>&1; then
-    echo "Installing Homebrew..."
+    log_info "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 brew update
@@ -15,10 +17,10 @@ brew update
 # Helper functions for installing applications
 brew_cask_install() {
   if ! brew list --cask "$1" &>/dev/null; then
-    echo "Installing $1..."
+    log_info "Installing $1..."
     brew install "$1" --cask
   else
-    echo "$1 is already installed."
+    log_info "$1 is already installed."
   fi
 }
 
@@ -58,5 +60,5 @@ brew_cask_install slack
 brew install lukechilds/tap/gifgen
 brew install mas # Mac App Store CLI
 
-echo "Mac-specific applications installation completed."
-echo "Note that some of these changes require a logout/restart to take effect."
+log_info "Mac-specific applications installation completed."
+log_info "Note that some of these changes require a logout/restart to take effect."

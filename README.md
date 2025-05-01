@@ -10,16 +10,48 @@ A collection of dotfiles and installation scripts for setting up a new developme
 - Automated installation of development tools and applications
 - Configuration for various applications and utilities
 
-## Linux Instructions
+## Installation Instructions
+
+### Remote Installation (from GitHub)
+
+#### Linux
 
 ```bash
 bash <(wget -qO- https://raw.githubusercontent.com/mjgil/dotfiles/master/linux/install.sh)
 ```
 
-## Mac OS Instructions
+#### Mac OS
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/mjgil/dotfiles/master/mac/install-mac.sh)
+```
+
+### Local Installation
+
+If you have already cloned the repository or have a local copy, you can install directly from the local directory:
+
+```bash
+# Navigate to your local dotfiles directory
+cd ~/git/dotfiles
+
+# Run the local installation script
+./install-local.sh
+```
+
+#### Additional Options
+
+```bash
+# Specify a different source directory
+./install-local.sh --source /path/to/dotfiles
+
+# Force a specific OS type (linux or mac)
+./install-local.sh --os linux
+
+# Dry run mode (show what would be done without making changes)
+./install-local.sh --dry-run
+
+# Show help
+./install-local.sh --help
 ```
 
 After installing Dropbox, run:

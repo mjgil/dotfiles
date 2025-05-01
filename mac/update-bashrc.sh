@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Import logging utilities
+source "$(dirname "${BASH_SOURCE[0]}")/shared/log_utils.sh"
 
 rm ~/.bash_profile
 rm ~/.bashrc

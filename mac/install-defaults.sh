@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Import logging utilities
+source "$(dirname "${BASH_SOURCE[0]}")/shared/log_utils.sh"
 
 # Disable the “Are you sure you want to open this application?” dialog
 defaults write com.apple.LaunchServices LSQuarantine -bool false
@@ -428,4 +430,4 @@ for app in "Address Book" "Calendar" "Contacts" "Dock" "Finder" "Mail" \
         "Twitter" "iCal"; do
         killall "${app}" > /dev/null 2>&1
 done
-echo "Killed Apps, Beginning Install..."
+log_info "Killed Apps, Beginning Install..."

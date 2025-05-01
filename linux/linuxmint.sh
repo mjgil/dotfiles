@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Import logging utilities
+source "$(dirname "${BASH_SOURCE[0]}")/shared/log_utils.sh"
 
 
 cp /var/lib/snapd/desktop/applications/*.desktop ~/.local/share/applications/
@@ -11,7 +13,7 @@ gsettings set org.nemo.preferences default-folder-viewer 'list-view'
 current_list=$(gsettings get org.cinnamon.desktop.keybindings custom-list)
 # Check if the list already contains 'custom0'
 if echo "$current_list" | grep -q "'custom0'"; then
-  echo "'custom0' is already in the list"
+  log_info "'custom0' is already in the list"
 else
   gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/desktop/keybindings/custom-keybindings/custom0/ name 'Area Screenshot'
   gsettings set org.cinnamon.desktop.keybindings.custom-keybinding:/org/cinnamon/desktop/keybindings/custom-keybindings/custom0/ binding "['<Primary>Print']"

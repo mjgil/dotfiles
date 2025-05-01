@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# Import logging utilities
+# Define logging functions
+function log_info() { echo -e "\\033[0;34m[INFO]\\033[0m $1"; }
+function log_success() { echo -e "\\033[0;32m[SUCCESS]\\033[0m $1"; }
+function log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m $1"; }
+function log_error() { echo -e "\\033[0;31m[ERROR]\\033[0m $1"; }
 
 # Script to install APT hooks to prevent installation of ASDF-managed packages
 # These hooks will work regardless of how apt is invoked (directly, via sudo, etc.)
@@ -11,7 +17,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Ensure yq is installed
 if ! command -v yq >/dev/null 2>&1; then
-  echo "yq is required but not installed. Please run bootstrap.sh first."
+  log_info "yq is required but not installed. Please run bootstrap.sh first."
   exit 1
 fi
 
@@ -43,7 +49,7 @@ get_blocked_packages() {
     esac
   done
   
-  echo "$BLOCKED_PACKAGES"
+  log_info "$BLOCKED_PACKAGES"
 }
 
 # Create the script that will be called by the APT hook
@@ -51,7 +57,7 @@ create_dpkg_blocker_script() {
   local script_path="/usr/local/bin/dpkg-asdf-block.sh"
   local blocked_packages=$(get_blocked_packages)
   
-  echo "Creating dpkg blocker script at $script_path"
+  log_info "Creating dpkg blocker script at $script_path"
   
   cat > /tmp/dpkg-asdf-block.sh << EOF
 #!/usr/bin/env bash
@@ -74,7 +80,7 @@ ALLOWED_PKGS=()
 
 # Check each package
 for pkg in $blocked_packages; do
-  if echo "\$PACKAGES" | grep -q "Package: \$pkg" && echo "\$PACKAGES" | grep -q "Status: install\|Status: hold"; then
+  if echo "\$PACKAGES" | grep -q "Package: \$pkg" && log_info "\$PACKAGES" | grep -q "Status: install\|Status: hold"; then
     BLOCKED_PKGS+=("\$pkg")
   fi
 done
@@ -147,7 +153,7 @@ EOF
   sudo mv /tmp/dpkg-asdf-block.sh "$script_path"
   sudo chmod +x "$script_path"
   
-  echo "dpkg blocker script installed successfully"
+  log_info "dpkg blocker script installed successfully"
 }
 
 # Create directory for APT hooks
@@ -157,7 +163,7 @@ sudo mkdir -p /etc/apt/apt.conf.d
 HOOK_FILE="/etc/apt/apt.conf.d/00-asdf-block"
 create_dpkg_blocker_script
 
-echo "Creating APT hook at $HOOK_FILE"
+log_info "Creating APT hook at $HOOK_FILE"
 
 cat > /tmp/asdf-hook << EOF
 // APT hook to prevent installation of packages managed by ASDF
@@ -170,6 +176,6 @@ EOF
 # Install the hook file using sudo
 sudo mv /tmp/asdf-hook "$HOOK_FILE"
 
-echo "APT hook installed successfully"
-echo "This hook will prevent direct installation of packages that should be managed through ASDF"
-echo "even when using sudo apt install or other methods"
+log_info "APT hook installed successfully"
+log_info "This hook will prevent direct installation of packages that should be managed through ASDF"
+log_info "even when using sudo apt install or other methods"

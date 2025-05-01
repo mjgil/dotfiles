@@ -1,4 +1,6 @@
 #!/bin/bash
+# Import logging utilities
+source "$(dirname "${BASH_SOURCE[0]}")/shared/log_utils.sh"
 set -o errexit
 
 # Author: David Underhill

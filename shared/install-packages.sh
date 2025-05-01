@@ -1,17 +1,36 @@
 #!/usr/bin/env bash
+# Import logging utilities
+# Define logging functions
+function log_info() { echo -e "\\033[0;34m[INFO]\\033[0m $1"; }
+function log_success() { echo -e "\\033[0;32m[SUCCESS]\\033[0m $1"; }
+function log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m $1"; }
+function log_error() { echo -e "\\033[0;31m[ERROR]\\033[0m $1"; }
 
 # Exit on error
 set -e
 
-# Script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Define package definition file
+PACKAGE_FILE="packages.json"
+
+# Script directory - adjusted for dotfiles root
+if [ -n "$DOTFILES_SOURCE_DIR" ]; then
+  SCRIPT_DIR="$DOTFILES_SOURCE_DIR/shared"
+else
+  SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+
+# Check if package file exists
+if [ ! -f "$SCRIPT_DIR/$PACKAGE_FILE" ]; then
+    log_error "Package definition file not found: $SCRIPT_DIR/$PACKAGE_FILE"
+    exit 1
+fi
 
 # Detect OS
 if [[ "$OSTYPE" == "darwin"* ]]; then
   OS="macos"
   # Ensure Homebrew is installed
   if ! command -v brew >/dev/null 2>&1; then
-    echo "Homebrew is required but not installed. Please run bootstrap.sh first."
+    log_info "Homebrew is required but not installed. Please run bootstrap.sh first."
     exit 1
   fi
 elif [[ -f /etc/os-release ]]; then
@@ -19,17 +38,17 @@ elif [[ -f /etc/os-release ]]; then
   if [[ "$ID" == "ubuntu" || "$ID" == "linuxmint" || "$ID" == "debian" ]]; then
     OS="debian"
   else
-    echo "Unsupported Linux distribution: $ID"
+    log_info "Unsupported Linux distribution: $ID"
     exit 1
   fi
 else
-  echo "Unsupported OS"
+  log_info "Unsupported OS"
   exit 1
 fi
 
-# Ensure yq is installed
-if ! command -v yq >/dev/null 2>&1; then
-  echo "yq is required but not installed. Please run bootstrap.sh first."
+# Ensure jq is installed
+if ! command -v jq >/dev/null 2>&1; then
+  log_info "jq is required but not installed. Please run bootstrap.sh first."
   exit 1
 fi
 
@@ -43,108 +62,155 @@ install_package() {
     return 0
   fi
   
-  # Extract package information
-  local name=$(yq e ".$category[$idx].name" "$SCRIPT_DIR/packages.yml")
-  local description=$(yq e ".$category[$idx].description" "$SCRIPT_DIR/packages.yml")
+  # Extract package information using jq
+  local name=$(jq -r ".${category}[${idx}].name" "$SCRIPT_DIR/$PACKAGE_FILE")
+  local description=$(jq -r ".${category}[${idx}].description // \"No description\"" "$SCRIPT_DIR/$PACKAGE_FILE")
   
-  echo "Installing $name: $description"
+  # Handle null values for name or description gracefully
+  if [[ "$name" == "null" ]]; then
+    log_warning "Skipping package at index $idx in category $category due to missing name."
+    return 0
+  fi
+  if [[ "$description" == "null" ]]; then
+      description="No description provided"
+  fi
+  
+  log_info "Installing $name: $description"
   
   if [[ "$OS" == "macos" ]]; then
     # Check for brew package
-    if yq e ".$category[$idx] | has(\"brew\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local brew_pkg=$(yq e ".$category[$idx].brew" "$SCRIPT_DIR/packages.yml")
-      echo " - Installing via brew: $brew_pkg"
-      brew install "$brew_pkg" || echo " - Already installed or error occurred"
+    local brew_pkg=$(jq -r ".${category}[${idx}].brew // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    if [[ "$brew_pkg" != "null" ]]; then
+      log_info " - Installing via brew: $brew_pkg"
+      brew install "$brew_pkg" || log_info " - Already installed or error occurred"
     fi
     
     # Check for brew cask package
-    if yq e ".$category[$idx] | has(\"brew_cask\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local brew_cask=$(yq e ".$category[$idx].brew_cask" "$SCRIPT_DIR/packages.yml")
-      echo " - Installing via brew cask: $brew_cask"
-      brew install --cask "$brew_cask" || echo " - Already installed or error occurred"
+    local brew_cask=$(jq -r ".${category}[${idx}].brew_cask // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    if [[ "$brew_cask" != "null" ]]; then
+      log_info " - Installing via brew cask: $brew_cask"
+      brew install --cask "$brew_cask" || log_info " - Already installed or error occurred"
     fi
     
     # Check for brew bundle
-    if yq e ".$category[$idx] | has(\"brew_bundle\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local packages=$(yq e ".$category[$idx].brew_bundle[]" "$SCRIPT_DIR/packages.yml")
-      for pkg in $packages; do
-        echo " - Installing via brew: $pkg"
-        brew install "$pkg" || echo " - Already installed or error occurred"
-      done
+    local brew_bundle_check=$(jq -e ".${category}[${idx}].brew_bundle" "$SCRIPT_DIR/$PACKAGE_FILE" > /dev/null 2>&1 && echo true || echo false)
+    if [[ "$brew_bundle_check" == "true" ]]; then
+        mapfile -t packages < <(jq -r ".${category}[${idx}].brew_bundle[]" "$SCRIPT_DIR/$PACKAGE_FILE")
+        if [[ "${#packages[@]}" -gt 0 ]]; then
+            log_info " - Installing brew bundle: ${packages[*]}"
+            for pkg in "${packages[@]}"; do
+                log_info "   - Installing via brew: $pkg"
+                brew install "$pkg" || log_info "     - Already installed or error occurred"
+            done
+        fi
     fi
     
     # Check for custom command
-    if yq e ".$category[$idx] | has(\"brew_command\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local command=$(yq e ".$category[$idx].brew_command" "$SCRIPT_DIR/packages.yml")
-      echo " - Running custom command: $command"
-      eval "$command"
+    local brew_command=$(jq -r ".${category}[${idx}].brew_command // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    if [[ "$brew_command" != "null" ]]; then
+      log_info " - Running custom command: $brew_command"
+      eval "$brew_command" || log_info " - Command may have failed, continuing..."
     fi
     
   elif [[ "$OS" == "debian" ]]; then
     # Add PPA if needed
-    if yq e ".$category[$idx] | has(\"apt_ppa\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local apt_ppa=$(yq e ".$category[$idx].apt_ppa" "$SCRIPT_DIR/packages.yml")
-      echo " - Adding PPA: $apt_ppa"
-      sudo add-apt-repository -y "$apt_ppa"
+    local apt_ppa=$(jq -r ".${category}[${idx}].apt_ppa // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    if [[ "$apt_ppa" != "null" ]]; then
+      log_info " - Adding PPA: $apt_ppa"
+      sudo add-apt-repository -y "$apt_ppa" || log_info " - PPA may already exist, continuing..."
     fi
     
     # Add repository if needed
-    if yq e ".$category[$idx] | has(\"apt_repo\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local apt_repo=$(yq e ".$category[$idx].apt_repo" "$SCRIPT_DIR/packages.yml")
-      
-      if yq e ".$category[$idx] | has(\"apt_key\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-        local apt_key=$(yq e ".$category[$idx].apt_key" "$SCRIPT_DIR/packages.yml")
-        echo " - Adding repository key: $apt_key"
-        wget -q -O - "$apt_key" | sudo apt-key add -
+    local apt_repo=$(jq -r ".${category}[${idx}].apt_repo // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    if [[ "$apt_repo" != "null" ]]; then
+      local apt_key=$(jq -r ".${category}[${idx}].apt_key // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+      if [[ "$apt_key" != "null" ]]; then
+        log_info " - Adding repository key: $apt_key"
+        # Use curl instead of wget, handle potential errors
+        curl -fsSL "$apt_key" | sudo gpg --dearmor -o /usr/share/keyrings/${name}-keyring.gpg || log_warning " - Failed to add repository key, continuing..."
+        # Ensure the key was added before proceeding
+        if [[ -f "/usr/share/keyrings/${name}-keyring.gpg" ]]; then
+             local repo_file="/etc/apt/sources.list.d/${name}.list"
+             if [[ ! -f "$repo_file" ]]; then
+                log_info " - Adding repository: $apt_repo"
+                echo "deb [signed-by=/usr/share/keyrings/${name}-keyring.gpg] $apt_repo" | sudo tee "$repo_file" > /dev/null || log_warning " - Error adding repository, continuing..."
+             else
+                log_info " - Repository already exists: $repo_file"
+             fi
+        else 
+             log_warning " - Repository key file not found, cannot add repository $apt_repo"
+        fi
+      else 
+        # If no key specified, try adding repo directly (less secure)
+        local repo_file="/etc/apt/sources.list.d/${name}.list"
+        if [[ ! -f "$repo_file" ]]; then
+            log_warning " - Adding repository without specific key: $apt_repo"
+            echo "$apt_repo" | sudo tee "$repo_file" > /dev/null || log_warning " - Error adding repository, continuing..."
+        else
+            log_info " - Repository already exists: $repo_file"
+        fi
       fi
-      
-      echo " - Adding repository: $apt_repo"
-      echo "$apt_repo" | sudo tee /etc/apt/sources.list.d/"$name".list > /dev/null
     fi
     
     # Update apt if we added any repos or PPAs
-    if yq e ".$category[$idx] | has(\"apt_repo\")" "$SCRIPT_DIR/packages.yml" == "true" || \
-       yq e ".$category[$idx] | has(\"apt_ppa\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      echo " - Updating apt..."
-      sudo apt update
+    if [[ "$apt_repo" != "null" || "$apt_ppa" != "null" ]]; then
+      log_info " - Updating apt..."
+      sudo apt update || log_warning " - Error updating apt, continuing..."
     fi
     
-    # Check for apt package
-    if yq e ".$category[$idx] | has(\"apt\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local apt_pkg=$(yq e ".$category[$idx].apt" "$SCRIPT_DIR/packages.yml")
-      echo " - Installing via apt: $apt_pkg"
-      sudo apt install -y "$apt_pkg"
+    # Check for apt package(s)
+    local apt_pkgs_type=$(jq -r ".${category}[${idx}].apt | type" "$SCRIPT_DIR/$PACKAGE_FILE")
+    local pkgs_to_install=()
+    
+    if [[ "$apt_pkgs_type" == "array" ]]; then
+        mapfile -t pkgs_to_install < <(jq -r ".${category}[${idx}].apt[]" "$SCRIPT_DIR/$PACKAGE_FILE")
+    elif [[ "$apt_pkgs_type" == "string" ]]; then
+        pkgs_to_install=( $(jq -r ".${category}[${idx}].apt" "$SCRIPT_DIR/$PACKAGE_FILE") )
+    fi
+
+    if [[ "${#pkgs_to_install[@]}" -gt 0 ]]; then
+        log_info " - Installing via apt: ${pkgs_to_install[*]}"
+        sudo apt install -y "${pkgs_to_install[@]}" || log_info " - Package(s) may already be installed or an error occurred, continuing..."
     fi
     
     # Check for snap package
-    if yq e ".$category[$idx] | has(\"apt_snap\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local snap_pkg=$(yq e ".$category[$idx].apt_snap" "$SCRIPT_DIR/packages.yml")
-      echo " - Installing via snap: $snap_pkg"
-      sudo snap install $snap_pkg
+    local snap_pkg=$(jq -r ".${category}[${idx}].apt_snap // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    if [[ "$snap_pkg" != "null" ]]; then
+      log_info " - Installing via snap: $snap_pkg"
+      sudo snap install $snap_pkg || log_info " - Package may already be installed, continuing..."
     fi
     
     # Check for custom command
-    if yq e ".$category[$idx] | has(\"apt_command\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local command=$(yq e ".$category[$idx].apt_command" "$SCRIPT_DIR/packages.yml")
-      echo " - Running custom command: $command"
-      eval "$command"
+    local apt_command=$(jq -r ".${category}[${idx}].apt_command // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    if [[ "$apt_command" != "null" ]]; then
+      log_info " - Running custom command: $apt_command"
+      # Special handling for asdf installation
+      if [[ "$name" == "asdf" && -d "$HOME/.asdf" ]]; then
+        log_info " - ASDF directory already exists, skipping clone command"
+      else
+        eval "$apt_command" || log_info " - Command may have failed, continuing..."
+      fi
     fi
   fi
   
-  echo " - Done installing $name"
+  log_info " - Done installing $name"
 }
 
 # Function to install ASDF if not already installed
 ensure_asdf_installed() {
-  echo "Checking for ASDF installation..."
+  log_info "Checking for ASDF installation..."
   
   if ! command -v asdf >/dev/null 2>&1; then
-    echo "ASDF not found, installing..."
+    log_info "ASDF not found, installing..."
     
     if [[ "$OS" == "macos" ]]; then
-      brew install asdf
+      brew install asdf || log_warning " - Error installing ASDF via Homebrew, continuing..."
     elif [[ "$OS" == "debian" ]]; then
-      git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+      if [[ -d "$HOME/.asdf" ]]; then
+        log_info "ASDF directory exists but command not found, using existing installation"
+      else
+        git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0 || log_warning " - Error cloning ASDF, continuing..."
+      fi
     fi
     
     # Source ASDF
@@ -152,7 +218,7 @@ ensure_asdf_installed() {
       . ~/.asdf/asdf.sh
     fi
   else
-    echo "ASDF is already installed."
+    log_info "ASDF is already installed."
   fi
   
   # Ensure ASDF is in the path
@@ -160,64 +226,78 @@ ensure_asdf_installed() {
     if [[ -f ~/.asdf/asdf.sh ]]; then
       . ~/.asdf/asdf.sh
     else
-      echo "ERROR: ASDF installation seems to have failed or can't be sourced."
-      exit 1
+      log_warning "ASDF installation seems to have failed or can't be sourced."
+      log_warning "Continuing without ASDF, some language installations may fail."
     fi
   fi
 }
 
 # Function to install ASDF-managed languages
 install_asdf_languages() {
-  echo "Installing ASDF-managed languages..."
+  log_info "Installing ASDF-managed languages..."
   
   # First ensure ASDF is installed and sourced
   ensure_asdf_installed
   
+  # Check if asdf command is available
+  if ! command -v asdf >/dev/null 2>&1; then
+    log_warning "ASDF command not available, skipping language installations."
+    return 1
+  fi
+  
   # Get number of languages
-  local num_languages=$(yq e ".asdf_languages | length" "$SCRIPT_DIR/packages.yml")
+  local num_languages=$(jq ".asdf_languages | length" "$SCRIPT_DIR/$PACKAGE_FILE")
   
   for ((i=0; i<num_languages; i++)); do
-    local name=$(yq e ".asdf_languages[$i].name" "$SCRIPT_DIR/packages.yml")
-    local description=$(yq e ".asdf_languages[$i].description" "$SCRIPT_DIR/packages.yml")
-    local plugin=$(yq e ".asdf_languages[$i].plugin" "$SCRIPT_DIR/packages.yml")
-    local versions=$(yq e ".asdf_languages[$i].versions[]" "$SCRIPT_DIR/packages.yml")
-    local global=$(yq e ".asdf_languages[$i].global" "$SCRIPT_DIR/packages.yml")
+    local name=$(jq -r ".asdf_languages[$i].name" "$SCRIPT_DIR/$PACKAGE_FILE")
+    local description=$(jq -r ".asdf_languages[$i].description // \"No description\"" "$SCRIPT_DIR/$PACKAGE_FILE")
+    local plugin=$(jq -r ".asdf_languages[$i].plugin" "$SCRIPT_DIR/$PACKAGE_FILE")
+    local global=$(jq -r ".asdf_languages[$i].global // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+    local post_install=$(jq -r ".asdf_languages[$i].post_install // null" "$SCRIPT_DIR/$PACKAGE_FILE")
     
-    echo "Installing $name: $description"
+    # Get versions into a bash array
+    mapfile -t versions < <(jq -r ".asdf_languages[$i].versions[]? // empty" "$SCRIPT_DIR/$PACKAGE_FILE")
     
+    log_info "Installing $name: $description"
+    
+    local plugin_name=$(echo $plugin | cut -d' ' -f1)
+
     # Check if plugin is already installed
-    if ! asdf plugin list | grep -q "$(echo $plugin | cut -d' ' -f1)"; then
-      echo " - Adding ASDF plugin: $plugin"
-      asdf plugin add $(echo $plugin)
+    if ! asdf plugin list 2>/dev/null | grep -q "^${plugin_name}$"; then
+      log_info " - Adding ASDF plugin: $plugin"
+      asdf plugin add $(echo $plugin) || log_info " - Error adding plugin, continuing..."
     else
-      echo " - ASDF plugin already installed: $(echo $plugin | cut -d' ' -f1)"
+      log_info " - ASDF plugin already installed: $plugin_name"
     fi
     
     # Install versions
-    for version in $versions; do
-      if ! asdf list $(echo $plugin | cut -d' ' -f1) | grep -q "$version"; then
-        echo " - Installing version: $version"
-        asdf install $(echo $plugin | cut -d' ' -f1) $version
-      else
-        echo " - Version $version already installed"
-      fi
-    done
-    
-    # Set global version
-    echo " - Setting global version to $global"
-    asdf global $(echo $plugin | cut -d' ' -f1) $global
-    
-    # Run post-install commands if specified
-    if yq e ".asdf_languages[$i] | has(\"post_install\")" "$SCRIPT_DIR/packages.yml" == "true"; then
-      local post_install=$(yq e ".asdf_languages[$i].post_install" "$SCRIPT_DIR/packages.yml")
-      echo " - Running post-install: $post_install"
-      eval "$post_install"
+    if [[ "${#versions[@]}" -gt 0 ]]; then
+      for version in "${versions[@]}"; do
+        if ! asdf list $plugin_name 2>/dev/null | grep -q "^ *${version} *$"; then
+          log_info " - Installing version: $version"
+          asdf install $plugin_name $version || log_warning " - Error installing version $version, continuing..."
+        else
+          log_info " - Version $version already installed"
+        fi
+      done
     fi
     
-    echo " - Done installing $name"
+    # Set global version
+    if [[ "$global" != "null" ]]; then
+      log_info " - Setting global version to $global"
+      asdf global $plugin_name $global || log_warning " - Error setting global version $global, continuing..."
+    fi
+    
+    # Run post-install commands if specified
+    if [[ "$post_install" != "null" ]]; then
+      log_info " - Running post-install: $post_install"
+      eval "$post_install" || log_warning " - Error in post-install command, continuing..."
+    fi
+    
+    log_info " - Done installing $name"
   done
   
-  echo "All ASDF-managed languages installed successfully."
+  log_info "All ASDF-managed languages installed successfully."
 }
 
 # Function to install all packages in a category
@@ -230,27 +310,33 @@ install_category() {
     return
   fi
   
-  echo "Installing category: $category"
+  log_info "Installing category: $category"
   
   # Get number of packages in this category
-  local num_packages=$(yq e ".$category | length" "$SCRIPT_DIR/packages.yml")
+  local num_packages=$(jq ".$category | length" "$SCRIPT_DIR/$PACKAGE_FILE")
   
   for ((i=0; i<num_packages; i++)); do
     install_package "$category" "$i"
   done
   
-  echo "Completed installing category: $category"
+  log_info "Completed installing category: $category"
 }
 
 # Main installation function
 install_all() {
-  echo "Starting package installation for $OS..."
-  
+  log_info "Starting package installation for $OS..."
+  echo "hi"
   # Install ASDF first (since other packages depend on it)
-  if yq e 'has("dev_environments")' "$SCRIPT_DIR/packages.yml" == "true"; then
-    for ((i=0; i<$(yq e ".dev_environments | length" "$SCRIPT_DIR/packages.yml"); i++)); do
-      if [[ "$(yq e ".dev_environments[$i].name" "$SCRIPT_DIR/packages.yml")" == "asdf" ]]; then
+  if jq -e '.dev_environments' "$SCRIPT_DIR/$PACKAGE_FILE" > /dev/null 2>&1; then
+    echo "one"
+    local num_dev_packages=$(jq '.dev_environments | length' "$SCRIPT_DIR/$PACKAGE_FILE")
+    for ((i=0; i<num_dev_packages; i++)); do
+    echo "two"
+      local name=$(jq -r ".dev_environments[$i].name" "$SCRIPT_DIR/$PACKAGE_FILE")
+      if [[ "$name" == "asdf" ]]; then
+        echo "three"
         install_package "dev_environments" "$i"
+        echo "four"
         break
       fi
     done
@@ -260,24 +346,24 @@ install_all() {
   install_asdf_languages
   
   # Get all categories except ASDF languages
-  local categories=$(yq e 'keys | .[]' "$SCRIPT_DIR/packages.yml")
+  mapfile -t categories < <(jq -r 'keys | .[]' "$SCRIPT_DIR/$PACKAGE_FILE")
   
-  for category in $categories; do
+  for category in "${categories[@]}"; do
     if [[ "$category" != "asdf_languages" ]]; then
       install_category "$category"
     fi
   done
   
-  echo "All packages installed successfully!"
+  log_info "All packages installed successfully!"
 }
 
 # Check for specific category installation
 if [[ $# -gt 0 ]]; then
   for category in "$@"; do
-    if yq e "has(\"$category\")" "$SCRIPT_DIR/packages.yml" == "true"; then
+    if jq -e ".$category" "$SCRIPT_DIR/$PACKAGE_FILE" > /dev/null 2>&1; then
       install_category "$category"
     else
-      echo "Category '$category' not found in packages.yml"
+      log_warning "Category '$category' not found in $PACKAGE_FILE"
     fi
   done
 else
