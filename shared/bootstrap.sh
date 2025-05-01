@@ -23,8 +23,9 @@ elif [[ -f /etc/os-release ]]; then
       sudo apt update
       sudo apt install -y wget
       YQ_VERSION="v4.30.8"
-      wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 -O /usr/local/bin/yq
-      chmod +x /usr/local/bin/yq
+      wget https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64 -O /tmp/yq
+      sudo mv /tmp/yq /usr/local/bin/yq
+      sudo chmod +x /usr/local/bin/yq
     fi
   else
     echo "Unsupported Linux distribution: $ID"
