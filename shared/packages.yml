@@ -108,6 +108,10 @@ terminal_utils:
     apt_snap: "cmake --classic"
     brew: cmake
     
+  - name: wmcrtl
+    description: "Window manager control utility"
+    apt: wmcrtl
+    
   - name: qbittorrent
     description: "BitTorrent client"
     apt_snap: "qbittorrent-arnatious"
@@ -122,23 +126,7 @@ dev_environments:
 
   - name: python-build-deps
     description: "Build dependencies for Python"
-    apt:
-      - software-properties-common
-      - make
-      - build-essential
-      - libssl-dev
-      - zlib1g-dev
-      - libbz2-dev
-      - libreadline-dev
-      - libsqlite3-dev
-      - llvm
-      - libncurses5-dev
-      - libncursesw5-dev
-      - xz-utils
-      - tk-dev
-      - libffi-dev
-      - liblzma-dev
-      - python3-openssl
+    apt: "software-properties-common make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl libsqlite3-dev"
     brew_bundle: ["openssl", "readline", "sqlite3", "xz", "zlib", "tcl-tk"]
 
 # Browsers
@@ -172,9 +160,9 @@ file_utils:
     apt: ffmpeg
     brew: ffmpeg
     
-  - name: exfatprogs
-    description: "ExFAT filesystem utilities"
-    apt: exfatprogs
+  - name: exfat-utils
+    description: "ExFAT filesystem support"
+    apt: "exfat-utils exfat-fuse"
     brew: exfat
     
   - name: vlc
@@ -269,6 +257,11 @@ design_tools:
     description: "Image editor"
     apt_snap: gimp
     brew_cask: gimp
+    
+  - name: gravit-designer
+    description: "Vector graphics editor"
+    apt_snap: gravit-designer
+    brew_cask: gravit-designer
     
   - name: vectr
     description: "Vector graphics editor"

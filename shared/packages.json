@@ -3,7 +3,7 @@
     {
       "name": "git",
       "description": "Version control system",
-      "apt": "git-core",
+      "apt": "git",
       "brew": "git"
     },
     {
@@ -154,8 +154,7 @@
         "libreadline-dev",
         "libsqlite3-dev",
         "llvm",
-        "libncurses5-dev",
-        "libncursesw5-dev",
+        "libncurses-dev",
         "xz-utils",
         "tk-dev",
         "libffi-dev",
