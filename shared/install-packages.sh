@@ -615,9 +615,6 @@ install_all() {
 
   # --- Install explicitly ordered categories --- 
   log_info "Installing core categories in specific order..."
-  # Ensure ASDF base is ready before processing any category that might need it
-  # (though dev_environments should handle the actual install)
-  ensure_asdf_installed 
 
   for category in "${explicit_order[@]}"; do
     # Check if category actually exists in the file
@@ -658,7 +655,6 @@ install_all() {
 # Check for specific category installation
 if [[ $# -gt 0 ]]; then
   log_info "Installing specific categories: $@"
-  ensure_asdf_installed # Ensure ASDF base is ready if needed
   if [[ " $* " == *" asdf_languages "* ]]; then install_asdf_languages; fi
 
   for category in "$@"; do
