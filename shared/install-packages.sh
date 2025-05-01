@@ -41,7 +41,7 @@ install_package() {
   # Skip ASDF languages category (handled separately)
   if [[ "$category" == "asdf_languages" ]]; then
     return 0
-  }
+  fi
   
   # Extract package information
   local name=$(yq e ".$category[$idx].name" "$SCRIPT_DIR/packages.yml")

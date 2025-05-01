@@ -15,7 +15,7 @@ fi
 
 # make git directory
 mkdir -p ~/git
-cd ~/git
+cd ~/git || exit
 
 # pull down dotfiles if not already cloned
 if [ ! -d ~/git/dotfiles ]; then
@@ -26,7 +26,7 @@ fi
 if [ ! -d ~/git/z ]; then
   cd ~/git
   git clone https://github.com/mjgil/z.git
-  cd -
+  cd - || exit
 fi
 
 # clone mini-bash repository if not already cloned
@@ -37,13 +37,13 @@ if [ ! -d ~/git/mini-bash ]; then
 fi
 
 # link bashrc
-cd ~/git/dotfiles
+cd ~/git/dotfiles || exit
 ./linux/update-bashrc.sh
 git remote set-url origin ssh://git@ssh.github.com:443/mjgil/dotfiles.git
 cd -
 
 # install mini-bash
-cd ~/git/mini-bash
+cd ~/git/mini-bash || exit
 ./install-local.sh
 git remote set-url origin ssh://git@ssh.github.com:443/mjgil/mini-bash.git
 cd -

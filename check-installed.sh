@@ -38,7 +38,7 @@ check_package() {
   # Skip ASDF languages (handled separately)
   if [[ "$category" == "asdf_languages" ]]; then
     return 0
-  }
+  fi
   
   # Extract package information
   local name=$(yq e ".$category[$idx].name" "$SCRIPT_DIR/shared/packages.yml")

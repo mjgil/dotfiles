@@ -12,7 +12,7 @@ fi
 if ! getent group docker > /dev/null 2>&1; then
   sudo groupadd docker
 fi
-sudo usermod -aG docker $USER
+sudo usermod -aG docker "$USER"
 
 # Export paths for python
 export LDFLAGS="-L/usr/local/opt/sqlite/lib"
