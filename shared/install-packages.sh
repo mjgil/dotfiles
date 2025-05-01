@@ -263,7 +263,7 @@ function install_debian_package() {
       install_apt_ppa "$category" "$idx" "$name" "$command_already_exists" "${pkgs_to_check_for_cmd[*]}"
 
       # Add repository if needed
-      install_apt_repo "$category" "$idx" "$name" "$id_for_checks" "$command_already_exists" "${pkgs_to_check_for_cmd[*]}"
+      install_apt_repo "$category" "$idx" "$name" "$id_for_checks"
 
       # Install apt packages
       install_apt_packages "$category" "$idx"
@@ -366,70 +366,86 @@ function install_apt_repo() {
   local idx=$2
   local name=$3
   local id_for_checks=$4
-  local command_already_exists=$5 # Less relevant now
-  local pkgs_to_check_for_cmd=$6
+  # command_already_exists=$5 # Less relevant now
+  # pkgs_to_check_for_cmd=$6
 
   local apt_repo=$(jq -r ".${category}[${idx}].apt_repo // null" "$SCRIPT_DIR/$PACKAGE_FILE")
   if [[ "$apt_repo" != "null" ]]; then
-      local repo_needed=false
+      # Determine the primary package this repo provides (usually the 'apt' field)
+      local primary_pkg=""
       local apt_pkgs_type=$(jq -r ".${category}[${idx}].apt | type" "$SCRIPT_DIR/$PACKAGE_FILE" 2>/dev/null || echo "null")
-      local pkgs_for_repo_check=()
       if [[ "$apt_pkgs_type" == "array" ]]; then
-          mapfile -t pkgs_for_repo_check < <(jq -r ".${category}[${idx}].apt[]" "$SCRIPT_DIR/$PACKAGE_FILE")
+          primary_pkg=$(jq -r ".${category}[${idx}].apt[0]" "$SCRIPT_DIR/$PACKAGE_FILE") # Assume first is primary
       elif [[ "$apt_pkgs_type" == "string" ]]; then
-          pkgs_for_repo_check=( $(jq -r ".${category}[${idx}].apt" "$SCRIPT_DIR/$PACKAGE_FILE") )
+          primary_pkg=$(jq -r ".${category}[${idx}].apt" "$SCRIPT_DIR/$PACKAGE_FILE")
       fi
 
-      if [[ "${#pkgs_for_repo_check[@]}" -gt 0 ]]; then
-        for pkg in "${pkgs_for_repo_check[@]}"; do
-            if ! dpkg-query -W -f='\${Status}' "$pkg" 2>/dev/null | grep -q "ok installed"; then
-                repo_needed=true
-                log_info "Package '$pkg' not installed, Repo '$apt_repo' might be needed."
-                break
-            fi
-        done
+      local repo_needed=false
+      if [[ -n "$primary_pkg" ]]; then
+          # Check if the primary package is installed
+          if ! dpkg-query -W -f='\${Status}' "$primary_pkg" 2>/dev/null | grep -q "ok installed"; then
+              repo_needed=true
+              log_info "Primary package '$primary_pkg' not installed, repository '$apt_repo' might be needed."
+          else
+              log_info "Primary package '$primary_pkg' already installed. Assuming repository '$apt_repo' is correctly configured or not needed."
+          fi
       else
-        local final_cmd_name="${symlink_target:-$name}"
-        if ! command_exists "$final_cmd_name"; then
-            repo_needed=true
-            log_info "Command '$final_cmd_name' not found, Repo '$apt_repo' might be needed."
-        fi
+          # If no primary package defined, check if the command exists
+          local symlink_target=$(jq -r ".${category}[${idx}].symlink_target // null" "$SCRIPT_DIR/$PACKAGE_FILE")
+          local final_cmd_name="${symlink_target:-$name}"
+          if ! command_exists "$final_cmd_name"; then
+              repo_needed=true
+              log_info "Command '$final_cmd_name' not found and no primary apt package specified, repository '$apt_repo' might be needed."
+          else
+               log_info "Command '$final_cmd_name' found. Assuming repository '$apt_repo' is correctly configured or not needed."
+          fi
       fi
 
+      # Only proceed if the package is missing
       if [[ "$repo_needed" == true ]]; then
-          log_info "Checking repository for $name: $apt_repo"
+          log_info "Checking repository configuration for $name: $apt_repo"
           local apt_key=$(jq -r ".${category}[${idx}].apt_key // null" "$SCRIPT_DIR/$PACKAGE_FILE")
           local key_file="/usr/share/keyrings/${id_for_checks}-keyring.gpg"
           local repo_file="/etc/apt/sources.list.d/${id_for_checks}.list"
           local repo_added_this_time=false
 
+          # Only try to add the repo file if it doesn't already exist
           if [[ ! -f "$repo_file" ]]; then
+              log_info "Repository file '$repo_file' not found. Attempting to add repo and key."
               if [[ "$apt_key" != "null" ]]; then
+                  # Add key only if it doesn't exist
                   if [[ ! -f "$key_file" ]]; then
-                      log_info "Adding repository key: $apt_key"
+                      log_info "Adding repository key: $apt_key to $key_file"
                       curl -fsSL "$apt_key" | sudo gpg --dearmor -o "$key_file" || log_warning "Failed to add repository key $apt_key, cannot add repo."
+                  else 
+                      log_info "Key file $key_file already exists."
                   fi
+                  # Add repo file if key exists (or was successfully added)
                   if [[ -f "$key_file" ]]; then
-                      log_info "Adding repository: $apt_repo"
+                      log_info "Adding repository source file: $repo_file"
                       echo "deb [signed-by=$key_file] $apt_repo" | sudo tee "$repo_file" > /dev/null || log_warning "Error adding repository $apt_repo, continuing..."
                       repo_added_this_time=true
                   else
                       log_warning "Key file $key_file not found or failed to add. Cannot add repository $apt_repo."
                   fi
               else
-                  log_warning "Adding repository without specific key: $apt_repo"
+                  # Add repo without key
+                  log_warning "Adding repository source file without specific key: $repo_file"
                   echo "deb $apt_repo" | sudo tee "$repo_file" > /dev/null || log_warning "Error adding repository $apt_repo, continuing..."
                   repo_added_this_time=true
               fi
-          else
-              log_info "Repository file already exists: $repo_file. Skipping add."
-          fi
 
-          if [[ "$repo_added_this_time" == true ]]; then
-              APT_UPDATE_NEEDED=true
+              # Trigger apt update if repo was newly added
+              if [[ "$repo_added_this_time" == true ]]; then
+                  APT_UPDATE_NEEDED=true
+              fi
+          else
+              log_info "Repository file '$repo_file' already exists. Skipping repo/key addition."
+              # We might still need an update if the package check failed earlier but file existed
+              # Let's ensure apt update runs if the package was missing, even if file existed
+              APT_UPDATE_NEEDED=true 
           fi
-      else
-        log_info "All associated apt packages installed or repo not needed for $name. Skipping repo check for $apt_repo."
+      # else: Package is installed, do nothing.
       fi
   fi
 }
@@ -829,7 +845,8 @@ function run_asdf_post_install() {
     if [[ "$run_post_install" == true ]]; then
       log_info "Running post-install for $name ($plugin_name $global): $post_install"
       # Execute using asdf exec to ensure the correct environment
-      if asdf exec "$plugin_name" "$global" $post_install; then
+      # Quote the post_install command to handle spaces correctly
+      if asdf exec "$plugin_name" "$global" "$post_install"; then
           log_success "Post-install command successful for $name."
       else
           log_warning "Error in post-install command for $name ($plugin_name $global), continuing..."
@@ -877,8 +894,8 @@ function install_all() {
   # Terminal utils should come early to provide tools like cargo if needed.
   local explicit_order=(
     "development"
-    "terminal_utils"
-    "dev_tools"
+    #"terminal_utils"
+    #"dev_tools"
     "dev_environments"
     "asdf_languages"
     # Commented out are lower priority for core functionality

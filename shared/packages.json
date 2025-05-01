@@ -170,6 +170,12 @@
       "description": "GitHub CLI",
       "apt": "gh",
       "brew": "gh"
+    },
+    {
+      "name": "shellcheck",
+      "description": "Shell script static analysis tool",
+      "apt": "shellcheck",
+      "brew": "shellcheck"
     }
   ],
   "system_tools": [
