@@ -12,54 +12,74 @@ function log_error() { echo -e "\\033[0;31m[ERROR]\\033[0m $1"; }
 # Exit on error
 set -e
 
-# Script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Define package definition file
+PACKAGE_FILE="packages.json"
 
-# Ensure yq is installed
-if ! command -v yq >/dev/null 2>&1; then
-  log_info "yq is required but not installed. Please run bootstrap.sh first."
+# Script directory - adjusted for dotfiles root
+if [ -n "$DOTFILES_SOURCE_DIR" ]; then
+  SCRIPT_DIR="$DOTFILES_SOURCE_DIR/shared"
+else
+  SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+
+# Ensure jq is installed
+if ! command -v jq >/dev/null 2>&1; then
+  log_error "jq is required but not installed. Please run bootstrap.sh first."
   exit 1
 fi
 
-# Get blocked package list from YAML file
+# Check if package file exists
+if [ ! -f "$SCRIPT_DIR/$PACKAGE_FILE" ]; then
+    log_error "Package definition file not found: $SCRIPT_DIR/$PACKAGE_FILE"
+    exit 1
+fi
+
+
+# Get blocked package list from JSON file
+# Mirrors the logic from create-package-blockers.sh for consistency
 get_blocked_packages() {
-  BLOCKED_PACKAGES=""
-  
-  # Get number of ASDF languages
-  local num_languages=$(yq e ".asdf_languages | length" "$SCRIPT_DIR/packages.yml")
-  
-  for ((i=0; i<num_languages; i++)); do
-    local name=$(yq e ".asdf_languages[$i].name" "$SCRIPT_DIR/packages.yml")
-    BLOCKED_PACKAGES="$BLOCKED_PACKAGES $name"
-    
-    # Add common variations
-    case "$name" in
-      "nodejs")
-        BLOCKED_PACKAGES="$BLOCKED_PACKAGES node npm"
-        ;;
-      "python")
-        BLOCKED_PACKAGES="$BLOCKED_PACKAGES python3 python-pip python3-pip pip pip3"
-        ;;
-      "golang")
-        BLOCKED_PACKAGES="$BLOCKED_PACKAGES go"
-        ;;
-      "java")
-        BLOCKED_PACKAGES="$BLOCKED_PACKAGES openjdk default-jdk default-jre"
-        ;;
-    esac
-  done
-  
-  log_info "$BLOCKED_PACKAGES"
+    jq -r '
+        .asdf_languages[] | 
+        # Only consider languages that might have apt alternatives defined or common names
+        # (We don't strictly need select(.apt?) here as we add common names regardless)
+        {name: .name, apt: .apt} | 
+        # Output the asdf name
+        .name, 
+        # Output apt packages if defined (handle string or array)
+        (if .apt? | type == "array" then .apt[] else .apt? // empty end), 
+        # Add common variations based on asdf name
+        (if .name == "nodejs" then "node", "npm" 
+         elif .name == "python" then "python3", "python-pip", "python3-pip", "pip", "pip3" 
+         elif .name == "golang" then "go" 
+         elif .name == "java" then "openjdk", "default-jdk", "default-jre" 
+         # Add other cases as needed
+         else empty end)
+    ' "$SCRIPT_DIR/$PACKAGE_FILE" | 
+    # Remove duplicates and empty lines, then join with space
+    sort -u | grep . | paste -sd ' ' || {
+        log_warning "Failed to extract blocked packages using jq. APT hook might be incomplete."
+        echo "" # Return empty string on error
+    }
 }
 
 # Create the script that will be called by the APT hook
 create_dpkg_blocker_script() {
   local script_path="/usr/local/bin/dpkg-asdf-block.sh"
-  local blocked_packages=$(get_blocked_packages)
+  local blocked_packages=$(get_blocked_packages) # Call once
   
+  if [[ -z "$blocked_packages" ]]; then
+      log_info "No ASDF-managed packages found to block via APT hook. Skipping hook creation."
+      # Optionally remove existing hook/script if desired
+      # sudo rm -f "$script_path" "/etc/apt/apt.conf.d/00-asdf-block"
+      return
+  fi
+
   log_info "Creating dpkg blocker script at $script_path"
+  log_info "Blocked packages for APT hook: $blocked_packages"
   
-  cat > /tmp/dpkg-asdf-block.sh << EOF
+  # Use cat with sudo tee to write the script content
+  # This avoids needing a temporary file owned by root
+  cat << EOF | sudo tee "$script_path" > /dev/null
 #!/usr/bin/env bash
 
 # ASDF package blocker script
@@ -71,23 +91,59 @@ if [ -n "\$BYPASS_ASDF_CHECK" ]; then
   exit 0
 fi
 
-# Get list of packages being installed
+# Get list of packages being installed (passed via stdin by APT)
 PACKAGES=\$(cat)
 
 # Initialize arrays
 BLOCKED_PKGS=()
-ALLOWED_PKGS=()
+# ALLOWED_PKGS=() # Not actually used in this script's logic
 
-# Check each package
-for pkg in $blocked_packages; do
-  if echo "\$PACKAGES" | grep -q "Package: \$pkg" && log_info "\$PACKAGES" | grep -q "Status: install\|Status: hold"; then
-    BLOCKED_PKGS+=("\$pkg")
+# Convert space-separated string to array for reliable iteration
+# Ensure the array declaration is safe even if $blocked_packages is empty
+local blocked_array=()
+read -r -a blocked_array <<< "$blocked_packages"
+
+# Check each package defined in blocked_array
+for pkg in "\${blocked_array[@]}"; do
+  # Check if the package name appears in the input from APT
+  # The input format is like:
+  # Package: <name>
+  # Version: <version>
+  # Architecture: <arch>
+  # Multi-Arch: <value>
+  # Status: install
+  # ... (repeated for each package)
+  # We look for "Package: pkg_name" followed by "Status: install" or "Status: hold" later
+  if echo "\$PACKAGES" | grep -qE "^Package:[[:space:]]*\$pkg\$"; then
+    # Now check if the status for this specific package block is install or hold
+     # This is tricky because the status line might be far below the Package line
+     # A simpler, though potentially less precise, check is if "Status: install" or "Status: hold" exists anywhere
+     # A more robust approach might use awk
+     if echo "\$PACKAGES" | grep -qE "^Status:[[:space:]]*(install|hold)\$"; then
+        # Found a blocked package being installed/held
+        BLOCKED_PKGS+=("\$pkg")
+     fi
   fi
 done
 
+# Remove duplicates just in case (shouldn't happen with loop logic but safe)
+BLOCKED_PKGS=(\$(printf "%s\\n" "\${BLOCKED_PKGS[@]}" | sort -u))
+
 # If any blocked packages found
 if [ \${#BLOCKED_PKGS[@]} -gt 0 ]; then
-  echo "⚠️  WARNING: Direct installation of the following packages is blocked:" >&2
+  # Use systemd-cat for logging if available, otherwise echo to stderr
+  log_cmd="echo"
+  if command -v systemd-cat >/dev/null 2>&1; then
+      log_cmd="systemd-cat -t asdf-blocker"
+  fi
+
+  \$log_cmd "--- ASDF Blocker Triggered ---"
+  \$log_cmd "Blocked packages detected: \${BLOCKED_PKGS[*]}"
+  \$log_cmd "Command executed: \$(ps -o cmd= \$PPID)"
+  \$log_cmd "-----------------------------"
+
+  # Output user-friendly message to stderr (which apt/dpkg usually shows)
+  echo "⚠️  WARNING: Direct installation/hold of the following packages is blocked:" >&2
   for pkg in "\${BLOCKED_PKGS[@]}"; do
     echo "  - \$pkg" >&2
   done
@@ -106,7 +162,8 @@ if [ \${#BLOCKED_PKGS[@]} -gt 0 ]; then
   # Get command line used
   CMD=\$(ps -o cmd= \$PPID)
   
-  # Extract non-blocked packages if any
+  # Extract non-blocked packages if any (This logic might be brittle)
+  # Only attempt if the command looks like apt/apt-get install/add
   if [[ "\$CMD" =~ apt(-get)?[[:space:]]+(install|add)[[:space:]]+(.+) ]]; then
     ALL_ARGS=(\${BASH_REMATCH[3]})
     ALLOWED_ARGS=()
@@ -132,50 +189,60 @@ if [ \${#BLOCKED_PKGS[@]} -gt 0 ]; then
       fi
     done
     
-    if [[ \${#ALLOWED_ARGS[@]} -gt 0 ]]; then
+    # Suggest command only if there are non-blocked arguments left
+    if [[ \${#ALLOWED_ARGS[@]} -gt 0 && \${#ALLOWED_ARGS[@]} -ne \${#ALL_ARGS[@]} ]]; then
       echo "" >&2
-      echo "You can install the non-blocked packages with:" >&2
+      echo "You can attempt to install only the non-blocked packages with:" >&2
+      # Extract the original command part (apt or apt-get)
+      local apt_cmd=\${BASH_REMATCH[1]} 
       if [[ "\$CMD" =~ sudo ]]; then
-        echo "  sudo apt install \${ALLOWED_ARGS[*]}" >&2
+        echo "  sudo \$apt_cmd install \$(printf "'"%s"' " "\${ALLOWED_ARGS[@]}")" >&2
       else
-        echo "  apt install \${ALLOWED_ARGS[*]}" >&2
+        echo "  \$apt_cmd install \$(printf "'"%s"' " "\${ALLOWED_ARGS[@]}")" >&2
       fi
     fi
   fi
   
-  exit 1
+  # Exit with error to prevent dpkg from proceeding with blocked packages
+  exit 1 
 fi
 
+# No blocked packages detected in the transaction, exit successfully
 exit 0
 EOF
 
-  # Install the script using sudo
-  sudo mv /tmp/dpkg-asdf-block.sh "$script_path"
+  # Ensure the script is executable
   sudo chmod +x "$script_path"
   
-  log_info "dpkg blocker script installed successfully"
+  log_info "dpkg blocker script installed/updated successfully"
 }
 
-# Create directory for APT hooks
+# --- Main Execution ---
+
+log_info "Setting up APT hook for ASDF package blocking..."
+
+# Create directory for APT hooks if it doesn't exist
 sudo mkdir -p /etc/apt/apt.conf.d
 
-# Create the APT hook file
-HOOK_FILE="/etc/apt/apt.conf.d/00-asdf-block"
+# Create/Update the blocker script itself
 create_dpkg_blocker_script
 
-log_info "Creating APT hook at $HOOK_FILE"
+# Check if the blocker script was actually created (it might be skipped if no blocked packages)
+if [[ -f "/usr/local/bin/dpkg-asdf-block.sh" ]]; then
+    # Create the APT hook configuration file using sudo tee
+    HOOK_FILE="/etc/apt/apt.conf.d/00-asdf-block"
+    log_info "Creating/Updating APT hook configuration at $HOOK_FILE"
 
-cat > /tmp/asdf-hook << EOF
-// APT hook to prevent installation of packages managed by ASDF
-
-DPkg::Pre-Install-Pkgs {
-  "/usr/local/bin/dpkg-asdf-block.sh";
-};
+    # Note: Using // comments might not be universally supported, sticking to simple format
+    cat << EOF | sudo tee "$HOOK_FILE" > /dev/null
+DPkg::Pre-Install-Pkgs { "/usr/local/bin/dpkg-asdf-block.sh"; };
 EOF
 
-# Install the hook file using sudo
-sudo mv /tmp/asdf-hook "$HOOK_FILE"
+    log_info "APT hook configured successfully"
+    log_info "This hook will prevent direct installation of packages that should be managed through ASDF"
+    log_info "(unless BYPASS_ASDF_CHECK=1 is set)."
+else
+    log_info "Skipped creating APT hook configuration as blocker script was not needed."
+fi
 
-log_info "APT hook installed successfully"
-log_info "This hook will prevent direct installation of packages that should be managed through ASDF"
-log_info "even when using sudo apt install or other methods"
+log_success "APT hook setup process completed."

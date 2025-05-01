@@ -76,6 +76,54 @@
       "brew": "fastfetch"
     },
     {
+      "name": "just",
+      "description": "Command runner",
+      "apt": "just",
+      "brew": "just"
+    },
+    {
+      "name": "hyperfine",
+      "description": "Command-line benchmarking tool",
+      "apt": "hyperfine",
+      "brew": "hyperfine"
+    },
+    {
+      "name": "exa",
+      "description": "Modern replacement for ls",
+      "apt": "exa",
+      "brew": "exa"
+    },
+    {
+      "name": "fzf",
+      "description": "Command-line fuzzy finder",
+      "apt": "fzf",
+      "brew": "fzf"
+    },
+    {
+      "name": "bat",
+      "description": "Cat clone with syntax highlighting",
+      "apt": "batcat",
+      "brew": "bat"
+    },
+    {
+      "name": "delta",
+      "description": "Syntax-highlighting pager for git, diff, and grep output",
+      "apt": "git-delta",
+      "brew": "git-delta"
+    },
+    {
+      "name": "atuin",
+      "description": "Magical shell history",
+      "apt_command": "bash <(curl https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh)",
+      "brew": "atuin"
+    },
+    {
+      "name": "lux",
+      "description": "Fast and simple video downloader",
+      "apt_command": "TARGET_DIR=${HOME}/.local/bin; mkdir -p $TARGET_DIR; curl -s https://api.github.com/repos/iawia002/lux/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '\"' -f 4 | wget -qi - -O $TARGET_DIR/lux && chmod +x $TARGET_DIR/lux",
+      "brew": "lux"
+    },
+    {
       "name": "cmake",
       "description": "Cross-platform build system",
       "apt_snap": "cmake --classic",
@@ -243,7 +291,7 @@
     {
       "name": "chrome",
       "description": "Google Chrome browser",
-      "apt_repo": "deb http://dl.google.com/linux/chrome/deb/ stable main",
+      "apt_repo": "http://dl.google.com/linux/chrome/deb/ stable main",
       "apt_key": "https://dl-ssl.google.com/linux/linux_signing_key.pub",
       "apt": "google-chrome-stable",
       "brew_cask": "google-chrome"

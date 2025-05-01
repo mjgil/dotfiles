@@ -601,13 +601,13 @@ install_all() {
     "terminal_utils"
     "dev_tools"
     "system_tools"
-    "cloud_tools"
+    # "cloud_tools"
     "dev_environments"
     "asdf_languages"
-    "browsers"
-    "design_tools"
-    "editors"
-    "file_utils"
+    # "browsers"
+    # "design_tools"
+    # "editors"
+    # "file_utils"
   )
 
   # Keep track of processed categories to avoid duplicates

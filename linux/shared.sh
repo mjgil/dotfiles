@@ -26,12 +26,12 @@ export CPPFLAGS="-I/usr/local/opt/sqlite/include"
 export PKG_CONFIG_PATH="/usr/local/opt/sqlite/lib/pkgconfig"
 
 # Sublime Text post-installation setup
-# if command -v subl >/dev/null 2>&1; then
-#   log_info "Setting up Sublime Text package control..."
-#   subl --command "install_package_control" &
-#   sleep 2
-#   pkill -f sublime_text || true
-# fi
+if command -v subl >/dev/null 2>&1; then
+  log_info "Setting up Sublime Text package control..."
+  subl --command "install_package_control" &
+  sleep 2
+  pkill -f sublime_text || true
+fi
 
 # Repository setup is now handled in shared/shared.sh
 
