@@ -593,24 +593,63 @@ install_category() {
 # Main installation function
 install_all() {
   log_info "Starting package installation for $OS..."
-  
-  # Ensure ASDF is installed first before processing other categories
-  # as some might depend on it (e.g., pip install in custom commands)
-  # The ensure_asdf_installed function handles its own installation if needed.
-  ensure_asdf_installed
-  
-  # Install ASDF languages next (might install tools needed by other packages)
-  install_asdf_languages
-  
-  # Get all categories except ASDF languages
-  mapfile -t categories < <(jq -r 'keys | .[]' "$SCRIPT_DIR/$PACKAGE_FILE")
-  
-  for category in "${categories[@]}"; do
-    if [[ "$category" != "asdf_languages" ]]; then
+
+  # Define the explicit installation order
+  # ASDF languages needs dev_environments (asdf itself) installed first.
+  local explicit_order=(
+    "development"
+    "terminal_utils"
+    "dev_tools"
+    "system_tools"
+    "cloud_tools"
+    "dev_environments"
+    "asdf_languages" 
+    # Add other critical categories here if needed
+  )
+
+  # Keep track of processed categories to avoid duplicates
+  declare -A processed_categories
+  for cat in "${explicit_order[@]}"; do
+    processed_categories["$cat"]=1
+  done
+
+  # --- Install explicitly ordered categories --- 
+  log_info "Installing core categories in specific order..."
+  # Ensure ASDF base is ready before processing any category that might need it
+  # (though dev_environments should handle the actual install)
+  ensure_asdf_installed 
+
+  for category in "${explicit_order[@]}"; do
+    # Check if category actually exists in the file
+    if ! jq -e ".$category" "$SCRIPT_DIR/$PACKAGE_FILE" > /dev/null 2>&1; then
+        log_warning "Category '$category' specified in explicit order but not found in $PACKAGE_FILE. Skipping."
+        continue
+    fi
+
+    if [[ "$category" == "asdf_languages" ]]; then
+      install_asdf_languages # Handle ASDF languages specifically
+    else
       install_category "$category"
     fi
   done
-  
+  log_info "Finished installing core categories."
+
+  # --- Install remaining categories --- 
+  log_info "Installing remaining categories..."
+  mapfile -t all_categories < <(jq -r 'keys | .[]' "$SCRIPT_DIR/$PACKAGE_FILE")
+
+  for category in "${all_categories[@]}"; do
+    # Check if this category was already processed in the explicit list
+    if [[ -z "${processed_categories[$category]}" ]]; then
+       log_info "Processing remaining category: $category"
+       # Double-check it's not asdf_languages again (shouldn't happen with map logic)
+       if [[ "$category" != "asdf_languages" ]]; then 
+           install_category "$category"
+           processed_categories["$category"]=1 # Mark as processed
+       fi
+    fi
+  done
+
   log_success "All package categories processed successfully!"
 }
 

@@ -25,52 +25,6 @@
       "brew": "rust"
     }
   ],
-  "asdf_languages": [
-    {
-      "name": "nodejs",
-      "description": "JavaScript runtime via ASDF",
-      "plugin": "nodejs https://github.com/asdf-vm/asdf-nodejs.git",
-      "versions": ["22.11.0"],
-      "global": "22.11.0",
-      "post_install": "npm install -g typescript ts-node"
-    },
-    {
-      "name": "python",
-      "description": "Python via ASDF",
-      "plugin": "python",
-      "versions": ["3.12.8"],
-      "global": "3.12.8",
-      "post_install": "pip install pipenv grip tabulate"
-    },
-    {
-      "name": "golang",
-      "description": "Go via ASDF",
-      "plugin": "golang",
-      "versions": ["1.23.3"],
-      "global": "1.23.3"
-    },
-    {
-      "name": "java",
-      "description": "Java via ASDF",
-      "plugin": "java",
-      "versions": ["openjdk-21.0.2"],
-      "global": "openjdk-21.0.2"
-    },
-    {
-      "name": "maven",
-      "description": "Maven via ASDF",
-      "plugin": "maven",
-      "versions": ["3.9.4"],
-      "global": "3.9.4"
-    },
-    {
-      "name": "dotnet",
-      "description": ".NET via ASDF",
-      "plugin": "dotnet",
-      "versions": ["7.0.100"],
-      "global": "7.0.100"
-    }
-  ],
   "terminal_utils": [
     {
       "name": "tree",
@@ -134,6 +88,81 @@
       "brew_cask": "qbittorrent"
     }
   ],
+  "dev_tools": [
+    {
+      "name": "docker",
+      "description": "Container platform",
+      "apt_snap": "docker",
+      "brew_cask": "docker"
+    },
+    {
+      "name": "github-cli",
+      "description": "GitHub CLI",
+      "apt": "gh",
+      "brew": "gh"
+    },
+    {
+      "name": "build-essential",
+      "description": "Build tools",
+      "apt": "build-essential"
+    },
+    {
+      "name": "ubuntu-make",
+      "description": "Ubuntu developer tools installer",
+      "apt_snap": "ubuntu-make --classic"
+    },
+    {
+      "name": "libssl-dev",
+      "description": "SSL development libraries",
+      "apt": "libssl-dev"
+    }
+  ],
+  "system_tools": [
+    {
+      "name": "sqlite3",
+      "description": "SQLite database",
+      "apt": "sqlite3",
+      "brew": "sqlite"
+    },
+    {
+      "name": "snapd",
+      "description": "Snap package manager",
+      "apt": "snapd"
+    },
+    {
+      "name": "gnupg",
+      "description": "GNU Privacy Guard",
+      "apt": "gnupg",
+      "brew": "gnupg"
+    },
+    {
+      "name": "ncal",
+      "description": "Calendar utility",
+      "apt": "ncal",
+      "brew": "ncal"
+    },
+    {
+      "name": "terminator",
+      "description": "Terminal emulator",
+      "apt_ppa": "ppa:gnome-terminator/ppa",
+      "apt": "terminator",
+      "brew_cask": "terminator"
+    }
+  ],
+  "cloud_tools": [
+    {
+      "name": "gcloud",
+      "description": "Google Cloud CLI",
+      "apt_snap": "google-cloud-cli --classic",
+      "brew_cask": "google-cloud-sdk"
+    },
+    {
+      "name": "hub",
+      "description": "GitHub CLI (hub)",
+      "apt_snap": "hub --classic",
+      "brew": "hub"
+    }
+  ],
   "dev_environments": [
     {
       "name": "asdf",
@@ -164,6 +193,52 @@
       "brew_bundle": ["openssl", "readline", "sqlite3", "xz", "zlib", "tcl-tk"]
     }
   ],
+  "asdf_languages": [
+    {
+      "name": "nodejs",
+      "description": "JavaScript runtime via ASDF",
+      "plugin": "nodejs https://github.com/asdf-vm/asdf-nodejs.git",
+      "versions": ["22.11.0"],
+      "global": "22.11.0",
+      "post_install": "npm install -g typescript ts-node"
+    },
+    {
+      "name": "python",
+      "description": "Python via ASDF",
+      "plugin": "python",
+      "versions": ["3.12.8"],
+      "global": "3.12.8",
+      "post_install": "pip install pipenv grip tabulate"
+    },
+    {
+      "name": "golang",
+      "description": "Go via ASDF",
+      "plugin": "golang",
+      "versions": ["1.23.3"],
+      "global": "1.23.3"
+    },
+    {
+      "name": "java",
+      "description": "Java via ASDF",
+      "plugin": "java",
+      "versions": ["openjdk-21.0.2"],
+      "global": "openjdk-21.0.2"
+    },
+    {
+      "name": "maven",
+      "description": "Maven via ASDF",
+      "plugin": "maven",
+      "versions": ["3.9.4"],
+      "global": "3.9.4"
+    },
+    {
+      "name": "dotnet",
+      "description": ".NET via ASDF",
+      "plugin": "dotnet",
+      "versions": ["7.0.100"],
+      "global": "7.0.100"
+    }
+  ],
   "browsers": [
     {
       "name": "chrome",
@@ -184,6 +259,28 @@
       "description": "Brave browser",
       "apt_snap": "brave",
       "brew_cask": "brave-browser"
+    }
+  ],
+  "design_tools": [
+    {
+      "name": "gimp",
+      "description": "Image editor",
+      "apt_snap": "gimp",
+      "brew_cask": "gimp"
+    },
+    {
+      "name": "vectr",
+      "description": "Vector graphics editor",
+      "apt_snap": "vectr",
+      "brew_cask": "vectr"
+    }
+  ],
+  "editors": [
+    {
+      "name": "sublime",
+      "description": "Sublime Text editor",
+      "apt_snap": "sublime-text --classic",
+      "brew_cask": "sublime-text"
     }
   ],
   "file_utils": [
@@ -221,104 +318,6 @@
       "description": "Media downloader",
       "apt_command": "pip install yt-dlp",
       "brew": "yt-dlp"
-    }
-  ],
-  "editors": [
-    {
-      "name": "sublime",
-      "description": "Sublime Text editor",
-      "apt_snap": "sublime-text --classic",
-      "brew_cask": "sublime-text"
-    }
-  ],
-  "dev_tools": [
-    {
-      "name": "docker",
-      "description": "Container platform",
-      "apt_snap": "docker",
-      "brew_cask": "docker"
-    },
-    {
-      "name": "github-cli",
-      "description": "GitHub CLI",
-      "apt": "gh",
-      "brew": "gh"
-    },
-    {
-      "name": "build-essential",
-      "description": "Build tools",
-      "apt": "build-essential",
-      "brew_bundle": ["gcc", "make"]
-    },
-    {
-      "name": "ubuntu-make",
-      "description": "Ubuntu developer tools installer",
-      "apt_snap": "ubuntu-make --classic"
-    },
-    {
-      "name": "libssl-dev",
-      "description": "SSL development libraries",
-      "apt": "libssl-dev",
-      "brew": "openssl"
-    }
-  ],
-  "system_tools": [
-    {
-      "name": "sqlite3",
-      "description": "SQLite database",
-      "apt": "sqlite3",
-      "brew": "sqlite"
-    },
-    {
-      "name": "snapd",
-      "description": "Snap package manager",
-      "apt": "snapd"
-    },
-    {
-      "name": "gnupg",
-      "description": "GNU Privacy Guard",
-      "apt": "gnupg",
-      "brew": "gnupg"
-    },
-    {
-      "name": "ncal",
-      "description": "Calendar utility",
-      "apt": "ncal",
-      "brew": "ncal"
-    },
-    {
-      "name": "terminator",
-      "description": "Terminal emulator",
-      "apt_ppa": "ppa:gnome-terminator",
-      "apt": "terminator",
-      "brew_cask": "terminator"
-    }
-  ],
-  "cloud_tools": [
-    {
-      "name": "gcloud",
-      "description": "Google Cloud CLI",
-      "apt_snap": "google-cloud-cli --classic",
-      "brew_cask": "google-cloud-sdk"
-    },
-    {
-      "name": "hub",
-      "description": "GitHub CLI (hub)",
-      "apt_snap": "hub --classic",
-      "brew": "hub"
-    }
-  ],
-  "design_tools": [
-    {
-      "name": "gimp",
-      "description": "Image editor",
-      "apt_snap": "gimp",
-      "brew_cask": "gimp"
-    },
-    {
-      "name": "vectr",
-      "description": "Vector graphics editor",
-      "apt_snap": "vectr"
     }
   ]
 } 
