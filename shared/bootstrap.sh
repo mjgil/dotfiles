@@ -26,9 +26,10 @@ elif [[ -f /etc/os-release ]]; then
   log_info "Detected Linux distribution: $ID"
   if [[ "$ID" == "ubuntu" || "$ID" == "linuxmint" || "$ID" == "debian" ]]; then
     # Ensure jq is installed (since we rely on it now)
+
+    sudo apt update
     if ! command -v jq >/dev/null 2>&1; then
       log_info "Installing jq..."
-      sudo apt update
       sudo apt install -y jq
     fi
   else
