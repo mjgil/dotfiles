@@ -29,6 +29,14 @@ get_failed_packages() {
     local output_file
     output_file=$(mktemp)
     local failed_list=""
+    
+    # Source ASDF environment to make shims available in the subshell
+    if [[ -f "$HOME/.asdf/asdf.sh" ]]; then
+        . "$HOME/.asdf/asdf.sh"
+    else
+        log_warning "ASDF script not found at $HOME/.asdf/asdf.sh. Check script might report false negatives."
+    fi
+
     # Run the check script, redirect stderr to stdout to capture all output, allow non-zero exit code
     if bash "$CHECK_SCRIPT" > "$output_file" 2>&1; then
         # Zero exit code means no failures
@@ -75,6 +83,12 @@ for (( i=1; i<=MAX_ITERATIONS; i++ )); do
     previous_failed_packages="$current_failed_packages"
 
     log_info "Running install script: $INSTALL_SCRIPT -s $SOURCE_DIR"
+    # Source ASDF environment before running install script in subshell
+    if [[ -f "$HOME/.asdf/asdf.sh" ]]; then
+        . "$HOME/.asdf/asdf.sh"
+    else
+        log_warning "ASDF script not found at $HOME/.asdf/asdf.sh. Install script might fail for ASDF packages."
+    fi
     if bash "$INSTALL_SCRIPT" -s "$SOURCE_DIR"; then
         log_success "Install script completed successfully."
     else

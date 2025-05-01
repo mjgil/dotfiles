@@ -844,9 +844,17 @@ function run_asdf_post_install() {
 
     if [[ "$run_post_install" == true ]]; then
       log_info "Running post-install for $name ($plugin_name $global): $post_install"
-      # Execute using asdf exec to ensure the correct environment
-      # Quote the post_install command to handle spaces correctly
-      if asdf exec "$plugin_name" "$global" "$post_install"; then
+      
+      log_info "Running asdf reshim $plugin_name..."
+      if asdf reshim "$plugin_name"; then
+        log_success "asdf reshim $plugin_name completed."
+      else
+        log_warning "asdf reshim $plugin_name failed, post-install might still fail."
+      fi
+
+      # Execute post-install command directly, relying on shims being in PATH
+      log_info "Attempting post-install command directly: $post_install"
+      if eval "$post_install"; then
           log_success "Post-install command successful for $name."
       else
           log_warning "Error in post-install command for $name ($plugin_name $global), continuing..."
@@ -894,17 +902,16 @@ function install_all() {
   # Terminal utils should come early to provide tools like cargo if needed.
   local explicit_order=(
     "development"
-    #"terminal_utils"
-    #"dev_tools"
+    "terminal_utils"
+    "dev_tools"
     "dev_environments"
     "asdf_languages"
-    # Commented out are lower priority for core functionality
-    # "system_tools"
-    # "cloud_tools"
-    # "browsers"
-    # "design_tools"
-    # "editors"
-    # "file_utils"
+    "system_tools"
+    "cloud_tools"
+    "browsers"
+    "design_tools"
+    "editors"
+    "file_utils"
   )
 
   # Keep track of processed categories to avoid duplicates
