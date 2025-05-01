@@ -145,13 +145,6 @@
       "brew": "git-delta"
     },
     {
-      "name": "atuin",
-      "description": "Magical shell history",
-      "apt_command": "bash <(curl https://raw.githubusercontent.com/atuinsh/atuin/main/install.sh)",
-      "brew": "atuin",
-      "symlink_target": "atuin"
-    },
-    {
       "name": "lux",
       "description": "Fast and simple video downloader",
       "apt_command": "TARGET_DIR=${HOME}/.local/bin; mkdir -p $TARGET_DIR; curl -s https://api.github.com/repos/iawia002/lux/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '\"' -f 4 | wget -qi - -O $TARGET_DIR/lux && chmod +x $TARGET_DIR/lux",

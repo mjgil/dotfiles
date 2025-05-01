@@ -543,13 +543,7 @@ function run_apt_custom_command() {
               needs_run=false 
             fi
             ;;          
-          "atuin")
-            # Custom command check specifically for atuin's non-standard location
-            if [[ -f "$HOME/.atuin/bin/atuin" ]]; then 
-                log_info "atuin binary found at $HOME/.atuin/bin/atuin. Skipping custom command."
-                needs_run=false
-            fi
-            ;;
+
           "yt-dlp")
              # Check using the command itself or pip show
              if command_exists "yt-dlp" || (command_exists "pip" && pip show yt-dlp > /dev/null 2>&1); then
@@ -626,15 +620,10 @@ function ensure_symlink() {
             elif [[ -z "$original_cmd_path" ]]; then
                  log_warning "Symlink requested for '$symlink_target' from '$original_cmd_name', but original command not found in PATH."
             fi
-        # Handle cases where symlink target is same as name (e.g., atuin) - link from non-PATH location if needed
+        # Handle cases where symlink target is same as name - link from non-PATH location if needed
         elif [[ "$original_cmd_name" == "$symlink_target" ]] && ! command_exists "$symlink_target"; then
-             # Specific check for atuin's non-standard location
-            if [[ "$original_cmd_name" == "atuin" && -f "$HOME/.atuin/bin/atuin" ]]; then
-                 local target_path="$LOCAL_BIN_DIR/atuin"
-                 log_info "Creating symlink for atuin (from non-PATH location)"
-                 ln -sf "$HOME/.atuin/bin/atuin" "$target_path"
-                 log_success "Created symlink: $target_path -> $HOME/.atuin/bin/atuin"
-            fi
+             # Reserved for future non-PATH checks
+            :
              # Add other specific non-PATH checks here if necessary
         fi
     fi
