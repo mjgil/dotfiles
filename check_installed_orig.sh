@@ -24,37 +24,74 @@ NC='\033[0m' # No color
 
 # Function to check if a program is installed
 check_program() {
-    if [[ "$1" == "java" ]]; then
-        if java -version &> /dev/null; then
-            echo -e "${GREEN}java: Installed${NC}"
-            ((passed++))
-        else
-            echo -e "${RED}java: Not installed${NC}"
-            ((failed++))
-            failed_programs+=("java")
-        fi
-    elif [[ "$1" == "javac" ]]; then
-        if javac -version &> /dev/null; then
-            echo -e "${GREEN}javac: Installed${NC}"
-            ((passed++))
-        else
-            echo -e "${RED}javac: Not installed${NC}"
-            ((failed++))
-            failed_programs+=("javac")
-        fi
-    elif which $1 &> /dev/null; then
-        echo -e "${GREEN}$1: Installed${NC}"
-        ((passed++))
-    else
-        echo -e "${RED}$1: Not installed${NC}"
-        ((failed++))
-        failed_programs+=($1)
-    fi
+    case "$1" in
+        "java")
+            if java -version &> /dev/null; then
+                echo -e "${GREEN}java: Installed${NC}"
+                ((passed++))
+            else
+                echo -e "${RED}java: Not installed${NC}"
+                ((failed++))
+                failed_programs+=("$1")
+            fi
+            ;;
+        "javac")
+            if javac -version &> /dev/null; then
+                echo -e "${GREEN}javac: Installed${NC}"
+                ((passed++))
+            else
+                echo -e "${RED}javac: Not installed${NC}"
+                ((failed++))
+                failed_programs+=("$1")
+            fi
+            ;;
+        "fd")
+            if which "fd" &> /dev/null || which "fdfind" &> /dev/null; then
+                echo -e "${GREEN}fd: Installed ($(which fd 2>/dev/null || which fdfind 2>/dev/null))${NC}"
+                ((passed++))
+            else
+                echo -e "${RED}fd: Not installed${NC}"
+                ((failed++))
+                failed_programs+=("$1")
+            fi
+            ;;
+        "bat")
+            if which "bat" &> /dev/null || which "batcat" &> /dev/null; then
+                echo -e "${GREEN}bat: Installed ($(which bat 2>/dev/null || which batcat 2>/dev/null))${NC}"
+                ((passed++))
+            else
+                echo -e "${RED}bat: Not installed${NC}"
+                ((failed++))
+                failed_programs+=("$1")
+            fi
+            ;;
+        "atuin")
+            if which "atuin" &> /dev/null || [ -f "$HOME/.atuin/bin/atuin" ]; then
+                local atuin_path=$(which atuin 2>/dev/null || echo "$HOME/.atuin/bin/atuin")
+                echo -e "${GREEN}atuin: Installed ($atuin_path)${NC}"
+                ((passed++))
+            else
+                echo -e "${RED}atuin: Not installed${NC}"
+                ((failed++))
+                failed_programs+=("$1")
+            fi
+            ;;
+        *)
+            if which "$1" &> /dev/null; then
+                echo -e "${GREEN}$1: Installed${NC}"
+                ((passed++))
+            else
+                echo -e "${RED}$1: Not installed${NC}"
+                ((failed++))
+                failed_programs+=("$1")
+            fi
+            ;;
+    esac
 }
 
 # Check each program in the list
 for program in "${programs[@]}"; do
-    check_program $program
+    check_program "$program"
 done
 
 # Display the results

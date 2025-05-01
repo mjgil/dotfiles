@@ -41,7 +41,7 @@ get_blocked_packages() {
     jq -r '
         .asdf_languages[] | 
         # Only consider languages that might have apt alternatives defined or common names
-        # (We don't strictly need select(.apt?) here as we add common names regardless)
+        # (We dont strictly need select(.apt?) here as we add common names regardless)
         {name: .name, apt: .apt} | 
         # Output the asdf name
         .name, 

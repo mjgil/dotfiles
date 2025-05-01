@@ -43,6 +43,12 @@ download_script "shared/install-apt-hooks.sh" "install-apt-hooks.sh"
 
 # Execute bootstrap.sh to install jq/yq dependencies
 log_info "Executing bootstrap.sh..."
+
+# Ask for the administrator password upfront
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until `.macos` has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # Pass TEMP_DIR so bootstrap knows where packages.json is
 bash "$TEMP_DIR/bootstrap.sh" "$TEMP_DIR"
 

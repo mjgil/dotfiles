@@ -69,7 +69,8 @@ get_blocked_packages() {
 # Create a wrapper for apt that checks for blocked packages
 create_apt_wrapper() {
   local wrapper_path="$WRAPPER_DIR/apt"
-  local blocked_packages=$(get_blocked_packages) # Call once
+  local blocked_packages
+  blocked_packages=$(get_blocked_packages) # Call once
 
   if [[ -z "$blocked_packages" ]]; then
       log_info "No ASDF-managed packages with apt definitions found. Skipping apt wrapper creation."
@@ -161,19 +162,14 @@ if [[ "\$1" == "install" || "\$1" == "add" ]]; then
       _log_info "BYPASS_ASDF_CHECK is set, proceeding with installation..."
       # Fall through to execute with REAL_APT below
     else
-      # If we have allowed packages, offer to install just those
+      # If we have allowed packages, execute with only those automatically.
       if [[ -n "\$ALLOWED_ARGS" ]]; then
-        _log_info ""
-        read -p "Would you like to install just the non-blocked packages (\$ALLOWED_ARGS)? (y/n) " -n 1 -r
-        _log_info "" # Newline after read
-        if [[ \$REPLY =~ ^[Yy]$ ]]; then
-          # Execute with allowed args only
-          exec "\$REAL_APT" \$1 \$ALLOWED_ARGS
-        else
-          exit 1 # Exit if user declines
-        fi
+        _log_info "Proceeding to install non-blocked packages: \$ALLOWED_ARGS"
+        # Execute with allowed args only
+        exec "\$REAL_APT" \$1 \$ALLOWED_ARGS
       else
-         # Only blocked packages requested, exit without prompting
+        # Only blocked packages requested, exit without doing anything
+        _log_warning "No non-blocked packages specified. Exiting."
         exit 1
       fi
     fi
@@ -193,7 +189,7 @@ EOF
   # Create similar wrapper for apt-get using the same logic
   local apt_get_path="$WRAPPER_DIR/apt-get"
   # Replace apt with apt-get carefully, especially in REAL_APT definition and messages
-  sed -e "s|REAL_APT=\\\$(PATH=\\\$(echo \"\\\$PATH\" | sed -e 's;'"$WRAPPER_DIR"':;;' -e 's;:'"$WRAPPER_DIR"'\\\$;;' -e 's;:'"$WRAPPER_DIR"':;:;') command -v apt)|REAL_APT_GET=\\\$(PATH=\\\$(echo \"\\\$PATH\" | sed -e 's;'"$WRAPPER_DIR"':;;' -e 's;:'"$WRAPPER_DIR"'\\\$;;' -e 's;:'"$WRAPPER_DIR"':;:;') command -v apt-get)|g" \
+  sed -e "s|REAL_APT=\\\$(PATH=\\\$(echo \\\"\\\$PATH\\\" | sed -e 's;'$WRAPPER_DIR':;;' -e 's;:'$WRAPPER_DIR'\\\\\\$;;' -e 's;:'$WRAPPER_DIR':;:;') command -v apt)|REAL_APT_GET=\\\$(PATH=\\\$(echo \\\"\\\$PATH\\\" | sed -e 's;'$WRAPPER_DIR':;;' -e 's;:'$WRAPPER_DIR'\\\\\\$;;' -e 's;:'$WRAPPER_DIR':;:;') command -v apt-get)|g" \
       -e "s|Could not find real 'apt' executable|Could not find real 'apt-get' executable|g" \
       -e "s|full path to apt:|full path to apt-get:|g" \
       -e "s|\\\$\\REAL_APT|\\\$\\REAL_APT_GET|g" \
@@ -211,7 +207,8 @@ create_brew_wrapper() {
   # Use the same blocked packages list determined by get_blocked_packages
   # This list might include apt package names, but brew often uses the same or similar names.
   # We could refine this to only use brew-specific names if needed, but simple blocking is often sufficient.
-  local blocked_packages=$(get_blocked_packages) 
+  local blocked_packages
+  blocked_packages=$(get_blocked_packages) 
 
   if [[ -z "$blocked_packages" ]]; then
       log_info "No ASDF-managed packages found. Skipping brew wrapper creation."
@@ -303,19 +300,14 @@ if [[ "\$1" == "install" || "\$1" == "reinstall" ]]; then
       _log_info "BYPASS_ASDF_CHECK is set, proceeding with installation..."
       # Fall through to execute with REAL_BREW below
     else
-      # If we have allowed packages, offer to install just those
+      # If we have allowed packages, execute with only those automatically.
       if [[ -n "\$ALLOWED_ARGS" ]]; then
-        _log_info ""
-        read -p "Would you like to install just the non-blocked packages (\$ALLOWED_ARGS)? (y/n) " -n 1 -r
-        _log_info "" # Newline after read
-        if [[ \$REPLY =~ ^[Yy]$ ]]; then
-          # Execute with allowed args only
-          exec "\$REAL_BREW" \$1 \$ALLOWED_ARGS
-        else
-           exit 1 # Exit if user declines
-        fi
+        _log_info "Proceeding to install non-blocked packages: \$ALLOWED_ARGS"
+        # Execute with allowed args only
+        exec "\$REAL_BREW" \$1 \$ALLOWED_ARGS
       else
-        # Only blocked packages requested, exit without prompting
+        # Only blocked packages requested, exit without doing anything
+        _log_warning "No non-blocked packages specified. Exiting."
         exit 1
       fi
     fi
@@ -338,7 +330,8 @@ EOF
 create_sudo_wrapper() {
   local wrapper_path="$WRAPPER_DIR/sudo"
   # Capture the output without logging, use the same combined list
-  local blocked_packages=$(get_blocked_packages)
+  local blocked_packages
+  blocked_packages=$(get_blocked_packages)
 
   if [[ -z "$blocked_packages" ]]; then
       log_info "No ASDF-managed packages found. Skipping sudo wrapper creation."

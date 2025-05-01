@@ -600,7 +600,7 @@ install_all() {
     "development"
     "terminal_utils"
     "dev_tools"
-    "system_tools"
+    # "system_tools"
     # "cloud_tools"
     "dev_environments"
     "asdf_languages"
