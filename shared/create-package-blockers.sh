@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# Import logging utilities
+# Purpose: Create wrapper scripts for package managers to prevent direct installation
+# of packages that should be managed by ASDF version manager
+
 # Define logging functions
-function log_info() { echo -e "\\033[0;34m[INFO]\\033[0m $1"; }
-function log_success() { echo -e "\\033[0;32m[SUCCESS]\\033[0m $1"; }
-function log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m $1"; }
-function log_error() { echo -e "\\033[0;31m[ERROR]\\033[0m $1"; }
+function log_info() { echo -e "\033[0;34m[INFO]\033[0m $1"; }
+function log_success() { echo -e "\033[0;32m[SUCCESS]\033[0m $1"; }
+function log_warning() { echo -e "\033[0;33m[WARNING]\033[0m $1"; }
+function log_error() { echo -e "\033[0;31m[ERROR]\033[0m $1"; }
 
 # Exit on error
 set -e
@@ -84,39 +86,60 @@ create_apt_wrapper() {
 #!/usr/bin/env bash
 
 # Define logging functions locally within the wrapper
-_log_info() { echo -e "\\\\033[0;34m[INFO]\\\\033[0m \$1"; }
-_log_warning() { echo -e "\\\\033[0;33m[WARNING]\\\\033[0m \$1"; }
+_log_info() { echo -e "\\033[0;34m[WRAPPER_DEBUG]\\033[0m \$1"; }
+_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
 
 # This is a wrapper script that prevents direct installation of ASDF-managed packages
 # Blocked packages: $blocked_packages
 
 # Get the real apt path, avoid infinite loop if wrapper is first in PATH
-REAL_APT=\$(PATH=\$(echo "\$PATH" | sed -e 's;'"$WRAPPER_DIR"':;;' -e 's;:'"$WRAPPER_DIR"'\\\$;;' -e 's;:'"$WRAPPER_DIR"':;:;') command -v apt)
+_log_info "Finding real apt path..."
+REAL_APT=""
+IFS=':' read -ra DIRS <<< "\$PATH"
+for dir in "\${DIRS[@]}"; do
+  # Skip our wrapper directory to avoid infinite loop
+  if [[ "\$dir" == "$WRAPPER_DIR" ]]; then
+    continue
+  fi
+  candidate="\$dir/apt"
+  if [[ -f "\$candidate" && -x "\$candidate" ]]; then
+    REAL_APT="\$candidate"
+    break # Found the first valid one
+  fi
+done
+_log_info "Real apt path found: \$REAL_APT"
 
 # Check if we found the real apt
-if [[ -z "\$REAL_APT" || "\$REAL_APT" == "$wrapper_path" ]]; then
-    _log_warning "Could not find real 'apt' executable. Cannot proceed."
+if [[ -z "\$REAL_APT" ]]; then
+    _log_warning "Could not find real 'apt' executable in PATH (excluding the wrapper). Cannot proceed."
     exit 1
 fi
 
+# Extract the command (e.g., install, update)
+_log_info "Extracting command: \$1"
+COMMAND="\$1"
+shift
+
 # Check if this is an install or add command
-if [[ "\$1" == "install" || "\$1" == "add" ]]; then
+_log_info "Checking if command is install/add..."
+if [[ "\$COMMAND" == "install" || "\$COMMAND" == "add" ]]; then
+  _log_info "Command is install/add. Parsing arguments..."
   # Check each argument against blocked packages
   DETECTED_BLOCKED=""
-  ALLOWED_ARGS=""
-  shift # Remove the command (install/add)
+  ALLOWED_ARGS_ARRAY=() # Use array for safer handling of args with spaces/special chars
+  NON_PKG_ARGS_ARRAY=() # Store options like -y, --fix-broken
   
   for arg in "\$@"; do
-    # Skip if it starts with a dash (option)
+    # If it's an option, store it separately
     if [[ "\$arg" == -* ]]; then
-      ALLOWED_ARGS="\$ALLOWED_ARGS \$arg"
+      NON_PKG_ARGS_ARRAY+=("\$arg")
       continue
     fi
     
     # Check if this is a blocked package
     FOUND=0
     # Convert space-separated string to array for reliable iteration
-    local blocked_array=($blocked_packages) 
+    blocked_array=($blocked_packages) 
     for blocked_pkg in "\${blocked_array[@]}"; do
       if [[ "\$arg" == "\$blocked_pkg" ]]; then
         DETECTED_BLOCKED="\$DETECTED_BLOCKED \$arg"
@@ -125,76 +148,207 @@ if [[ "\$1" == "install" || "\$1" == "add" ]]; then
       fi
     done
     
-    # If not blocked, add to allowed args
+    # If not blocked, add to allowed package args
     if [[ \$FOUND -eq 0 ]]; then
-      ALLOWED_ARGS="\$ALLOWED_ARGS \$arg"
+      ALLOWED_ARGS_ARRAY+=("\$arg")
     fi
   done
   
-  # Trim leading/trailing whitespace
+  # Trim leading/trailing whitespace from detected blocked list
   DETECTED_BLOCKED=\$(echo \$DETECTED_BLOCKED | xargs)
-  ALLOWED_ARGS=\$(echo \$ALLOWED_ARGS | xargs)
+  _log_info "Finished parsing arguments. Blocked: \$DETECTED_BLOCKED. Allowed: \${ALLOWED_ARGS_ARRAY[*]}"
 
   if [[ -n "\$DETECTED_BLOCKED" ]]; then
     _log_warning "⚠️ WARNING: Blocked ASDF-managed packages detected: \$DETECTED_BLOCKED"
     _log_warning "These languages/runtimes should be managed using ASDF instead."
     _log_warning ""
     
-    if [[ -n "\$ALLOWED_ARGS" ]]; then
-      _log_info "You can install the non-blocked packages with:"
-      _log_info "  $wrapper_path \$1 \$ALLOWED_ARGS" # Use wrapper path for consistency
-      _log_info ""
-    fi
-     
-    _log_info "To install with ASDF, use:"
-    _log_info "  asdf plugin add <plugin>"
-    _log_info "  asdf install <plugin> <version>"
-    _log_info "  asdf global <plugin> <version>"
-    _log_info ""
-    _log_info "To bypass this check and force installation, run:"
-    _log_info "  BYPASS_ASDF_CHECK=1 $wrapper_path \$@" # Use wrapper path
-    _log_info ""
-    _log_info "Or use the full path to apt:"
-    _log_info "  \$REAL_APT \$@"
-    
     # Check if bypass flag is set
+    _log_info "Checking for BYPASS_ASDF_CHECK... (Value: '\$BYPASS_ASDF_CHECK')"
     if [[ "\$BYPASS_ASDF_CHECK" == "1" ]]; then
-      _log_info "BYPASS_ASDF_CHECK is set, proceeding with installation..."
-      # Fall through to execute with REAL_APT below
+      _log_info "BYPASS_ASDF_CHECK is set, proceeding with original command..."
+      _log_info "Executing: \$REAL_APT \$COMMAND \$@"
+      # Execute original command with REAL_APT
+      exec "\$REAL_APT" "\$COMMAND" "\$@"
     else
-      # If we have allowed packages, execute with only those automatically.
-      if [[ -n "\$ALLOWED_ARGS" ]]; then
-        _log_info "Proceeding to install non-blocked packages: \$ALLOWED_ARGS"
-        # Execute with allowed args only
-        exec "\$REAL_APT" \$1 \$ALLOWED_ARGS
+      # If we have allowed packages, execute with only those automatically and non-interactively.
+      if [[ \${#ALLOWED_ARGS_ARRAY[@]} -gt 0 ]]; then
+        _log_info "Proceeding to install non-blocked packages non-interactively: \${ALLOWED_ARGS_ARRAY[*]}"
+        # Ensure -y is included
+        HAS_Y=0
+        for opt in "\${NON_PKG_ARGS_ARRAY[@]}"; do
+          if [[ "\$opt" == "-y" || "\$opt" == "--yes" ]]; then
+            HAS_Y=1
+            break
+          fi
+        done
+        if [[ \$HAS_Y -eq 0 ]]; then
+          NON_PKG_ARGS_ARRAY+=("-y")
+        fi
+        # Execute with allowed packages and all original options + -y
+        _log_info "Executing: \$REAL_APT \$COMMAND \${NON_PKG_ARGS_ARRAY[@]} \${ALLOWED_ARGS_ARRAY[@]}"
+        exec "\$REAL_APT" "\$COMMAND" "\${NON_PKG_ARGS_ARRAY[@]}" "\${ALLOWED_ARGS_ARRAY[@]}"
       else
         # Only blocked packages requested, exit without doing anything
-        _log_warning "No non-blocked packages specified. Exiting."
-        exit 1
+        _log_warning "Only blocked packages were requested (\$DETECTED_BLOCKED). No action taken."
+        _log_warning "Use ASDF to manage these packages or set BYPASS_ASDF_CHECK=1 to force."
+        _log_info "Exiting wrapper with status 1."
+        exit 1 # Exit with non-zero status
       fi
     fi
+  else
+     _log_info "No blocked packages detected."
   fi
+else
+  _log_info "Command is not install/add."
 fi
 
+_log_info "Executing final command: \$REAL_APT \$COMMAND \$@"
 # If we get here:
-# - Not an install/add command
-# - No blocked packages detected
-# - Bypass flag was set
+# - Not an install/add command OR
+# - No blocked packages detected OR
+# - Bypass flag was set (already handled by exec above)
 # Execute the original command using the real apt
-exec "\$REAL_APT" "\$@"
+# Combine original command and args back
+exec "\$REAL_APT" "\$COMMAND" "\$@" # Pass all original arguments
 EOF
 
   chmod +x "$wrapper_path"
   
-  # Create similar wrapper for apt-get using the same logic
+  # Create similar wrapper for apt-get using a separate heredoc
   local apt_get_path="$WRAPPER_DIR/apt-get"
-  # Replace apt with apt-get carefully, especially in REAL_APT definition and messages
-  sed -e "s|REAL_APT=\\\$(PATH=\\\$(echo \\\"\\\$PATH\\\" | sed -e 's;'$WRAPPER_DIR':;;' -e 's;:'$WRAPPER_DIR'\\\\\\$;;' -e 's;:'$WRAPPER_DIR':;:;') command -v apt)|REAL_APT_GET=\\\$(PATH=\\\$(echo \\\"\\\$PATH\\\" | sed -e 's;'$WRAPPER_DIR':;;' -e 's;:'$WRAPPER_DIR'\\\\\\$;;' -e 's;:'$WRAPPER_DIR':;:;') command -v apt-get)|g" \
-      -e "s|Could not find real 'apt' executable|Could not find real 'apt-get' executable|g" \
-      -e "s|full path to apt:|full path to apt-get:|g" \
-      -e "s|\\\$\\REAL_APT|\\\$\\REAL_APT_GET|g" \
-      -e "s|$wrapper_path|$apt_get_path|g" \
-      "$wrapper_path" > "$apt_get_path"
+  log_info "Creating apt-get wrapper at $apt_get_path"
+
+  cat > "$apt_get_path" << EOF_GET
+#!/usr/bin/env bash
+
+# Define logging functions locally within the wrapper
+_log_info() { echo -e "\\033[0;34m[WRAPPER_DEBUG]\\033[0m \$1"; }
+_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
+
+# This is a wrapper script that prevents direct installation of ASDF-managed packages
+# Blocked packages: $blocked_packages
+
+# Get the real apt-get path, avoid infinite loop if wrapper is first in PATH
+_log_info "Finding real apt-get path..."
+REAL_APT_GET=""
+IFS=':' read -ra DIRS_GET <<< "\$PATH"
+for dir_get in "\${DIRS_GET[@]}"; do
+  # Skip our wrapper directory to avoid infinite loop
+  if [[ "\$dir_get" == "$WRAPPER_DIR" ]]; then
+    continue
+  fi
+  candidate_get="\$dir_get/apt-get"
+  if [[ -f "\$candidate_get" && -x "\$candidate_get" ]]; then
+    REAL_APT_GET="\$candidate_get"
+    break # Found the first valid one
+  fi
+done
+_log_info "Real apt-get path found: \$REAL_APT_GET"
+
+# Check if we found the real apt-get
+if [[ -z "\$REAL_APT_GET" ]]; then
+    _log_warning "Could not find real 'apt-get' executable in PATH (excluding the wrapper). Cannot proceed."
+    exit 1
+fi
+
+# Extract the command (e.g., install, update)
+_log_info "Extracting command: \$1"
+COMMAND="\$1"
+shift
+
+# Check if this is an install or add command
+_log_info "Checking if command is install/add..."
+if [[ "\$COMMAND" == "install" || "\$COMMAND" == "add" ]]; then
+  _log_info "Command is install/add. Parsing arguments..."
+  # Check each argument against blocked packages
+  DETECTED_BLOCKED=""
+  ALLOWED_ARGS_ARRAY=() # Use array for safer handling of args with spaces/special chars
+  NON_PKG_ARGS_ARRAY=() # Store options like -y, --fix-broken
+
+  for arg in "\$@"; do
+    # If it's an option, store it separately
+    if [[ "\$arg" == -* ]]; then
+      NON_PKG_ARGS_ARRAY+=("\$arg")
+      continue
+    fi
+
+    # Check if this is a blocked package
+    FOUND=0
+    # Convert space-separated string to array for reliable iteration
+    blocked_array=($blocked_packages)
+    for blocked_pkg in "\${blocked_array[@]}"; do
+      if [[ "\$arg" == "\$blocked_pkg" ]]; then
+        DETECTED_BLOCKED="\$DETECTED_BLOCKED \$arg"
+        FOUND=1
+        break
+      fi
+    done
+
+    # If not blocked, add to allowed package args
+    if [[ \$FOUND -eq 0 ]]; then
+      ALLOWED_ARGS_ARRAY+=("\$arg")
+    fi
+  done
+
+  # Trim leading/trailing whitespace from detected blocked list
+  DETECTED_BLOCKED=\$(echo \$DETECTED_BLOCKED | xargs)
+  _log_info "Finished parsing arguments. Blocked: \$DETECTED_BLOCKED. Allowed: \${ALLOWED_ARGS_ARRAY[*]}"
+
+  if [[ -n "\$DETECTED_BLOCKED" ]]; then
+    _log_warning "⚠️ WARNING: Blocked ASDF-managed packages detected: \$DETECTED_BLOCKED"
+    _log_warning "These languages/runtimes should be managed using ASDF instead."
+    _log_warning ""
+
+    # Check if bypass flag is set
+    _log_info "Checking for BYPASS_ASDF_CHECK... (Value: '\$BYPASS_ASDF_CHECK')"
+    if [[ "\$BYPASS_ASDF_CHECK" == "1" ]]; then
+      _log_info "BYPASS_ASDF_CHECK is set, proceeding with original command..."
+      _log_info "Executing: \$REAL_APT_GET \$COMMAND \$@"
+      # Execute original command with REAL_APT_GET
+      exec "\$REAL_APT_GET" "\$COMMAND" "\$@"
+    else
+      # If we have allowed packages, execute with only those automatically and non-interactively.
+      if [[ \${#ALLOWED_ARGS_ARRAY[@]} -gt 0 ]]; then
+        _log_info "Proceeding to install non-blocked packages non-interactively: \${ALLOWED_ARGS_ARRAY[*]}"
+        # Ensure -y is included
+        HAS_Y=0
+        for opt in "\${NON_PKG_ARGS_ARRAY[@]}"; do
+          if [[ "\$opt" == "-y" || "\$opt" == "--yes" ]]; then
+            HAS_Y=1
+            break
+          fi
+        done
+        if [[ \$HAS_Y -eq 0 ]]; then
+          NON_PKG_ARGS_ARRAY+=("-y")
+        fi
+        # Execute with allowed packages and all original options + -y
+        _log_info "Executing: \$REAL_APT_GET \$COMMAND \${NON_PKG_ARGS_ARRAY[@]} \${ALLOWED_ARGS_ARRAY[@]}"
+        exec "\$REAL_APT_GET" "\$COMMAND" "\${NON_PKG_ARGS_ARRAY[@]}" "\${ALLOWED_ARGS_ARRAY[@]}"
+      else
+        # Only blocked packages requested, exit without doing anything
+        _log_warning "Only blocked packages were requested (\$DETECTED_BLOCKED). No action taken."
+        _log_warning "Use ASDF to manage these packages or set BYPASS_ASDF_CHECK=1 to force."
+        _log_info "Exiting wrapper with status 1."
+        exit 1 # Exit with non-zero status
+      fi
+    fi
+  else
+     _log_info "No blocked packages detected."
+  fi
+else
+  _log_info "Command is not install/add."
+fi
+
+# If we get here:
+# - Not an install/add command OR
+# - No blocked packages detected OR
+# - Bypass flag was set (already handled by exec above)
+# Execute the original command using the real apt-get
+# Combine original command and args back
+_log_info "Executing final command: \$REAL_APT_GET \$COMMAND \$@"
+exec "\$REAL_APT_GET" "\$COMMAND" "\$@" # Pass all original arguments
+EOF_GET
 
   chmod +x "$apt_get_path"
   
@@ -222,41 +376,59 @@ create_brew_wrapper() {
 #!/usr/bin/env bash
 
 # Define logging functions locally within the wrapper
-_log_info() { echo -e "\\\\033[0;34m[INFO]\\\\033[0m \$1"; }
-_log_warning() { echo -e "\\\\033[0;33m[WARNING]\\\\033[0m \$1"; }
+_log_info() { echo -e "\\033[0;34m[INFO]\\033[0m \$1"; }
+_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
 
 # This is a wrapper script that prevents direct installation of ASDF-managed packages
 # Blocked packages: $blocked_packages
 
 # Get the real brew path, avoid infinite loop
-REAL_BREW=\$(PATH=\$(echo "\$PATH" | sed -e 's;'"$WRAPPER_DIR"':;;' -e 's;:'"$WRAPPER_DIR"'\\\$;;' -e 's;:'"$WRAPPER_DIR"':;:;') command -v brew)
+REAL_BREW=""
+IFS=':' read -ra DIRS <<< "\$PATH"
+for dir in "\${DIRS[@]}"; do
+  # Skip our wrapper directory to avoid infinite loop
+  if [[ "\$dir" == "$WRAPPER_DIR" ]]; then
+    continue
+  fi
+  candidate="\$dir/brew"
+  if [[ -f "\$candidate" && -x "\$candidate" ]]; then
+    REAL_BREW="\$candidate"
+    break # Found the first valid one
+  fi
+done
 
-if [[ -z "\$REAL_BREW" || "\$REAL_BREW" == "$wrapper_path" ]]; then
+if [[ -z "\$REAL_BREW" ]]; then
     _log_warning "Could not find real 'brew' executable. Cannot proceed."
     exit 1
 fi
 
+# Extract the command (e.g., install, reinstall)
+COMMAND="\$1"
+shift
+
 # Check if this is an install or reinstall command
-if [[ "\$1" == "install" || "\$1" == "reinstall" ]]; then
+if [[ "\$COMMAND" == "install" || "\$COMMAND" == "reinstall" ]]; then
   # Check each argument against blocked packages
   DETECTED_BLOCKED=""
-  ALLOWED_ARGS=""
-  shift # Remove the command (install/reinstall)
-  
+  ALLOWED_ARGS_ARRAY=()
+  NON_PKG_ARGS_ARRAY=()
+
   for arg in "\$@"; do
-    # Skip if it starts with a dash (option) or is a path/URL
+    # Skip if it starts with a dash (option) or is a path/URL (common in brew)
     if [[ "\$arg" == -* || "\$arg" == */* || "\$arg" == *:* ]]; then
-      ALLOWED_ARGS="\$ALLOWED_ARGS \$arg"
+      NON_PKG_ARGS_ARRAY+=("\$arg")
       continue
     fi
     
-    # Check if this is a blocked package (formula name)
+    # Check if this is a blocked package (case-insensitive for brew often?)
+    # For simplicity, sticking to case-sensitive match based on get_blocked_packages output
     FOUND=0
-    # Convert space-separated string to array for reliable iteration
-    local blocked_array=($blocked_packages)
+    blocked_array=($blocked_packages) 
     for blocked_pkg in "\${blocked_array[@]}"; do
-      # Simple string comparison - might need refinement for complex brew names
-      if [[ "\$arg" == "\$blocked_pkg" ]]; then
+      # Handle potential brew naming differences (e.g., python@3.10 vs python)
+      # This is a simple check; more complex mapping might be needed for robustness
+      local brew_check_name=\$(echo "\$arg" | cut -d'@' -f1) 
+      if [[ "\$arg" == "\$blocked_pkg" || "\$brew_check_name" == "\$blocked_pkg" ]]; then
         DETECTED_BLOCKED="\$DETECTED_BLOCKED \$arg"
         FOUND=1
         break
@@ -265,49 +437,30 @@ if [[ "\$1" == "install" || "\$1" == "reinstall" ]]; then
     
     # If not blocked, add to allowed args
     if [[ \$FOUND -eq 0 ]]; then
-      ALLOWED_ARGS="\$ALLOWED_ARGS \$arg"
+      ALLOWED_ARGS_ARRAY+=("\$arg")
     fi
   done
 
   # Trim leading/trailing whitespace
   DETECTED_BLOCKED=\$(echo \$DETECTED_BLOCKED | xargs)
-  ALLOWED_ARGS=\$(echo \$ALLOWED_ARGS | xargs)
-  
+
   if [[ -n "\$DETECTED_BLOCKED" ]]; then
     _log_warning "⚠️ WARNING: Blocked ASDF-managed packages detected: \$DETECTED_BLOCKED"
-    _log_warning "These languages/runtimes should be managed using ASDF instead."
+    _log_warning "These should be managed using ASDF."
     _log_warning ""
-    
-    if [[ -n "\$ALLOWED_ARGS" ]]; then
-      _log_info "You can install the non-blocked packages with:"
-      _log_info "  $wrapper_path \$1 \$ALLOWED_ARGS" # Use wrapper path
-      _log_info ""
-    fi
-    
-    _log_info "To install with ASDF, use:"
-    _log_info "  asdf plugin add <plugin>"
-    _log_info "  asdf install <plugin> <version>"
-    _log_info "  asdf global <plugin> <version>"
-    _log_info ""
-    _log_info "To bypass this check and force installation, run:"
-    _log_info "  BYPASS_ASDF_CHECK=1 $wrapper_path \$@" # Use wrapper path
-    _log_info ""
-    _log_info "Or use the full path to brew:"
-    _log_info "  \$REAL_BREW \$@"
-    
+
     # Check if bypass flag is set
     if [[ "\$BYPASS_ASDF_CHECK" == "1" ]]; then
-      _log_info "BYPASS_ASDF_CHECK is set, proceeding with installation..."
-      # Fall through to execute with REAL_BREW below
+      _log_info "BYPASS_ASDF_CHECK is set, proceeding with original command..."
+      exec "\$REAL_BREW" "\$COMMAND" "\$@"
     else
-      # If we have allowed packages, execute with only those automatically.
-      if [[ -n "\$ALLOWED_ARGS" ]]; then
-        _log_info "Proceeding to install non-blocked packages: \$ALLOWED_ARGS"
-        # Execute with allowed args only
-        exec "\$REAL_BREW" \$1 \$ALLOWED_ARGS
+      # If we have allowed packages, execute with only those. Brew doesn't need -y
+      if [[ \${#ALLOWED_ARGS_ARRAY[@]} -gt 0 ]]; then
+        _log_info "Proceeding to install non-blocked packages: \${ALLOWED_ARGS_ARRAY[*]}"
+        exec "\$REAL_BREW" "\$COMMAND" "\${NON_PKG_ARGS_ARRAY[@]}" "\${ALLOWED_ARGS_ARRAY[@]}"
       else
-        # Only blocked packages requested, exit without doing anything
-        _log_warning "No non-blocked packages specified. Exiting."
+        _log_warning "Only blocked packages were requested (\$DETECTED_BLOCKED). No action taken."
+        _log_warning "Use ASDF to manage these packages or set BYPASS_ASDF_CHECK=1 to force."
         exit 1
       fi
     fi
@@ -315,11 +468,11 @@ if [[ "\$1" == "install" || "\$1" == "reinstall" ]]; then
 fi
 
 # If we get here:
-# - Not an install/reinstall command
-# - No blocked packages detected
-# - Bypass flag was set
+# - Not an install/reinstall command OR
+# - No blocked packages detected OR
+# - Bypass flag was set (handled above)
 # Execute the original command using the real brew
-exec "\$REAL_BREW" "\$@"
+exec "\$REAL_BREW" "\$COMMAND" "\$@"
 EOF
 
   chmod +x "$wrapper_path"
@@ -345,27 +498,34 @@ create_sudo_wrapper() {
 #!/usr/bin/env bash
 
 # Define logging functions locally within the wrapper
-_log_info() { echo -e "\\\\033[0;34m[INFO]\\\\033[0m \$1"; }
-_log_warning() { echo -e "\\\\033[0;33m[WARNING]\\\\033[0m \$1"; }
+_log_info() { echo -e "\\033[0;34m[INFO]\\033[0m \$1"; }
+_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
 
 # This is a wrapper for sudo that mainly ensures our wrapped apt/apt-get is called if present
 
 # Get the real sudo path, avoid infinite loop
-REAL_SUDO=\$(PATH=\$(echo "\$PATH" | sed -e 's;'"$WRAPPER_DIR"':;;' -e 's;:'"$WRAPPER_DIR"'\\\$;;' -e 's;:'"$WRAPPER_DIR"':;:;') command -v sudo)
+REAL_SUDO=""
+IFS=':' read -ra DIRS <<< "\$PATH"
+for dir in "\${DIRS[@]}"; do
+  # Skip our wrapper directory to avoid infinite loop
+  if [[ "\$dir" == "$WRAPPER_DIR" ]]; then
+    continue
+  fi
+  candidate="\$dir/sudo"
+  if [[ -f "\$candidate" && -x "\$candidate" ]]; then
+    REAL_SUDO="\$candidate"
+    break # Found the first valid one
+  fi
+done
 
 if [[ -z "\$REAL_SUDO" ]]; then
-    # This should almost never happen
-     echo "[ERROR] Could not find real 'sudo' executable. Cannot proceed." >&2
-     exit 1
+    _log_warning "Could not find real 'sudo' executable. Cannot proceed."
+    exit 1
 fi
 
-# Check if the command being run with sudo is 'apt' or 'apt-get'
-# If it is, we don't need to intercept here. The PATH modification ensures that
-# if our apt/apt-get wrappers exist in $WRAPPER_DIR, they will be called *by sudo*.
-# Sudo preserves the PATH by default unless configured otherwise (e.g., secure_path).
-# We rely on $WRAPPER_DIR being early in the PATH for the user running the script.
-
 # Just execute the command with the real sudo
+# The PATH modification ensures that if our apt/apt-get wrappers exist in $WRAPPER_DIR,
+# they will be called by the command being run with sudo.
 exec "\$REAL_SUDO" "\$@"
 EOF
 

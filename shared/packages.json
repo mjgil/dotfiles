@@ -256,6 +256,7 @@
       "plugin": "nodejs https://github.com/asdf-vm/asdf-nodejs.git",
       "versions": ["22.11.0"],
       "global": "22.11.0",
+      "apt": ["nodejs", "node", "npm"],
       "post_install": "npm install -g typescript ts-node"
     },
     {
@@ -264,6 +265,7 @@
       "plugin": "python",
       "versions": ["3.12.8"],
       "global": "3.12.8",
+      "apt": ["python", "python3", "python-pip", "python3-pip", "pip", "pip3"],
       "post_install": "pip install pipenv grip tabulate"
     },
     {
@@ -271,28 +273,32 @@
       "description": "Go via ASDF",
       "plugin": "golang",
       "versions": ["1.23.3"],
-      "global": "1.23.3"
+      "global": "1.23.3",
+      "apt": ["golang", "golang-go", "go"]
     },
     {
       "name": "java",
       "description": "Java via ASDF",
       "plugin": "java",
       "versions": ["openjdk-21.0.2"],
-      "global": "openjdk-21.0.2"
+      "global": "openjdk-21.0.2",
+      "apt": ["openjdk-21-jdk", "default-jdk", "java-common"]
     },
     {
       "name": "maven",
       "description": "Maven via ASDF",
       "plugin": "maven",
       "versions": ["3.9.4"],
-      "global": "3.9.4"
+      "global": "3.9.4",
+      "apt": ["maven"]
     },
     {
       "name": "dotnet",
       "description": ".NET via ASDF",
       "plugin": "dotnet",
       "versions": ["7.0.100"],
-      "global": "7.0.100"
+      "global": "7.0.100",
+      "apt": ["dotnet-sdk-7.0", "dotnet-runtime-7.0", "dotnet-sdk", "dotnet-runtime"]
     }
   ],
   "browsers": [

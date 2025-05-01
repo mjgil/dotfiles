@@ -100,7 +100,7 @@ BLOCKED_PKGS=()
 
 # Convert space-separated string to array for reliable iteration
 # Ensure the array declaration is safe even if $blocked_packages is empty
-local blocked_array=()
+blocked_array=()
 read -r -a blocked_array <<< "$blocked_packages"
 
 # Check each package defined in blocked_array
@@ -194,7 +194,7 @@ if [ \${#BLOCKED_PKGS[@]} -gt 0 ]; then
       echo "" >&2
       echo "You can attempt to install only the non-blocked packages with:" >&2
       # Extract the original command part (apt or apt-get)
-      local apt_cmd=\${BASH_REMATCH[1]} 
+      apt_cmd=\${BASH_REMATCH[1]} 
       if [[ "\$CMD" =~ sudo ]]; then
         echo "  sudo \$apt_cmd install \$(printf "'"%s"' " "\${ALLOWED_ARGS[@]}")" >&2
       else
