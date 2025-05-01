@@ -23,7 +23,7 @@ My personal configuration files and setup scripts for macOS and Linux (Ubuntu/Mi
 Run this command in your terminal. It downloads and executes the main installation script:
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/mjgil/dotfiles/master/linux/install.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/mjgil/dotfiles/master/linux/install.sh)
 ```
 
 This method downloads all necessary scripts to a temporary directory and executes them.
