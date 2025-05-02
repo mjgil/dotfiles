@@ -45,6 +45,8 @@ brew_cask_install rectangle
 brew_cask_install the-unarchiver
 brew_cask_install bartender
 brew_cask_install istat-menus
+brew_cask_install macfuse
+brew install gromgit/fuse/ntfs-3g-mac
 brew_cask_install mounty
 
 # Media & Entertainment
