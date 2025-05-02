@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 # Import logging utilities
-# Define logging functions
-function log_info() { echo -e "\\033[0;34m[INFO]\\033[0m $1"; }
-function log_success() { echo -e "\\033[0;32m[SUCCESS]\\033[0m $1"; }
-function log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m $1"; }
-function log_error() { echo -e "\\033[0;31m[ERROR]\\033[0m $1"; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../shared/log_utils.sh"
 
 rm ~/.bashrc
 rm ~/.bashrc_shared

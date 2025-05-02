@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 # Import logging utilities
-# Define logging functions
-function log_info() { echo -e "\\033[0;34m[INFO]\\033[0m $1"; }
-function log_success() { echo -e "\\033[0;32m[SUCCESS]\\033[0m $1"; }
-function log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m $1"; }
-function log_error() { echo -e "\\033[0;31m[ERROR]\\033[0m $1"; }
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/log_utils.sh"
 
 # Script to install APT hooks to prevent installation of ASDF-managed packages
 # These hooks will work regardless of how apt is invoked (directly, via sudo, etc.)
@@ -17,9 +14,9 @@ PACKAGE_FILE="packages.json"
 
 # Script directory - adjusted for dotfiles root
 if [ -n "$DOTFILES_SOURCE_DIR" ]; then
-  SCRIPT_DIR="$DOTFILES_SOURCE_DIR/shared"
+  PACKAGE_DIR="$DOTFILES_SOURCE_DIR/shared"
 else
-  SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  PACKAGE_DIR="$SCRIPT_DIR"
 fi
 
 # Ensure jq is installed
@@ -29,8 +26,8 @@ if ! command -v jq >/dev/null 2>&1; then
 fi
 
 # Check if package file exists
-if [ ! -f "$SCRIPT_DIR/$PACKAGE_FILE" ]; then
-    log_error "Package definition file not found: $SCRIPT_DIR/$PACKAGE_FILE"
+if [ ! -f "$PACKAGE_DIR/$PACKAGE_FILE" ]; then
+    log_error "Package definition file not found: $PACKAGE_DIR/$PACKAGE_FILE"
     exit 1
 fi
 
@@ -54,7 +51,7 @@ get_blocked_packages() {
          elif .name == "java" then "openjdk", "default-jdk", "default-jre" 
          # Add other cases as needed
          else empty end)
-    ' "$SCRIPT_DIR/$PACKAGE_FILE" | 
+    ' "$PACKAGE_DIR/$PACKAGE_FILE" | 
     # Remove duplicates and empty lines, then join with space
     sort -u | grep . | paste -sd ' ' || {
         log_warning "Failed to extract blocked packages using jq. APT hook might be incomplete."

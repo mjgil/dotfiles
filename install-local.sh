@@ -11,17 +11,12 @@ sudo -v
 # Keep-alive: update existing `sudo` time stamp until `.macos` has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-# Import logging utilities if available, otherwise define basic ones
-# Note: SCRIPT_DIR is removed as it's not used in this script
+# Import logging utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/shared/log_utils.sh"
 
 # Use our yq wrapper to suppress "open ==" errors
 export PATH="/home/m/git/dotfiles:$PATH"
-
-# Define logging functions
-function log_info() { echo -e "\033[0;34m[INFO]\033[0m $1"; }
-function log_success() { echo -e "\033[0;32m[SUCCESS]\033[0m $1"; }
-function log_warning() { echo -e "\033[0;33m[WARNING]\033[0m $1"; }
-function log_error() { echo -e "\033[0;31m[ERROR]\033[0m $1"; }
 
 # Function to show usage/help
 show_help() {

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Import logging utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/shared/log_utils.sh"
+
 # List of programs to check
 programs=("git" "hub" "curl" "jq" "google-chrome" "vlc" "tree" "ffmpeg" 
           "tmux" "curl" "wget" "python3" "node" "npm" "java" "javac"
@@ -17,50 +21,47 @@ failed=0
 # Array to store failed programs
 failed_programs=()
 
-# ANSI color codes
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m' # No color
+# Using log_utils.sh for colored output now
 
 # Function to check if a program is installed
 check_program() {
     case "$1" in
         "java")
             if java -version &> /dev/null; then
-                echo -e "${GREEN}java: Installed${NC}"
+                log_success "java: Installed"
                 ((passed++))
             else
-                echo -e "${RED}java: Not installed${NC}"
+                log_error "java: Not installed"
                 ((failed++))
                 failed_programs+=("$1")
             fi
             ;;
         "javac")
             if javac -version &> /dev/null; then
-                echo -e "${GREEN}javac: Installed${NC}"
+                log_success "javac: Installed"
                 ((passed++))
             else
-                echo -e "${RED}javac: Not installed${NC}"
+                log_error "javac: Not installed"
                 ((failed++))
                 failed_programs+=("$1")
             fi
             ;;
         "fd")
             if which "fd" &> /dev/null || which "fdfind" &> /dev/null; then
-                echo -e "${GREEN}fd: Installed ($(which fd 2>/dev/null || which fdfind 2>/dev/null))${NC}"
+                log_success "fd: Installed ($(which fd 2>/dev/null || which fdfind 2>/dev/null))"
                 ((passed++))
             else
-                echo -e "${RED}fd: Not installed${NC}"
+                log_error "fd: Not installed"
                 ((failed++))
                 failed_programs+=("$1")
             fi
             ;;
         "bat")
             if which "bat" &> /dev/null || which "batcat" &> /dev/null; then
-                echo -e "${GREEN}bat: Installed ($(which bat 2>/dev/null || which batcat 2>/dev/null))${NC}"
+                log_success "bat: Installed ($(which bat 2>/dev/null || which batcat 2>/dev/null))"
                 ((passed++))
             else
-                echo -e "${RED}bat: Not installed${NC}"
+                log_error "bat: Not installed"
                 ((failed++))
                 failed_programs+=("$1")
             fi
@@ -68,10 +69,10 @@ check_program() {
 
         *)
             if which "$1" &> /dev/null; then
-                echo -e "${GREEN}$1: Installed${NC}"
+                log_success "$1: Installed"
                 ((passed++))
             else
-                echo -e "${RED}$1: Not installed${NC}"
+                log_error "$1: Not installed"
                 ((failed++))
                 failed_programs+=("$1")
             fi
@@ -85,17 +86,17 @@ for program in "${programs[@]}"; do
 done
 
 # Display the results
-echo ""
-echo "Summary:"
-echo -e "${GREEN}Passed: $passed${NC}"
-echo -e "${RED}Failed: $failed${NC}"
+log_echo ""
+log_info "Summary:"
+log_success "Passed: $passed"
+log_error "Failed: $failed"
 
 # Display the failed programs if any
 if [ $failed -ne 0 ]; then
-    echo ""
-    echo "Programs not installed:"
+    log_echo ""
+    log_warning "Programs not installed:"
     for program in "${failed_programs[@]}"; do
-        echo -e "${RED}- $program${NC}"
+        log_error "- $program"
     done
 fi
 
