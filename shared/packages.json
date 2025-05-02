@@ -298,8 +298,7 @@
     {
       "name": "chrome",
       "description": "Google Chrome browser",
-      "apt_repo": "http://dl.google.com/linux/chrome/deb/ stable main",
-      "apt_key": "https://dl-ssl.google.com/linux/linux_signing_key.pub",
+      "apt_command": "if [ ! -d \"/usr/bin/google-chrome\" ]; then wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && sudo sh -c 'echo \"deb http://dl.google.com/linux/chrome/deb/ stable main\" >> /etc/apt/sources.list.d/google.list'; fi",
       "apt": "google-chrome-stable",
       "brew_cask": "google-chrome"
     },
