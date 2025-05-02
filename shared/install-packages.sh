@@ -703,38 +703,66 @@ function check_asdf_version_installed() {
 # Function to install ASDF-managed languages
 function install_asdf_languages() {
   log_info "Installing ASDF-managed languages..."
-  
+
   # First ensure ASDF is installed and sourced
   if ! ensure_asdf_installed; then
     log_warning "Skipping ASDF language installations due to setup issues."
     return 1
   fi
-  
+
   # Get number of languages
   local num_languages=$(jq ".asdf_languages | length" "$SCRIPT_DIR/$PACKAGE_FILE")
-  
+
   for ((i=0; i<num_languages; i++)); do
     local name=$(jq -r ".asdf_languages[$i].name" "$SCRIPT_DIR/$PACKAGE_FILE")
     local description=$(jq -r ".asdf_languages[$i].description // \"No description\"" "$SCRIPT_DIR/$PACKAGE_FILE")
     local plugin_cmd=$(jq -r ".asdf_languages[$i].plugin" "$SCRIPT_DIR/$PACKAGE_FILE") # Can include URL
     local global=$(jq -r ".asdf_languages[$i].global // null" "$SCRIPT_DIR/$PACKAGE_FILE")
     local post_install=$(jq -r ".asdf_languages[$i].post_install // null" "$SCRIPT_DIR/$PACKAGE_FILE")
-    
+
     # Get versions into a bash array
     mapfile -t versions < <(jq -r ".asdf_languages[$i].versions[]? // empty" "$SCRIPT_DIR/$PACKAGE_FILE")
-    
-    log_info "Processing ASDF language $name: $description"
-    
+
     local plugin_name=$(echo $plugin_cmd | cut -d' ' -f1)
 
+    log_info "Processing ASDF language $name ($plugin_name): $description"
+
+    # Check if the desired global version is already set and installed
+    if [[ "$global" != "null" ]]; then
+
+      # Get the currently set global version specifically for this plugin
+      local current_global_version
+      current_global_version=$(asdf current "$plugin_name" 2>/dev/null | awk '{print $2}')
+
+      echo "$current_global_version"
+      echo "$global"
+
+      # Check if the current global matches the desired global AND if that version is installed
+      if [[ "$current_global_version" == "$global" ]] && check_asdf_version_installed "$plugin_name" "$global"; then
+        log_info "ASDF language $name ($plugin_name) is already globally set to the desired version $global and installed. Skipping."
+        continue # Skip to the next language in the loop
+      else
+        # Log why we are proceeding if the global was set but maybe not installed, or different
+        if [[ "$current_global_version" == "$global" ]]; then
+          log_info "ASDF language $name ($plugin_name) is globally set to $global, but version is not installed. Proceeding with installation."
+        elif [[ -n "$current_global_version" ]]; then
+          log_info "Current global version for $plugin_name ('$current_global_version') does not match desired global '$global'. Proceeding with installation/update."
+        else
+          log_info "No global version currently set for $plugin_name. Proceeding with installation/update."
+        fi
+      fi
+    fi
+
+
+    # Proceed with installation steps if not skipped
     install_asdf_plugin "$plugin_name" "$plugin_cmd"
     install_asdf_versions "$plugin_name" "${versions[@]}"
     set_asdf_global_version "$plugin_name" "$global" "$name"
     run_asdf_post_install "$plugin_name" "$post_install" "$global" "$name"
-    
-    log_info "Finished processing ASDF language $name"
+
+    log_info "Finished processing ASDF language $name ($plugin_name)"
   done
-  
+
   log_info "All ASDF-managed languages processed."
 }
 
