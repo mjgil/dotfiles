@@ -486,6 +486,7 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 # source /usr/local/bin/virtualenvwrapper.sh
 
 
+# Clean and organized PATH settings
 export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="~/.yarn/bin:$PATH"
 export PATH="~/.local/bin:$PATH"
@@ -495,9 +496,22 @@ export PATH="/usr/local/hub/bin:$PATH" # hub
 source $HOME/.cargo/env # rust
 export PATH="$PATH:/opt/mssql-tools/bin"
 
+# ASDF configuration
 if command -v asdf >/dev/null 2>&1; then
+  # Golang configuration
   export GOROOT=$(asdf where golang)/go
   export PATH="$GOROOT/bin:$PATH"
+  
+  # Node.js configuration - ensure global npm packages are in PATH
+  if NODEJS_VERSION=$(asdf current nodejs 2>/dev/null | awk '{print $2}'); then
+    export PATH="$HOME/.asdf/installs/nodejs/$NODEJS_VERSION/bin:$PATH"
+    # Add npm configuration for global installs
+    export npm_config_prefix="$HOME/.asdf/installs/nodejs/$NODEJS_VERSION"
+  fi
 fi
+
+# NPM global package aliases
+alias npm-global="npm install -g"
+alias npm-list-global="npm list -g --depth=0"
 
 

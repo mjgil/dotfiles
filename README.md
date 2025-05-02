@@ -96,4 +96,6 @@ All packages are defined in `shared/packages.yml` and organized by category. To 
 
 To check which packages are installed:
 
+```bash
+./check-installed.sh
 ```

@@ -44,6 +44,7 @@ show_help() {
 SOURCE_DIR="$(pwd)"
 OS_TYPE=""
 DRY_RUN=false
+extra_args=() # Array to hold non-option arguments
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -76,9 +77,9 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         *)
-            log_error "Unknown option: $1"
-            show_help
-            exit 1
+            # Store unrecognized arguments instead of erroring
+            extra_args+=("$1")
+            shift
             ;;
     esac
 done
@@ -122,8 +123,8 @@ if [ "$OS_TYPE" == "linux" ]; then
     export DOTFILES_SOURCE_DIR="$SOURCE_DIR"
     export DOTFILES_DRY_RUN="$DRY_RUN"
     
-    # Execute the Linux local installation script
-    bash "$SOURCE_DIR/linux/install-local.sh"
+    # Execute the Linux local installation script, passing extra args
+    bash "$SOURCE_DIR/linux/install-local.sh" "${extra_args[@]}"
     
 elif [ "$OS_TYPE" == "mac" ]; then
     log_info "Running Mac installation from local directory..."
@@ -132,8 +133,8 @@ elif [ "$OS_TYPE" == "mac" ]; then
     export DOTFILES_SOURCE_DIR="$SOURCE_DIR"
     export DOTFILES_DRY_RUN="$DRY_RUN"
     
-    # Execute the Mac local installation script
-    bash "$SOURCE_DIR/mac/install-local.sh"
+    # Execute the Mac local installation script, passing extra args
+    bash "$SOURCE_DIR/mac/install-local.sh" "${extra_args[@]}"
     
 else
     log_error "Unsupported OS type: $OS_TYPE"

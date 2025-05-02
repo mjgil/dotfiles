@@ -14,17 +14,14 @@ fi
 
 export PATH="/snap/bin:$PATH" # snap
 . "$HOME/.cargo/env"
-export HADOOP_HOME=/opt/hadoop
-export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-export PATH=$PATH:$HADOOP_HOME/bin
-export HADOOP_HOME=/opt/hadoop
-export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-export PATH=$PATH:$HADOOP_HOME/bin
+
+# Only set HADOOP_HOME once
 export HADOOP_HOME=/opt/hadoop
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
 export PATH=$PATH:$HADOOP_HOME/bin
 
 
+# asdf configuration
 . $HOME/.asdf/asdf.sh
 . $HOME/.asdf/completions/asdf.bash
 
@@ -42,6 +39,7 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+# Consolidated PATH settings - no duplicates
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/home/m/.local/bin:$PATH"
