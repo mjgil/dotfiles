@@ -84,8 +84,8 @@ create_apt_wrapper() {
 #!/usr/bin/env bash
 
 # Define logging functions locally within the wrapper
-_log_info() { echo -e "\\033[0;34m[WRAPPER_DEBUG]\\033[0m \$1"; }
-_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
+_log_info() { echo -e "\033[0;34m[WRAPPER_DEBUG]\033[0m \$1"; }
+_log_warning() { echo -e "\033[0;33m[WARNING]\033[0m \$1"; }
 
 # This is a wrapper script that prevents direct installation of ASDF-managed packages
 # Blocked packages: $blocked_packages
@@ -221,8 +221,8 @@ EOF
 #!/usr/bin/env bash
 
 # Define logging functions locally within the wrapper
-_log_info() { echo -e "\\033[0;34m[WRAPPER_DEBUG]\\033[0m \$1"; }
-_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
+_log_info() { echo -e "\033[0;34m[WRAPPER_DEBUG]\033[0m \$1"; }
+_log_warning() { echo -e "\033[0;33m[WARNING]\033[0m \$1"; }
 
 # This is a wrapper script that prevents direct installation of ASDF-managed packages
 # Blocked packages: $blocked_packages
@@ -374,8 +374,8 @@ create_brew_wrapper() {
 #!/usr/bin/env bash
 
 # Define logging functions locally within the wrapper
-_log_info() { echo -e "\\033[0;34m[INFO]\\033[0m \$1"; }
-_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
+_log_info() { echo -e "\033[0;34m[INFO]\033[0m \$1"; }
+_log_warning() { echo -e "\033[0;33m[WARNING]\033[0m \$1"; }
 
 # This is a wrapper script that prevents direct installation of ASDF-managed packages
 # Blocked packages: $blocked_packages
@@ -496,8 +496,8 @@ create_sudo_wrapper() {
 #!/usr/bin/env bash
 
 # Define logging functions locally within the wrapper
-_log_info() { echo -e "\\033[0;34m[INFO]\\033[0m \$1"; }
-_log_warning() { echo -e "\\033[0;33m[WARNING]\\033[0m \$1"; }
+_log_info() { echo -e "\033[0;34m[INFO]\033[0m \$1"; }
+_log_warning() { echo -e "\033[0;33m[WARNING]\033[0m \$1"; }
 
 # This is a wrapper for sudo that intercepts apt/apt-get commands to block ASDF-managed packages
 # Blocked packages: $blocked_packages
@@ -522,46 +522,60 @@ if [[ -z "\$REAL_SUDO" ]]; then
     exit 1
 fi
 
-# Check if the command is apt/apt-get install
-if [[ \$# -ge 2 && ("\$1" == "apt" || "\$1" == "apt-get") && ("\$2" == "install" || "\$2" == "add") ]]; then
-  _log_info "Intercepted sudo \$1 \$2 command. Checking for blocked packages..."
+# Check if the command involves apt/apt-get and install/add
+APT_CMD=""
+ACTION_CMD=""
+IS_APT=0
+IS_INSTALL=0
+for arg in "\$@"; do
+  if [[ "\$arg" == "apt" || "\$arg" == "apt-get" ]]; then
+    APT_CMD="\$arg"
+    IS_APT=1
+    continue
+  fi
+  if [[ "\$arg" == "install" || "\$arg" == "add" ]]; then
+    ACTION_CMD="\$arg"
+    IS_INSTALL=1
+    break
+  fi
+done
+
+if [[ \$IS_APT -eq 1 && \$IS_INSTALL -eq 1 ]]; then
+  _log_info "Intercepted sudo \$APT_CMD \$ACTION_CMD command. Checking for blocked packages..."
   
-  # Save the apt command before shifting
-  APT_CMD="\$1"
-  
-  # Extract packages (skip the first two arguments: apt/apt-get and install/add)
-  shift 2
+  # Extract packages (skip arguments until after the install/add command)
   DETECTED_BLOCKED=""
   ALLOWED_ARGS_ARRAY=() # Arguments that are not blocked packages
   OPTIONS_ARRAY=()    # Store options like -y
-  
+  FOUND_ACTION=0
   for arg in "\$@"; do
-    # If it's an option, store it separately
-    if [[ "\$arg" == -* ]]; then
-      OPTIONS_ARRAY+=("\$arg")
-      continue
-    fi
-    
-    # Check if this is a blocked package
-    FOUND=0
-    # Convert space-separated string to array for reliable iteration
-    blocked_array=($blocked_packages) 
-    for blocked_pkg in "\${blocked_array[@]}"; do
-      if [[ "\$arg" == "\$blocked_pkg" ]]; then
-        DETECTED_BLOCKED="\$DETECTED_BLOCKED \$arg"
-        FOUND=1
-        break
+    if [[ \$FOUND_ACTION -eq 1 ]]; then
+      # After install/add, check for packages or options
+      if [[ "\$arg" == -* ]]; then
+        OPTIONS_ARRAY+=("\$arg")
+        continue
       fi
-    done
-    
-    # If not blocked, add to allowed args
-    if [[ \$FOUND -eq 0 ]]; then
-      ALLOWED_ARGS_ARRAY+=("\$arg")
+      # Check if this is a blocked package
+      FOUND=0
+      IFS=' ' read -ra blocked_array <<< "$blocked_packages"
+      for blocked_pkg in "\${blocked_array[@]}"; do
+        if [[ "\$arg" == "\$blocked_pkg" ]]; then
+          DETECTED_BLOCKED="\$DETECTED_BLOCKED \$arg"
+          FOUND=1
+          break
+        fi
+      done
+      # If not blocked, add to allowed args
+      if [[ \$FOUND -eq 0 ]]; then
+        ALLOWED_ARGS_ARRAY+=("\$arg")
+      fi
+    elif [[ "\$arg" == "install" || "\$arg" == "add" ]]; then
+      FOUND_ACTION=1
     fi
   done
   
   # Trim leading/trailing whitespace
-  DETECTED_BLOCKED=\$(echo \$DETECTED_BLOCKED | xargs)
+  DETECTED_BLOCKED=\$(echo "\$DETECTED_BLOCKED" | xargs)
   
   if [[ -n "\$DETECTED_BLOCKED" ]]; then
     _log_warning "⚠️ WARNING: Blocked ASDF-managed packages detected: \$DETECTED_BLOCKED"
@@ -571,28 +585,40 @@ if [[ \$# -ge 2 && ("\$1" == "apt" || "\$1" == "apt-get") && ("\$2" == "install"
     # Check if bypass flag is set
     if [[ "\$BYPASS_ASDF_CHECK" == "1" ]]; then
       _log_info "BYPASS_ASDF_CHECK is set, proceeding with original command..."
-      # Fall through to execute original command
+      # Execute the original command as is
+      exec "\$REAL_SUDO" "\$@"
     else
       # If we have allowed packages, execute with only those
       if [[ \${#ALLOWED_ARGS_ARRAY[@]} -gt 0 ]]; then
         _log_info "Proceeding to install only non-blocked packages: \${ALLOWED_ARGS_ARRAY[*]}"
-        # Execute with allowed packages only - using saved APT_CMD
-        exec "\$REAL_SUDO" "\$APT_CMD" "install" "\${OPTIONS_ARRAY[@]}" "\${ALLOWED_ARGS_ARRAY[@]}"
+        # Construct the command with allowed arguments
+        COMMAND_ARGS=("\$APT_CMD" "\$ACTION_CMD")
+        for opt in "\${OPTIONS_ARRAY[@]}"; do
+          COMMAND_ARGS+=("\$opt")
+        done
+        for pkg in "\${ALLOWED_ARGS_ARRAY[@]}"; do
+          COMMAND_ARGS+=("\$pkg")
+        done
+        exec "\$REAL_SUDO" "\${COMMAND_ARGS[@]}"
       else
         _log_warning "Only blocked packages were requested (\$DETECTED_BLOCKED). No action taken."
         _log_warning "Use ASDF to manage these packages or set BYPASS_ASDF_CHECK=1 to force."
         exit 1
       fi
     fi
+  else
+    _log_info "No blocked packages detected, proceeding with original command..."
+    # No blocked packages, execute original command with all arguments
+    exec "\$REAL_SUDO" "\$@"
   fi
+else
+  # Not an apt/apt-get install command, execute as is
+  exec "\$REAL_SUDO" "\$@"
 fi
 
-# If we get here and haven't exited or exec'd:
-# 1. Not an apt/apt-get install command, OR
-# 2. No blocked packages detected, OR
-# 3. Bypass flag was set
-# Just execute the original command with the real sudo
-exec "\$REAL_SUDO" "\$@"
+# This line should not be reached due to exec above, but included for completeness
+_log_warning "Unexpected execution path reached in sudo wrapper."
+exit 1
 EOF
 
   chmod +x "$wrapper_path"
