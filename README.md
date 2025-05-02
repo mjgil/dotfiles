@@ -11,6 +11,7 @@ My personal configuration files and setup scripts for macOS and Linux (Ubuntu/Mi
 - Package definitions managed centrally in `shared/packages.json`.
 - Idempotent installation scripts (safe to re-run).
 - Centralized logging using `shared/log_utils.sh`.
+- Virtualization tools setup (QEMU/KVM, libvirt, virt-manager).
 
 ## Installation
 
@@ -99,3 +100,13 @@ To check which packages are installed:
 ```bash
 ./check-installed.sh
 ```
+
+## Virtualization Tools
+
+On Linux systems, this dotfiles setup includes configuration for QEMU/KVM virtualization:
+
+- Installs QEMU, libvirt, and virt-manager packages
+- Adds the user to the libvirt and kvm groups for proper permissions
+- Starts and enables the libvirtd service
+
+After installation, you may need to log out and back in for group changes to take effect. Then you can create and manage virtual machines using the virt-manager application.

@@ -373,5 +373,28 @@
       "apt_command": "pip install yt-dlp",
       "brew": "yt-dlp"
     }
+  ],
+  "virtualization_tools": [
+    {
+      "name": "qemu-kvm",
+      "description": "QEMU virtualization with KVM support",
+      "apt": "qemu-kvm"
+    },
+    {
+      "name": "libvirt",
+      "description": "Virtualization API library",
+      "apt": ["libvirt-daemon-system", "libvirt-clients"]
+    },
+    {
+      "name": "bridge-utils",
+      "description": "Utilities for configuring the Linux bridge",
+      "apt": "bridge-utils"
+    },
+    {
+      "name": "virt-manager",
+      "description": "Desktop application for managing virtual machines",
+      "apt": "virt-manager",
+      "brew_cask": "virt-manager"
+    }
   ]
 } 

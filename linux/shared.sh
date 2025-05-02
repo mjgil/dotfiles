@@ -53,4 +53,19 @@ if [ -d "$HOME/.cargo/bin" ] && ! grep -q "export PATH=\"$HOME/.cargo/bin:\$PATH
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+# Virtualization group setup
+if command -v virt-manager >/dev/null 2>&1; then
+  log_info "Adding user to virtualization groups..."
+  sudo usermod -aG libvirt "$USER"
+  sudo usermod -aG kvm "$USER"
+  
+  # Start and enable libvirtd service if not running
+  if ! sudo systemctl is-active --quiet libvirtd; then
+    log_info "Starting and enabling libvirtd service..."
+    sudo systemctl start libvirtd
+    sudo systemctl enable libvirtd
+  fi
+  log_success "Added user to virtualization groups"
+fi
+
 log_info "Linux-specific configurations completed."
