@@ -106,17 +106,9 @@ log_info "Setting up Git configuration..."
 if $DRY_RUN; then
     log_info "[DRY RUN] Would configure Git"
 else
-    git config --global user.name "Malcom Gilbert"
-    git config --global user.email malcomgilbert@gmail.com
-    git config --global core.editor "subl -n -w"
-    git config --global push.default matching
-    git config --global core.excludesfile ~/.gitignore
-    echo "*.DS_Store" >> ~/.gitignore
-
-    if [ ! -f ~/.git-prompt.sh ]; then
-        curl -o ~/.git-prompt.sh \
-        https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
-    fi
+    # Source our centralized git configuration script
+    source "${SCRIPT_DIR}/../shared/git-config.sh"
+    setup_git_config
 fi
 
 # Run bootstrap script

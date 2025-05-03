@@ -64,12 +64,9 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 # Setup Git before cloning repositories
-git config --global user.name "Malcom Gilbert"
-git config --global user.email malcomgilbert@gmail.com
-git config --global core.editor "subl -n -w"
-git config --global push.default matching
-git config --global core.excludesfile ~/.gitignore
-log_info "*.DS_Store >> ~/.gitignore
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/../shared/git-config.sh"
+setup_git_config
 
 if [ ! -f ~/.git-prompt.sh ]; then
   curl -o ~/.git-prompt.sh \

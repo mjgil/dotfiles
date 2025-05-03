@@ -6,6 +6,11 @@
 # o - open finder
 # r - resource bashrc
 
+# Make sure the git-prompt script is available for showing git information in the prompt
+if [ -f ~/.git-prompt.sh ]; then
+   source ~/.git-prompt.sh
+fi
+
 export PS1='\[\033[1;34m\][\u@\h jobs:\j \d \A] \n \[\033[1;32m\]$PWD $(__git_ps1 "(%s)")\n \[\033[1;31m\]m\[\033[0m\]: '
 # virtualenv ps1 --- export PS1='\[\033[1;34m\][\u@\h jobs:\j \d \A] \n \[\033[1;32m\](`basename $VIRTUAL_ENV`) $PWD $(__git_ps1 "(%s)")\n \[\033[1;31m\]ΝΔ\[\033[0m\]: '
 # export PATH="/usr/local/bin:/opt/chef/embedded/bin:$PATH"
@@ -28,7 +33,7 @@ alias gmnf="git merge --no-ff"
 alias gpt="git push --tags"
 alias gp="git push"
 alias gpn='git push -u origin $(__git_ps1 "%s")'
-alias gpom="git push origin master"
+alias gpom="git push origin main" # Updated to use main instead of master
 alias gpf="git push -f"
 alias grh="git reset --hard"
 alias grm1="git reset --mixed HEAD~1"
@@ -42,7 +47,7 @@ alias gl="git log --pretty='format:%Cgreen%h%Creset %an - %s' --graph"
 alias glo="git log --color --oneline | head"
 alias gpl="git pull"
 alias gplo="git pull origin"
-alias gplom="git pull origin master"
+alias gplom="git pull origin main" # Updated to use main instead of master
 alias gcd='cd "`git rev-parse --show-toplevel`"'
 alias gc='git add --all :/ && git commit -m'
 alias gct='git add --all . && git commit -m'
@@ -103,7 +108,7 @@ git_create_repo() {
       git add readme.md
       git commit -m 'initial commit'
       hub create $1
-      git push -u origin master
+      git push -u origin main
     fi
   fi
 }

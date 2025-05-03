@@ -3,11 +3,7 @@
 # Sublime Text Thing
 ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
 
-# Setup Git
-git config --global user.name "Malcom Gilbert"
-git config --global user.email malcomgilbert@gmail.com
-git config --global core.editor "subl -n -w"
-git config --global push.default matching
-
-curl -o ~/.git-prompt.sh \
-    https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+# Setup Git using our centralized script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/shared/git-config.sh"
+setup_git_config

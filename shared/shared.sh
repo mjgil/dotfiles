@@ -6,10 +6,9 @@ source "${SCRIPT_DIR}/log_utils.sh"
 # This script contains common setup for all systems
 
 # Setup Git
-git config --global user.name "Malcom Gilbert"
-git config --global user.email malcomgilbert@gmail.com
-git config --global core.editor "subl -n -w"
-git config --global push.default matching
+# Source our centralized git configuration script
+source "${SCRIPT_DIR}/git-config.sh"
+setup_git_config
 
 if [ ! -f ~/.git-prompt.sh ]; then
   curl -o ~/.git-prompt.sh \
