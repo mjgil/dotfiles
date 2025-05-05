@@ -138,6 +138,13 @@ gh_new_existing() {
 }
 alias ghne=gh_new_existing
 
+gh_new_existing_add() {
+  git init
+  c 'initial commit'
+  ghne $1 $2
+}
+alias ghnea=gh_new_existing_add
+
 git_merge() {
   # $1 -- branch to merge into
   local cur_branch=${2:-$(__git_ps1 "%s")}
