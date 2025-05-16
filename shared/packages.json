@@ -198,12 +198,6 @@
       "brew": "gnupg"
     },
     {
-      "name": "ncal",
-      "description": "Calendar utility",
-      "apt": "ncal",
-      "brew": "ncal"
-    },
-    {
       "name": "terminator",
       "description": "Terminal emulator",
       "apt_ppa": "ppa:gnome-terminator/ppa",
