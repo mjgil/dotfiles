@@ -156,6 +156,12 @@
       "description": "Fast and simple video downloader",
       "apt_command": "TARGET_DIR=${HOME}/.local/bin; mkdir -p $TARGET_DIR; curl -s https://api.github.com/repos/iawia002/lux/releases/latest | grep browser_download_url | grep linux_amd64 | cut -d '\"' -f 4 | wget -qi - -O $TARGET_DIR/lux && chmod +x $TARGET_DIR/lux",
       "brew": "lux"
+    },
+    {
+      "name": "wmctrl",
+      "description": "Command-line tool to interact with EWMH/NetWM compatible X Window managers",
+      "apt": "wmctrl",
+      "brew": "wmctrl"
     }
   ],
   "dev_tools": [
@@ -203,6 +209,17 @@
       "apt_ppa": "ppa:gnome-terminator/ppa",
       "apt": "terminator",
       "brew_cask": "terminator"
+    },
+    {
+      "name": "libfuse2t64",
+      "description": "FUSE v2 library (64-bit time_t) for AppImage support on newer Ubuntu",
+      "apt": "libfuse2t64"
+    },
+    {
+      "name": "appimagelauncher",
+      "description": "Helper to integrate and manage AppImages (installs v3.0.0-alpha-4 .deb from GitHub)",
+      "apt_command": "AIL_DEB_URL=\"https://github.com/TheAssassin/AppImageLauncher/releases/download/v3.0.0-alpha-4/appimagelauncher_3.0.0-alpha-4-gha253.36951ec_amd64.deb\"; AIL_DEB_FILE=\"/tmp/appimagelauncher_temp.deb\"; wget --no-verbose -O \"$AIL_DEB_FILE\" \"$AIL_DEB_URL\" && sudo dpkg -i \"$AIL_DEB_FILE\" && sudo apt-get install -f -y && rm \"$AIL_DEB_FILE\" || echo \"AppImageLauncher installation failed. Check URL or install manually from GitHub releases.\"",
+      "brew": "appimagelauncher"
     }
   ],
   "cloud_tools": [
