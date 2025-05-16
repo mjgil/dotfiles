@@ -40,6 +40,7 @@ download_script "shared/packages.json" "packages.json"
 download_script "shared/install-packages.sh" "install-packages.sh"
 download_script "shared/create-package-blockers.sh" "create-package-blockers.sh"
 download_script "shared/install-apt-hooks.sh" "install-apt-hooks.sh"
+download_script "shared/git-config.sh" "git-config.sh"
 
 # Execute bootstrap.sh to install jq/yq dependencies
 log_info "Executing bootstrap.sh..."
@@ -89,5 +90,6 @@ log_info "Setting up package blocking for ASDF..."
 # Pass TEMP_DIR so these scripts know where packages.json is
 bash "$TEMP_DIR/create-package-blockers.sh"
 bash "$TEMP_DIR/install-apt-hooks.sh"
+bash "$TEMP_DIR/git-config.sh"
 
 log_success "Setup completed successfully."

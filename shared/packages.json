@@ -257,7 +257,7 @@
       "versions": ["22.11.0"],
       "global": "22.11.0",
       "apt": ["nodejs", "node", "npm"],
-      "post_install": "npm install -g typescript ts-node"
+      "post_install": "npm install -g typescript ts-node corepack"
     },
     {
       "name": "python",
