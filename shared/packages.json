@@ -7,6 +7,12 @@
       "brew": "git"
     },
     {
+      "name": "git-lfs",
+      "description": "Git Large File Storage",
+      "apt": "git-lfs",
+      "brew": "git-lfs"
+    },
+    {
       "name": "curl",
       "description": "Command line tool for transferring data",
       "apt": "curl",
