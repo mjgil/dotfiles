@@ -30,9 +30,23 @@ if command -v subl >/dev/null 2>&1; then
   pkill -f sublime_text || true
 fi
 
-# Repository setup is now handled in shared/shared.sh
+# Sublime Text
+mkdir -p ~/.config/sublime-text/Packages/User
 
-# App settings are now handled in shared/shared.sh
+# Copy config files with the correct names
+cp ~/git/dotfiles/app-settings/sublime/linux-key-bindings.json ~/.config/sublime-text/Packages/User/"Default (Linux).sublime-keymap"
+cp ~/git/dotfiles/app-settings/sublime/settings.json ~/.config/sublime-text/Packages/User/Preferences.sublime-settings
+
+# Install Oceanic Next Color Scheme if not already installed
+OCEANIC_PACKAGE_DIR="$HOME/.config/sublime-text/Installed Packages"
+OCEANIC_PACKAGE="Oceanic Next Color Scheme.sublime-package"
+if [ ! -f "${OCEANIC_PACKAGE_DIR}/${OCEANIC_PACKAGE}" ]; then
+  mkdir -p "${OCEANIC_PACKAGE_DIR}"
+  curl -o "${OCEANIC_PACKAGE_DIR}/${OCEANIC_PACKAGE}" \
+    https://github.com/voronianski/oceanic-next-color-scheme/raw/master/Oceanic%20Next%20Color%20Scheme.sublime-package
+  log_success "Installed Oceanic Next Color Scheme for Sublime Text"
+fi
+
 
 # Ensure ~/.local/bin exists and is in PATH in .bashrc if not already
 # (install-packages.sh now creates the dir, this ensures it's in PATH)

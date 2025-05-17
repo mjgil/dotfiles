@@ -51,6 +51,7 @@ git remote set-url origin ssh://git@ssh.github.com:443/mjgil/mini-bash.git
 cd -
 
 # app-settings
+# Terminator
 mkdir -p ~/.config/terminator
 cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
