@@ -1,0 +1,51 @@
+# Silicon Configuration File
+# Create beautiful images of your source code
+# See: https://github.com/Aloxaf/silicon
+
+# Theme to use for syntax highlighting
+# Use 'silicon --list-themes' to see available themes
+# Popular options: "Dracula", "GitHub", "Monokai Extended", "OneHalfDark", "Oceanic Next"
+theme = "Dracula"
+
+# Background color (RGB hex format)
+background = "#1e1e1e"
+
+# Font settings
+[font]
+# Font family for code
+family = "Fira Code"
+# Font size in points
+size = 14.0
+
+# Window settings
+[window]
+# Add shadow to the window
+shadow = true
+# Window controls (minimize, maximize, close buttons)
+controls = true
+# Round window corners
+round_corner = true
+# Window title bar
+title = ""
+
+# Code settings
+[code]
+# Show line numbers
+line_number = true
+# Highlight the specified line
+# highlight_lines = "1-5,10"
+# Add padding around the code
+pad_horiz = 80
+pad_vert = 100
+
+# Output settings
+[output]
+# Output format (png, jpg, svg)
+format = "png"
+# Output directory (if not specified, uses current directory)
+# dir = "~/Pictures/screenshots"
+
+# Tab settings
+[tab]
+# Tab width in spaces
+width = 4

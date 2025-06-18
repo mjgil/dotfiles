@@ -1,0 +1,142 @@
+# Silicon - Code Screenshot Tool
+# Create beautiful images of your source code
+
+# Basic silicon aliases
+alias si='silicon'
+alias silicon-themes='silicon --list-themes'
+alias silicon-help='silicon --help'
+
+# Quick screenshot functions
+silicon-quick() {
+    local input="${1:-}"
+    local output="${2:-code-$(date +%Y%m%d-%H%M%S).png}"
+    
+    if [[ -z "$input" ]]; then
+        echo "Usage: silicon-quick <input-file> [output-file]"
+        echo "Example: silicon-quick main.py screenshot.png"
+        return 1
+    fi
+    
+    silicon "$input" -o "$output"
+    echo "Screenshot saved as: $output"
+}
+
+# Copy code to clipboard and create screenshot
+silicon-clipboard() {
+    local output="${1:-code-$(date +%Y%m%d-%H%M%S).png}"
+    
+    # Create screenshot from clipboard
+    pbpaste 2>/dev/null || xclip -selection clipboard -o 2>/dev/null || echo "No clipboard content available"
+    silicon --from-clipboard -o "$output"
+    echo "Screenshot from clipboard saved as: $output"
+}
+
+# Screenshot with specific themes
+silicon-dark() {
+    silicon --theme "Dracula" "$@"
+}
+
+silicon-light() {
+    silicon --theme "GitHub" "$@"
+}
+
+silicon-oceanic() {
+    silicon --theme "Oceanic Next" "$@"
+}
+
+# Screenshot with custom settings
+silicon-presentation() {
+    local input="${1:-}"
+    local output="${2:-presentation-$(date +%Y%m%d-%H%M%S).png}"
+    
+    if [[ -z "$input" ]]; then
+        echo "Usage: silicon-presentation <input-file> [output-file]"
+        return 1
+    fi
+    
+    silicon "$input" \
+        --theme "GitHub" \
+        --background "#ffffff" \
+        --font "Fira Code" \
+        --font-size 16 \
+        --line-number \
+        --window-controls \
+        --shadow \
+        --pad-horiz 100 \
+        --pad-vert 80 \
+        -o "$output"
+    
+    echo "Presentation screenshot saved as: $output"
+}
+
+# Screenshot for social media (with good contrast and readable fonts)
+silicon-social() {
+    local input="${1:-}"
+    local output="${2:-social-$(date +%Y%m%d-%H%M%S).png}"
+    
+    if [[ -z "$input" ]]; then
+        echo "Usage: silicon-social <input-file> [output-file]"
+        return 1
+    fi
+    
+    silicon "$input" \
+        --theme "Dracula" \
+        --background "#282a36" \
+        --font "Fira Code" \
+        --font-size 14 \
+        --line-number \
+        --window-controls \
+        --shadow \
+        --round-corner \
+        --pad-horiz 80 \
+        --pad-vert 60 \
+        -o "$output"
+    
+    echo "Social media screenshot saved as: $output"
+}
+
+# Screenshot a specific line range
+silicon-lines() {
+    local input="${1:-}"
+    local lines="${2:-}"
+    local output="${3:-lines-$(date +%Y%m%d-%H%M%S).png}"
+    
+    if [[ -z "$input" || -z "$lines" ]]; then
+        echo "Usage: silicon-lines <input-file> <line-range> [output-file]"
+        echo "Example: silicon-lines main.py 10-20 function_screenshot.png"
+        return 1
+    fi
+    
+    silicon "$input" \
+        --highlight-lines "$lines" \
+        --line-number \
+        -o "$output"
+    
+    echo "Line range screenshot saved as: $output"
+}
+
+# Batch screenshot multiple files
+silicon-batch() {
+    local theme="${1:-Dracula}"
+    shift
+    
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: silicon-batch [theme] <file1> [file2] [file3] ..."
+        echo "Example: silicon-batch Dracula *.py"
+        return 1
+    fi
+    
+    local count=0
+    for file in "$@"; do
+        if [[ -f "$file" ]]; then
+            local output="screenshot-$(basename "$file")-$(date +%Y%m%d-%H%M%S).png"
+            silicon "$file" --theme "$theme" -o "$output"
+            echo "Created: $output"
+            ((count++))
+        else
+            echo "Skipping non-existent file: $file"
+        fi
+    done
+    
+    echo "Created $count screenshots"
+}

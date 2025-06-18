@@ -55,6 +55,10 @@ cd -
 mkdir -p ~/.config/terminator
 cp ~/git/dotfiles/app-settings/terminator.config ~/.config/terminator/config
 
+# Silicon (code screenshot tool)
+mkdir -p ~/.config/silicon
+cp ~/git/dotfiles/app-settings/silicon/config.toml ~/.config/silicon/config.toml
+
 # Set time format to AM/PM if on GNOME
 if command -v gsettings >/dev/null 2>&1; then
   gsettings set org.gnome.desktop.interface clock-format 12h

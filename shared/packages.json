@@ -55,6 +55,22 @@
       "name": "ubuntu-make",
       "description": "Ubuntu developer tools installer",
       "apt_snap": "ubuntu-make --classic"
+    },
+    {
+      "name": "silicon-deps",
+      "description": "Development libraries for Silicon (code screenshot tool)",
+      "apt": [
+        "pkg-config",
+        "libfontconfig1-dev",
+        "libfreetype6-dev",
+        "libxcb-composite0-dev",
+        "libxcb-render0-dev",
+        "libxcb-shape0-dev",
+        "libxcb-xfixes0-dev",
+        "libharfbuzz-dev",
+        "libexpat1-dev",
+        "libxml2-dev"
+      ]
     }
   ],
   "terminal_utils": [
@@ -168,6 +184,12 @@
       "description": "Command-line tool to interact with EWMH/NetWM compatible X Window managers",
       "apt": "wmctrl",
       "brew": "wmctrl"
+    },
+    {
+      "name": "silicon",
+      "description": "Create beautiful images of source code (alternative to Carbon)",
+      "cargo_fallback": "silicon",
+      "brew": "silicon"
     }
   ],
   "dev_tools": [
