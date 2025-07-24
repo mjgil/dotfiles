@@ -338,6 +338,14 @@
       "versions": ["7.0.100"],
       "global": "7.0.100",
       "apt": ["dotnet-sdk-7.0", "dotnet-runtime-7.0", "dotnet-sdk", "dotnet-runtime"]
+    },
+    {
+      "name": "bun",
+      "description": "Bun JavaScript runtime via ASDF",
+      "plugin": "bun",
+      "versions": ["1.2.19"],
+      "global": "1.2.19",
+      "apt": ["bun"]
     }
   ],
   "browsers": [
