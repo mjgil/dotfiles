@@ -36,6 +36,7 @@ alias gpn='git push -u origin $(__git_ps1 "%s")'
 alias gpom="git push origin main" # Updated to use main instead of master
 alias gpf="git push -f"
 alias grh="git reset --hard"
+alias grha="git reset --hard && git clean -fd"
 alias grm1="git reset --mixed HEAD~1"
 alias gb="git branch"
 alias gcob="git checkout -b"
