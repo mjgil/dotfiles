@@ -381,6 +381,16 @@
       "description": "Vector graphics editor",
       "apt_snap": "vectr",
       "brew_cask": "vectr"
+    },
+    {
+      "name": "gcolor3",
+      "description": "Color picker and palette tool",
+      "apt": "gcolor3"
+    },
+    {
+      "name": "gnome-screenshot",
+      "description": "GNOME screenshot utility",
+      "apt": "gnome-screenshot"
     }
   ],
   "editors": [
