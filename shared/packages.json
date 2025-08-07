@@ -31,6 +31,12 @@
       "brew": "rust"
     },
     {
+      "name": "uv",
+      "description": "An extremely fast Python package and project manager",
+      "apt_command": "curl -LsSf https://astral.sh/uv/install.sh | sh",
+      "brew": "uv"
+    },
+    {
       "name": "build-essential",
       "description": "Build tools",
       "apt": "build-essential"
