@@ -36,7 +36,7 @@ alias gpn='git push -u origin $(__git_ps1 "%s")'
 alias gpom="git push origin main" # Updated to use main instead of master
 alias gpf="git push -f"
 alias grh="git reset --hard"
-alias grha="git reset --hard && git clean -fd"
+alias grha="git status --porcelain -z | cut -c 4- -z | xargs -0 rm -rf && git reset --hard"
 alias grm1="git reset --mixed HEAD~1"
 alias gb="git branch"
 alias gcob="git checkout -b"
@@ -60,6 +60,7 @@ alias grr='git remote rename'
 alias gfa='git fetch --all'
 alias gpa='git fetch --all && git reset --hard HEAD' #git pull all
 alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull all clean
+
 
 
 
@@ -156,6 +157,7 @@ git_merge() {
   git merge $1
 }
 alias gm=git_merge
+
 
 bitbucket_to_github() {
   # $1 -- github repo path
