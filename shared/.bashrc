@@ -423,7 +423,7 @@ alias cdm="cd ~/Music"
 alias cdb="cd ~/Dropbox"
 alias cdd="cd ~/git/dotfiles"
 
-
+alias cx="chmod +x"
 
 # OS X has no `md5sum`, so use `md5` as a fallback
 command -v md5sum > /dev/null || alias md5sum="md5"
