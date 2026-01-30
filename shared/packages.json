@@ -248,6 +248,11 @@
       "description": "Helper to integrate and manage AppImages (installs v3.0.0-alpha-4 .deb from GitHub)",
       "apt_command": "AIL_DEB_URL=\"https://github.com/TheAssassin/AppImageLauncher/releases/download/v3.0.0-alpha-4/appimagelauncher_3.0.0-alpha-4-gha253.36951ec_amd64.deb\"; AIL_DEB_FILE=\"/tmp/appimagelauncher_temp.deb\"; wget --no-verbose -O \"$AIL_DEB_FILE\" \"$AIL_DEB_URL\" && sudo dpkg -i \"$AIL_DEB_FILE\" && sudo apt-get install -f -y && rm \"$AIL_DEB_FILE\" || echo \"AppImageLauncher installation failed. Check URL or install manually from GitHub releases.\"",
       "brew": "appimagelauncher"
+    },
+    {
+      "name": "libsecret-tools",
+      "description": "Tools for storing and retrieving passwords and other secrets (GNOME Keyring CLI)",
+      "apt": "libsecret-tools"
     }
   ],
   "cloud_tools": [
@@ -299,8 +304,8 @@
       "name": "nodejs",
       "description": "JavaScript runtime via ASDF",
       "plugin": "nodejs https://github.com/asdf-vm/asdf-nodejs.git",
-      "versions": ["22.11.0"],
-      "global": "22.11.0",
+      "versions": ["22.15.0"],
+      "global": "22.15.0",
       "apt": ["nodejs", "node", "npm"],
       "post_install": "npm install -g typescript ts-node corepack"
     },
