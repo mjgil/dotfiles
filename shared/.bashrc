@@ -26,7 +26,6 @@ alias gd="git diff | subl -"
 alias ga="git add"
 alias gaa="git add --all"
 alias gbd="git branch -D"
-alias gst="git status"
 alias gca="git commit -a -m"
 alias gcam="git commit --amend -m"
 alias gmnf="git merge --no-ff"
@@ -63,7 +62,19 @@ alias gpac='git fetch --all && git reset --hard HEAD && git clean -f' #git pull 
 
 
 
-
+git_status_large() {
+  git status
+  large_files=$(git ls-files --others --exclude-standard -z | xargs -0 -I{} find {} -size +2M -exec du -h {} \;)
+  if [ -n "$large_files" ]; then
+    echo ""
+    echo "⚠️  Large untracked files (>2M):"
+    echo "$large_files"
+    echo ""
+    echo "To remove them:"
+    echo "$large_files" | awk '{print "rm " $2}'
+  fi
+}
+alias gst=git_status_large
 git_commit_push() {
   gc "$1" && gp
 }
@@ -411,8 +422,11 @@ alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 # test editor stuff
-alias t="~/git/up-sublime/main"
-ct() {
+unalias t 2>/dev/null || true
+function t {
+  launchr --prefer-existing --prefer-existing-cwd --window-title "Sublime Text" subl .
+}
+function ct {
   cd "$1" && t
 }
 alias hosts="sudo subl /etc/hosts"
@@ -530,3 +544,5 @@ alias npm-global="npm install -g"
 alias npm-list-global="npm list -g --depth=0"
 
 
+export CARGO_BUILD_JOBS=1
+source <(shellvault init bash)

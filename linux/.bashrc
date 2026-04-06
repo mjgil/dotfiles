@@ -45,3 +45,9 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/home/m/.local/bin:$PATH"
 export PATH="/home/m/.cargo/bin:$PATH"
 . "/home/m/.deno/env"
+
+# >>> shellvault >>>
+if command -v shellvault >/dev/null 2>&1; then
+  source <(shellvault init bash)
+fi
+# <<< shellvault <<<
